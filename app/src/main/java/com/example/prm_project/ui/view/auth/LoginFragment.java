@@ -1,37 +1,45 @@
-package com.example.prm_project.ui.view;
+package com.example.prm_project.ui.view.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.prm_project.R;
-import com.example.prm_project.databinding.ActivityLoginBinding;
+import com.example.prm_project.databinding.FragmentLoginBinding;
 import com.example.prm_project.ui.viewmodel.AuthViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class LoginActivity extends AppCompatActivity {
+public class LoginFragment extends Fragment {
     
-    private ActivityLoginBinding binding;
+    private FragmentLoginBinding binding;
     private AuthViewModel authViewModel;
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+    
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         
-        // Set up data binding
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        
-        // Initialize ViewModel
+        // Initialize ViewModel - Hilt provides all dependencies automatically
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         
         // Check if user is already logged in
         if (authViewModel.isUserLoggedIn()) {
-            navigateToMainActivity();
+            navigateBasedOnRole();
             return;
         }
         
@@ -59,20 +67,20 @@ public class LoginActivity extends AppCompatActivity {
         
         // Forgot password click listener
         binding.btnForgotPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-            startActivity(intent);
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
         });
         
         // Sign up click listener
         binding.btnSignUp.setOnClickListener(v -> {
-            // TODO: Navigate to registration activity
-            Toast.makeText(this, "Registration coming soon!", Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_loginFragment_to_registerPersonalInfoFragment);
         });
         
         // Google sign-in click listener
         binding.btnGoogleSignin.setOnClickListener(v -> {
             // TODO: Implement Google sign-in
-            Toast.makeText(this, "Google Sign-in coming soon!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Google Sign-in coming soon!", Toast.LENGTH_SHORT).show();
         });
     }
     
@@ -83,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
         // Clear previous errors
         binding.tilEmail.setError(null);
         binding.tilPassword.setError(null);
-        binding.tvErrorMessage.setVisibility(View.GONE);
         
         boolean isValid = true;
         
@@ -110,11 +117,10 @@ public class LoginActivity extends AppCompatActivity {
     
     private void observeViewModel() {
         // Observe loading state
-        authViewModel.getIsLoading().observe(this, isLoading -> {
+        authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
                 binding.btnLogin.setEnabled(false);
                 binding.btnLogin.setText(getString(R.string.logging_in));
-                // You can add a progress indicator here
             } else {
                 binding.btnLogin.setEnabled(true);
                 binding.btnLogin.setText(getString(R.string.login));
@@ -122,33 +128,25 @@ public class LoginActivity extends AppCompatActivity {
         });
         
         // Observe error messages
-        authViewModel.getErrorMessage().observe(this, errorMessage -> {
+        authViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null && !errorMessage.isEmpty()) {
-                binding.tvErrorMessage.setText(errorMessage);
-                binding.tvErrorMessage.setVisibility(View.VISIBLE);
-                
-                // Also show in Snackbar for better UX
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_LONG).show();
-                
-                // Clear error after showing
                 authViewModel.clearMessages();
-            } else {
-                binding.tvErrorMessage.setVisibility(View.GONE);
             }
         });
         
         // Observe success messages
-        authViewModel.getSuccessMessage().observe(this, successMessage -> {
+        authViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), successMessage -> {
             if (successMessage != null && !successMessage.isEmpty()) {
-                Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), successMessage, Toast.LENGTH_SHORT).show();
                 authViewModel.clearMessages();
             }
         });
         
         // Observe login success
-        authViewModel.getLoginSuccess().observe(this, loginSuccess -> {
+        authViewModel.getLoginSuccess().observe(getViewLifecycleOwner(), loginSuccess -> {
             if (loginSuccess != null && loginSuccess) {
-                navigateToMainActivity();
+                navigateBasedOnRole();
             }
         });
     }
@@ -159,22 +157,33 @@ public class LoginActivity extends AppCompatActivity {
             if (!savedEmail.isEmpty()) {
                 binding.etEmail.setText(savedEmail);
                 binding.cbRememberMe.setChecked(true);
-                // Focus on password field
                 binding.etPassword.requestFocus();
             }
         }
     }
     
-    private void navigateToMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+    private void navigateBasedOnRole() {
+        NavController navController = Navigation.findNavController(requireView());
+        
+        // Check user role and navigate to appropriate dashboard
+        if (authViewModel.isAdmin()) {
+            navController.navigate(R.id.action_loginFragment_to_adminFragment);
+        } else if (authViewModel.isStaff()) {
+            navController.navigate(R.id.action_loginFragment_to_staffFragment);
+        } else {
+            // Default to customer dashboard (includes customer role or any other role)
+            navController.navigate(R.id.action_loginFragment_to_mainFragment);
+        }
+    }
+    
+    private void navigateToMain() {
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.action_loginFragment_to_mainFragment);
     }
     
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         binding = null;
     }
 } 

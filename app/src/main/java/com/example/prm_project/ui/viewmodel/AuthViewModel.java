@@ -201,6 +201,107 @@ public class AuthViewModel extends ViewModel {
         return authRepository.isRememberMeEnabled();
     }
     
+    // Registration data holders
+    private CustomerRegistrationRequest registrationRequest = new CustomerRegistrationRequest();
+    
+    /**
+     * Set personal information for registration
+     */
+    public void setRegistrationPersonalInfo(String fullName, String email, String phoneNumber, 
+                                          String password, String dateOfBirth, String gender, 
+                                          String emergencyContactName, String emergencyContactPhone) {
+        registrationRequest.setFullName(fullName);
+        registrationRequest.setEmail(email);
+        registrationRequest.setPhoneNumber(phoneNumber);
+        registrationRequest.setPassword(password);
+        registrationRequest.setDateOfBirth(dateOfBirth);
+        registrationRequest.setGender(gender);
+        registrationRequest.setEmergencyContactName(emergencyContactName);
+        registrationRequest.setEmergencyContactPhone(emergencyContactPhone);
+    }
+    
+    /**
+     * Set address information for registration
+     */
+    public void setRegistrationAddressInfo(String address, String ward, String district, 
+                                         String province, String country) {
+        registrationRequest.setAddress(address);
+        registrationRequest.setWard(ward);
+        registrationRequest.setDistrict(district);
+        registrationRequest.setProvince(province);
+        registrationRequest.setCountry(country);
+    }
+    
+    /**
+     * Complete customer registration
+     */
+    public void registerCustomer() {
+        isLoading.setValue(true);
+        errorMessage.setValue(null);
+        
+        authRepository.registerCustomer(registrationRequest, new AuthRepository.AuthCallback<AuthResponse>() {
+            @Override
+            public void onSuccess(AuthResponse response) {
+                isLoading.setValue(false);
+                successMessage.setValue("Account created successfully! Please login.");
+                
+                // Clear registration data after successful registration
+                registrationRequest = new CustomerRegistrationRequest();
+            }
+            
+            @Override
+            public void onError(String error) {
+                isLoading.setValue(false);
+                errorMessage.setValue(error);
+            }
+        });
+    }
+    
+    /**
+     * Get current registration request (for debugging or validation)
+     */
+    public CustomerRegistrationRequest getRegistrationRequest() {
+        return registrationRequest;
+    }
+    
+    /**
+     * Clear registration data
+     */
+    public void clearRegistrationData() {
+        registrationRequest = new CustomerRegistrationRequest();
+    }
+    
+    /**
+     * Get current user role from session
+     */
+    public String getUserRole() {
+        return authRepository.getUserRole();
+    }
+    
+    /**
+     * Check if current user is customer
+     */
+    public boolean isCustomer() {
+        String role = getUserRole();
+        return role != null && (role.equalsIgnoreCase("CUSTOMER") || role.equalsIgnoreCase("customer"));
+    }
+    
+    /**
+     * Check if current user is admin
+     */
+    public boolean isAdmin() {
+        String role = getUserRole();
+        return role != null && (role.equalsIgnoreCase("ADMIN") || role.equalsIgnoreCase("admin"));
+    }
+    
+    /**
+     * Check if current user is staff
+     */
+    public boolean isStaff() {
+        String role = getUserRole();
+        return role != null && (role.equalsIgnoreCase("STAFF") || role.equalsIgnoreCase("staff"));
+    }
+    
     // Validation methods
     private boolean validateLoginInput(String email, String password) {
         if (email == null || email.trim().isEmpty()) {

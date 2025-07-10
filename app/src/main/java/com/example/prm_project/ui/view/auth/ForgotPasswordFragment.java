@@ -1,32 +1,40 @@
-package com.example.prm_project.ui.view;
+package com.example.prm_project.ui.view.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.prm_project.R;
-import com.example.prm_project.databinding.ActivityForgotPasswordBinding;
+import com.example.prm_project.databinding.FragmentForgotPasswordBinding;
 import com.example.prm_project.ui.viewmodel.AuthViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordFragment extends Fragment {
     
-    private ActivityForgotPasswordBinding binding;
+    private FragmentForgotPasswordBinding binding;
     private AuthViewModel authViewModel;
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentForgotPasswordBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+    
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         
-        // Set up data binding
-        binding = ActivityForgotPasswordBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        
-        // Initialize ViewModel
+        // Initialize ViewModel - Hilt provides all dependencies automatically
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         
         // Initialize UI components
@@ -39,7 +47,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void initializeComponents() {
         // Back button click listener
         binding.btnBack.setOnClickListener(v -> {
-            finish();
+            NavController navController = Navigation.findNavController(v);
+            navController.navigateUp();
         });
         
         // Reset password button click listener
@@ -74,11 +83,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     
     private void observeViewModel() {
         // Observe loading state
-        authViewModel.getIsLoading().observe(this, isLoading -> {
+        authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
                 binding.btnResetPassword.setEnabled(false);
                 binding.btnResetPassword.setText(getString(R.string.sending_reset_email));
-                // You can add a progress indicator here
             } else {
                 binding.btnResetPassword.setEnabled(true);
                 binding.btnResetPassword.setText(getString(R.string.reset_password));
@@ -86,7 +94,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
         
         // Observe error messages
-        authViewModel.getErrorMessage().observe(this, errorMessage -> {
+        authViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_LONG).show();
                 authViewModel.clearMessages();
@@ -94,28 +102,29 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
         
         // Observe success messages
-        authViewModel.getSuccessMessage().observe(this, successMessage -> {
+        authViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), successMessage -> {
             if (successMessage != null && !successMessage.isEmpty()) {
-                Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), successMessage, Toast.LENGTH_SHORT).show();
                 authViewModel.clearMessages();
             }
         });
         
         // Observe forgot password success
-        authViewModel.getForgotPasswordSuccess().observe(this, success -> {
+        authViewModel.getForgotPasswordSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                // Navigate to reset email sent activity
-                Intent intent = new Intent(ForgotPasswordActivity.this, ResetEmailSentActivity.class);
-                intent.putExtra("email", binding.etEmail.getText().toString().trim());
-                startActivity(intent);
-                finish();
+                // Navigate to reset email sent fragment
+                Bundle args = new Bundle();
+                args.putString("email", binding.etEmail.getText().toString().trim());
+                
+                NavController navController = Navigation.findNavController(requireView());
+                navController.navigate(R.id.action_forgotPasswordFragment_to_resetEmailSentFragment, args);
             }
         });
     }
     
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         binding = null;
     }
 } 

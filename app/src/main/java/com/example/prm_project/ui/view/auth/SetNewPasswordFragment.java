@@ -1,38 +1,48 @@
-package com.example.prm_project.ui.view;
+package com.example.prm_project.ui.view.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.prm_project.R;
-import com.example.prm_project.databinding.ActivitySetNewPasswordBinding;
+import com.example.prm_project.databinding.FragmentSetNewPasswordBinding;
 import com.example.prm_project.ui.viewmodel.AuthViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class SetNewPasswordActivity extends AppCompatActivity {
+public class SetNewPasswordFragment extends Fragment {
     
-    private ActivitySetNewPasswordBinding binding;
+    private FragmentSetNewPasswordBinding binding;
     private AuthViewModel authViewModel;
     private String resetToken;
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentSetNewPasswordBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+    
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         
-        // Set up data binding
-        binding = ActivitySetNewPasswordBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        
-        // Initialize ViewModel
+        // Initialize ViewModel - Hilt provides all dependencies automatically
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         
-        // Get reset token from intent (in real app, this would come from email link)
-        resetToken = getIntent().getStringExtra("reset_token");
+        // Get reset token from arguments (in real app, this would come from deep link)
+        Bundle args = getArguments();
+        if (args != null) {
+            resetToken = args.getString("reset_token");
+        }
         if (resetToken == null || resetToken.isEmpty()) {
             // For demo purposes, use a placeholder token
             resetToken = "demo_reset_token";
@@ -48,7 +58,8 @@ public class SetNewPasswordActivity extends AppCompatActivity {
     private void initializeComponents() {
         // Back button click listener
         binding.btnBack.setOnClickListener(v -> {
-            finish();
+            NavController navController = Navigation.findNavController(v);
+            navController.navigateUp();
         });
         
         // Set password button click listener
@@ -102,11 +113,10 @@ public class SetNewPasswordActivity extends AppCompatActivity {
     
     private void observeViewModel() {
         // Observe loading state
-        authViewModel.getIsLoading().observe(this, isLoading -> {
+        authViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading) {
                 binding.btnSavePassword.setEnabled(false);
                 binding.btnSavePassword.setText(getString(R.string.saving_password));
-                // You can add a progress indicator here
             } else {
                 binding.btnSavePassword.setEnabled(true);
                 binding.btnSavePassword.setText(getString(R.string.save_password));
@@ -114,7 +124,7 @@ public class SetNewPasswordActivity extends AppCompatActivity {
         });
         
         // Observe error messages
-        authViewModel.getErrorMessage().observe(this, errorMessage -> {
+        authViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null && !errorMessage.isEmpty()) {
                 Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_LONG).show();
                 authViewModel.clearMessages();
@@ -122,32 +132,28 @@ public class SetNewPasswordActivity extends AppCompatActivity {
         });
         
         // Observe success messages
-        authViewModel.getSuccessMessage().observe(this, successMessage -> {
+        authViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), successMessage -> {
             if (successMessage != null && !successMessage.isEmpty()) {
-                Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), successMessage, Toast.LENGTH_SHORT).show();
                 authViewModel.clearMessages();
             }
         });
         
         // Observe reset password success
-        authViewModel.getResetPasswordSuccess().observe(this, success -> {
+        authViewModel.getResetPasswordSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
                 // Navigate back to login
-                Intent intent = new Intent(SetNewPasswordActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                NavController navController = Navigation.findNavController(requireView());
+                navController.navigate(R.id.action_setNewPasswordFragment_to_loginFragment);
                 
-                Toast.makeText(this, getString(R.string.password_reset_success_message), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.password_reset_success_message), Toast.LENGTH_LONG).show();
             }
         });
-        
-
     }
     
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         binding = null;
     }
 } 

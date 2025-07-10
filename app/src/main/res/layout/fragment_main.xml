@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.prm_project.ui.viewmodel.MainViewModel" />
+    </data>
+
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="?attr/colorSurface">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
+            tools:context=".ui.view.main.MainFragment">
+
+            <!-- App Bar -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_app_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <!-- App Icon -->
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_launcher_foreground"
+                        android:background="@drawable/ic_launcher_background" />
+
+                    <!-- Welcome Text -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/welcome_to_main_screen"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="?attr/colorOnSurface" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ready to explore!"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    </LinearLayout>
+
+                    <!-- Logout Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_logout"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:icon="@drawable/ic_arrow_back"
+                        app:iconSize="20dp"
+                        app:iconTint="?attr/colorOnSurfaceVariant"
+                        android:contentDescription="@string/logout" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Quick Actions Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_quick_actions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardElevation="1dp"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintTop_toBottomOf="@id/card_app_bar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <!-- Quick Book Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_quick_book"
+                        style="@style/Widget.MaterialComponents.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/quick_book"
+                        android:textAppearance="?attr/textAppearanceButton"
+                        app:cornerRadius="12dp" />
+
+                    <!-- My Bookings Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_my_bookings"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/my_bookings"
+                        android:textAppearance="?attr/textAppearanceButton"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="?attr/colorOutline"
+                        app:strokeWidth="1dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Popular Services Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_services"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintTop_toBottomOf="@id/card_quick_actions"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <!-- Section Title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/popular_services"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <!-- Services Grid -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Row 1 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <!-- Cleaning Service -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_cleaning"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:text="@string/cleaning_service"
+                                android:textAppearance="?attr/textAppearanceCaption"
+                                app:cornerRadius="8dp"
+                                app:strokeColor="?attr/colorOutline"
+                                app:strokeWidth="1dp" />
+
+                            <!-- Plumbing Service -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_plumbing"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/plumbing_service"
+                                android:textAppearance="?attr/textAppearanceCaption"
+                                app:cornerRadius="8dp"
+                                app:strokeColor="?attr/colorOutline"
+                                app:strokeWidth="1dp" />
+
+                        </LinearLayout>
+
+                        <!-- Row 2 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <!-- Electrical Service -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_electrical"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:text="@string/electrical_service"
+                                android:textAppearance="?attr/textAppearanceCaption"
+                                app:cornerRadius="8dp"
+                                app:strokeColor="?attr/colorOutline"
+                                app:strokeWidth="1dp" />
+
+                            <!-- Carpentry Service -->
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_carpentry"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/carpentry_service"
+                                android:textAppearance="?attr/textAppearanceCaption"
+                                app:cornerRadius="8dp"
+                                app:strokeColor="?attr/colorOutline"
+                                app:strokeWidth="1dp" />
+
+                        </LinearLayout>
+
+                        <!-- Browse All Services Button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_browse_all"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/all_services"
+                            android:textAppearance="?attr/textAppearanceButton" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Bottom Spacer -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                app:layout_constraintTop_toBottomOf="@id/card_services"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout> 

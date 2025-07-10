@@ -208,30 +208,30 @@ public class AuthRepository {
     /**
      * Update profile - No manual token needed! AuthInterceptor handles it
      */
-    public void updateProfile(UpdateProfileRequest request, AuthCallback<User> callback) {
-        Call<ApiResponse<User>> call = authApiService.updateProfile("", request); // Empty string, interceptor will inject token
-        
-        call.enqueue(new Callback<ApiResponse<User>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<User> apiResponse = response.body();
-                    if (apiResponse.isSucceeded()) {
-                        callback.onSuccess(apiResponse.getData());
-                    } else {
-                        callback.onError(apiResponse.getFirstErrorMessage());
-                    }
-                } else {
-                    callback.onError("Failed to update profile. Please try again.");
-                }
-            }
-            
-            @Override
-            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                callback.onError("Network error: " + t.getMessage());
-            }
-        });
-    }
+//    public void updateProfile(UpdateProfileRequest request, AuthCallback<User> callback) {
+//        Call<ApiResponse<User>> call = authApiService.updateProfile("", request); // Empty string, interceptor will inject token
+//
+//        call.enqueue(new Callback<ApiResponse<User>>() {
+//            @Override
+//            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    ApiResponse<User> apiResponse = response.body();
+//                    if (apiResponse.isSucceeded()) {
+//                        callback.onSuccess(apiResponse.getData());
+//                    } else {
+//                        callback.onError(apiResponse.getFirstErrorMessage());
+//                    }
+//                } else {
+//                    callback.onError("Failed to update profile. Please try again.");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+//                callback.onError("Network error: " + t.getMessage());
+//            }
+//        });
+//    }
     
     /**
      * Logout user - No manual token needed! AuthInterceptor handles it
@@ -293,5 +293,12 @@ public class AuthRepository {
      */
     public boolean isRememberMeEnabled() {
         return sessionManager.isRememberMeEnabled();
+    }
+    
+    /**
+     * Get current user role
+     */
+    public String getUserRole() {
+        return sessionManager.getUserRole();
     }
 } 

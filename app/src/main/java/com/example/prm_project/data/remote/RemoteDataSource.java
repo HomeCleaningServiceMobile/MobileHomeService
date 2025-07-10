@@ -209,31 +209,31 @@ public class RemoteDataSource {
         });
     }
     
-    public void updateProfile(String authToken, UpdateProfileRequest updateProfileRequest, ProfileCallback callback) {
-        Call<ApiResponse<User>> call = authApiService.updateProfile("Bearer " + authToken, updateProfileRequest);
-        call.enqueue(new Callback<ApiResponse<User>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
-                mainHandler.post(() -> {
-                    if (response.isSuccessful() && response.body() != null) {
-                        ApiResponse<User> apiResponse = response.body();
-                        if (apiResponse.isSucceeded()) {
-                            callback.onSuccess(apiResponse.getData());
-                        } else {
-                            callback.onError(apiResponse.getFirstErrorMessage());
-                        }
-                    } else {
-                        callback.onError("Failed to update profile: " + response.code());
-                    }
-                });
-            }
-            
-            @Override
-            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                mainHandler.post(() -> callback.onError("Network error: " + t.getMessage()));
-            }
-        });
-    }
+//    public void updateProfile(String authToken, UpdateProfileRequest updateProfileRequest, ProfileCallback callback) {
+//        Call<ApiResponse<User>> call = authApiService.updateProfile("Bearer " + authToken, updateProfileRequest);
+//        call.enqueue(new Callback<ApiResponse<User>>() {
+//            @Override
+//            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+//                mainHandler.post(() -> {
+//                    if (response.isSuccessful() && response.body() != null) {
+//                        ApiResponse<User> apiResponse = response.body();
+//                        if (apiResponse.isSucceeded()) {
+//                            callback.onSuccess(apiResponse.getData());
+//                        } else {
+//                            callback.onError(apiResponse.getFirstErrorMessage());
+//                        }
+//                    } else {
+//                        callback.onError("Failed to update profile: " + response.code());
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+//                mainHandler.post(() -> callback.onError("Network error: " + t.getMessage()));
+//            }
+//        });
+//    }
     
     public void refreshToken(RefreshTokenRequest refreshTokenRequest, TokenCallback callback) {
         Call<ApiResponse<TokenResponse>> call = authApiService.refreshToken(refreshTokenRequest);

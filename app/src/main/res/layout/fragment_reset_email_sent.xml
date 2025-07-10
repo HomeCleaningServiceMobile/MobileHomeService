@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="?attr/colorSurface">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp"
+        tools:context=".ui.view.auth.ResetEmailSentFragment">
+
+        <!-- Content Container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_go_to_login"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Success Icon -->
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="32dp"
+                android:src="@drawable/ic_check_circle"
+                android:padding="24dp"
+                app:tint="?attr/colorPrimary"
+                android:contentDescription="@string/success_icon" />
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/reset_email_sent_title"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="?attr/colorOnSurface"
+                android:gravity="center" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="@string/reset_email_sent_subtitle"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:gravity="center" />
+
+            <!-- Message Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="1dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+                <TextView
+                    android:id="@+id/tv_reset_email_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="@string/reset_email_sent_subtitle"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:gravity="center"
+                    tools:text="We've sent a password reset link to your email address. Please check your email and follow the instructions." />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <!-- Go to Login Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_go_to_login"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="32dp"
+            android:text="@string/go_to_login_page"
+            android:textAppearance="?attr/textAppearanceButton"
+            app:cornerRadius="16dp"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView> 

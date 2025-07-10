@@ -27,11 +27,11 @@ public interface AuthApiService {
     @GET("profile")
     Call<ApiResponse<User>> getProfile(@Header("Authorization") String authToken);
     
-    @PUT("profile")
-    Call<ApiResponse<User>> updateProfile(
-        @Header("Authorization") String authToken,
-        @Body UpdateProfileRequest updateProfileRequest
-    );
+//    @PUT("profile")
+//    Call<ApiResponse<User>> updateProfile(
+//        @Header("Authorization") String authToken,
+//        @Body UpdateProfileRequest updateProfileRequest
+//    );
     
     @POST("refresh")
     Call<ApiResponse<TokenResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);

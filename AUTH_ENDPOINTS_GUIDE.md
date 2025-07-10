@@ -100,7 +100,6 @@ Register a new customer account.
   "ward": "Ward 1",
   "district": "District 1",
   "province": "Ho Chi Minh City",
-  "country": "Vietnam",
   "latitude": 10.762622,
   "longitude": 106.660172,
   "emergencyContactName": "Jane Doe",

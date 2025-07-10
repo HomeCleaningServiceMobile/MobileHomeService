@@ -5,6 +5,7 @@
     
     <!-- Primary Colors -->
     <color name="primary_orange">#FF6B3A</color>
+    <color name="purple_500">#9C27B0</color>
     
     <!-- Background Colors -->
     <color name="background_light">#F8F9FA</color>

@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
 
@@ -58,11 +57,19 @@ dependencies {
     // Security & Encryption
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     
-    // Dependency Injection - Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-compiler:2.48")
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    // Dependency Injection - Hilt (Java compatible version)
+    implementation("com.google.dagger:hilt-android:2.44")
+    annotationProcessor("com.google.dagger:hilt-compiler:2.44")
+    
+    // JSR 330 - Provides @Inject, @Singleton, etc.
+    implementation("javax.inject:javax.inject:1")
+    
+    // Fragment
+    implementation("androidx.fragment:fragment:1.6.2")
+    
+    // Navigation Component
+    implementation("androidx.navigation:navigation-fragment:2.7.5")
+    implementation("androidx.navigation:navigation-ui:2.7.5")
     
     // Networking
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
