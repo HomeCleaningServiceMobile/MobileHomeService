@@ -3,12 +3,14 @@ package com.example.prm_project.ui.view;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+
 import com.example.prm_project.R;
 import com.example.prm_project.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
     
-    private ActivityLoginBinding binding;
+    private ViewDataBinding binding;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
