@@ -13,28 +13,154 @@
     <string name="login">Login</string>
     <string name="or">OR</string>
     <string name="continue_with_google">Continue with Google</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
     <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="dont_have_account_sign_up">Don\'t have an account? Sign Up</string>
     <string name="sign_up">Sign Up</string>
     <string name="wrong_password_error">Wrong password. Please try again.</string>
     
     <!-- Forgot Password Screen -->
-    <string name="forgot_password_title">Forget Password</string>
+<!--    <string name="forgot_password_title">Forget Password</string>-->
     <string name="forgot_password_nav_title">Reset Password</string>
     <string name="enter_email_to_reset">Enter your email address to reset password</string>
     <string name="reset_password">Reset Password</string>
     <string name="back_to_login">Back to Login</string>
     
     <!-- Reset Email Sent Screen -->
-    <string name="reset_email_sent_title">Reset email sent</string>
-    <string name="reset_email_sent_subtitle">We have sent all required instructions details to your mail.</string>
+<!--    <string name="reset_email_sent_title">Reset email sent</string>-->
+<!--    <string name="reset_email_sent_subtitle">We have sent all required instructions details to your mail.</string>-->
+<!--    <string name="reset_email_sent_message">We have sent all required instructions details to %1$s.</string>-->
     <string name="go_to_login_page">Go to Login page</string>
     
     <!-- Set New Password Screen -->
-    <string name="set_new_password_title">Set new password</string>
+<!--    <string name="set_new_password_title">Set new password</string>-->
     <string name="set_new_password_nav_title">New Password</string>
     <string name="create_strong_password">Create strong and secured new password</string>
-    <string name="new_password">New Password</string>
+<!--    <string name="new_password">New Password</string>-->
     <string name="confirm_password">Confirm Password</string>
-    <string name="save_password">Save Password</string>
+<!--    <string name="save_password">Save Password</string>-->
+<!--    <string name="saving_password">Saving Password…</string>-->
     <string name="password_requirements">At least 8 characters with uppercase, lowercase, and number</string>
+    
+    <!-- Validation Messages -->
+    <string name="email_required">Email is required</string>
+    <string name="invalid_email_format">Please enter a valid email address</string>
+    <string name="password_required">Password is required</string>
+    <string name="password_too_short">Password must be at least 6 characters</string>
+    <string name="confirm_password_required">Please confirm your password</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_reset_success_message">Password reset successfully! Please login with your new password.</string>
+    
+    <!-- Loading States -->
+    <string name="logging_in">Logging in…</string>
+    <string name="sending_reset_email">Sending…</string>
+    
+    <!-- Fragment-specific strings -->
+    <string name="welcome_to_main_screen">Welcome to Main Screen</string>
+    <string name="load_data">Load Data</string>
+    <string name="update_message">Update Message</string>
+    <string name="go_to_login">Go to Login</string>
+    <string name="logout">Logout</string>
+    <string name="email_icon">Email Icon</string>
+    <string name="success_icon">Success Icon</string>
+    <string name="lock_icon">Lock Icon</string>
+    <string name="back">Back</string>
+    
+    <!-- Forgot Password -->
+    <string name="forgot_password_title">Forgot Password?</string>
+    <string name="forgot_password_subtitle">Enter your email address and we\'ll send you a link to reset your password.</string>
+    
+    <!-- Set New Password -->
+    <string name="set_new_password">Set New Password</string>
+    <string name="set_new_password_title">Create New Password</string>
+    <string name="set_new_password_subtitle">Create a strong password for your account.</string>
+    <string name="new_password">New Password</string>
+    <string name="save_password">Save Password</string>
+    <string name="saving_password">Saving...</string>
+    
+    <!-- Reset Email Sent -->
+    <string name="reset_email_sent_title">Check Your Email</string>
+    <string name="reset_email_sent_subtitle">We\'ve sent a password reset link to your email address.</string>
+    <string name="reset_email_sent_message">We\'ve sent a password reset link to %1$s. Please check your email and follow the instructions to reset your password.</string>
+
+    <!-- Customer Registration - Personal Info -->
+    <string name="create_account">Create Account</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="step_1_of_2">Step 1 of 2</string>
+    <string name="full_name">Full Name</string>
+    <string name="full_name_hint">Enter your full name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="phone_number_hint">Enter your phone number</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="date_of_birth_hint">DD/MM/YYYY</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="emergency_contact_name">Emergency Contact Name</string>
+    <string name="emergency_contact_name_hint">Contact person name</string>
+    <string name="emergency_contact_phone">Emergency Contact Phone</string>
+    <string name="emergency_contact_phone_hint">Contact person phone</string>
+    <string name="continue_to_address">Continue to Address</string>
+    
+    <!-- Customer Registration - Address Info -->
+    <string name="address_information">Address Information</string>
+    <string name="step_2_of_2">Step 2 of 2</string>
+    <string name="street_address">Street Address</string>
+    <string name="street_address_hint">Enter your street address</string>
+    <string name="ward">Ward</string>
+    <string name="ward_hint">Select or enter ward</string>
+    <string name="district">District</string>
+    <string name="district_hint">Select or enter district</string>
+    <string name="province">Province/City</string>
+    <string name="province_hint">Select or enter province</string>
+    <string name="country">Country</string>
+    <string name="country_hint">Select or enter country</string>
+    <string name="complete_registration">Complete Registration</string>
+    <string name="registering">Creating Account...</string>
+    
+    <!-- Validation Messages for Registration -->
+    <string name="full_name_required">Full name is required</string>
+    <string name="phone_number_required">Phone number is required</string>
+    <string name="invalid_phone_format">Please enter a valid phone number</string>
+    <string name="date_of_birth_required">Date of birth is required</string>
+    <string name="invalid_date_format">Please enter a valid date (DD/MM/YYYY)</string>
+    <string name="gender_required">Please select a gender</string>
+    <string name="emergency_contact_name_required">Emergency contact name is required</string>
+    <string name="emergency_contact_phone_required">Emergency contact phone is required</string>
+    <string name="address_required">Street address is required</string>
+    <string name="ward_required">Ward is required</string>
+    <string name="district_required">District is required</string>
+    <string name="province_required">Province is required</string>
+    <string name="country_required">Country is required</string>
+    <string name="registration_success">Account created successfully! Please login.</string>
+    <string name="back_to_personal_info">Back to Personal Info</string>
+
+    <!-- Customer Dashboard -->
+    <string name="home_services">Home Services</string>
+    <string name="quick_book">Quick Book</string>
+    <string name="my_bookings">My Bookings</string>
+    <string name="browse_services">Browse Services</string>
+    <string name="cleaning_service">Cleaning</string>
+    <string name="plumbing_service">Plumbing</string>
+    <string name="electrical_service">Electrical</string>
+    <string name="carpentry_service">Carpentry</string>
+    <string name="painting_service">Painting</string>
+    <string name="gardening_service">Gardening</string>
+    <string name="book_now">Book Now</string>
+    <string name="popular_services">Popular Services</string>
+    <string name="all_services">All Services</string>
+    <string name="recent_bookings">Recent Bookings</string>
+    <string name="no_recent_bookings">No recent bookings</string>
+    <string name="view_all_bookings">View All Bookings</string>
+    
+    <!-- Role-based Views -->
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="staff_dashboard">Staff Dashboard</string>
+    <string name="hello_admin">Hello Admin!</string>
+    <string name="hello_staff">Hello Staff!</string>
+    <string name="admin_welcome_message">Welcome to the admin panel. You have full access to manage the system.</string>
+    <string name="staff_welcome_message">Welcome to the staff panel. You can manage assigned services and bookings.</string>
+
 </resources>

@@ -1,9 +1,9 @@
 package com.example.prm_project.data.repository;
 
-import com.example.prm_project.data.local.LocalDataSource;
-import com.example.prm_project.data.remote.RemoteDataSource;
-import com.example.prm_project.data.remote.AuthApiService;
 import com.example.prm_project.data.model.*;
+import com.example.prm_project.data.remote.AuthApiService;
+import com.example.prm_project.utils.SessionManager;
+import com.example.prm_project.utils.TokenManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -11,98 +11,31 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class MainRepository {
+public class AuthRepository {
     
-    private LocalDataSource localDataSource;
-    private RemoteDataSource remoteDataSource;
     private AuthApiService authApiService;
+    private SessionManager sessionManager;
+    private TokenManager tokenManager;
     
     /**
      * Constructor with dependency injection
      * All dependencies are automatically provided by Hilt
      */
     @Inject
-    public MainRepository(AuthApiService authApiService) {
-        this.localDataSource = new LocalDataSource(); // TODO: Make this injectable too
-        this.remoteDataSource = new RemoteDataSource(); // TODO: Make this injectable too
+    public AuthRepository(
+            AuthApiService authApiService,
+            SessionManager sessionManager,
+            TokenManager tokenManager) {
         this.authApiService = authApiService;
+        this.sessionManager = sessionManager;
+        this.tokenManager = tokenManager;
     }
     
-    // Callback interface for async operations
-    public interface DataCallback {
-        void onSuccess(String data);
-        void onError(String error);
-    }
-    
-    public interface UserCallback {
-        void onSuccess(User user);
-        void onError(String error);
-    }
-    
-    // Authentication callback interface
+    // Callback interfaces
     public interface AuthCallback<T> {
         void onSuccess(T data);
         void onError(String error);
     }
-    
-    public void getData(DataCallback callback) {
-        // First try to get data from local source
-        String localData = localDataSource.getCachedData();
-        if (localData != null && !localData.isEmpty()) {
-            callback.onSuccess(localData);
-            return;
-        }
-        
-        // If no local data, fetch from remote
-        remoteDataSource.fetchData(new RemoteDataSource.RemoteCallback() {
-            @Override
-            public void onSuccess(String data) {
-                // Cache the data locally
-                localDataSource.cacheData(data);
-                callback.onSuccess(data);
-            }
-            
-            @Override
-            public void onError(String error) {
-                callback.onError(error);
-            }
-        });
-    }
-    
-    public void getUser(int userId, UserCallback callback) {
-        // First check local database
-//        User localUser = localDataSource.getUser(userId);
-        User localUser = null;
-        if (localUser != null) {
-            callback.onSuccess(localUser);
-            return;
-        }
-        
-        // If not found locally, fetch from remote
-        remoteDataSource.fetchUser(userId, new RemoteDataSource.UserRemoteCallback() {
-            @Override
-            public void onSuccess(User user) {
-                // Save to local database
-                localDataSource.saveUser(user);
-                callback.onSuccess(user);
-            }
-            
-            @Override
-            public void onError(String error) {
-                callback.onError(error);
-            }
-        });
-    }
-    
-    public void saveUser(User user) {
-        localDataSource.saveUser(user);
-    }
-    
-    public void clearCache() {
-        localDataSource.clearCache();
-    }
-    
-    // Authentication methods
     
     /**
      * Login user
@@ -122,6 +55,34 @@ public class MainRepository {
                     }
                 } else {
                     callback.onError("Login failed. Please try again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Register customer
+     */
+    public void registerCustomer(CustomerRegistrationRequest request, AuthCallback<AuthResponse> callback) {
+        Call<ApiResponse<AuthResponse>> call = authApiService.registerCustomer(request);
+        
+        call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<AuthResponse> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Registration failed. Please try again.");
                 }
             }
             
@@ -189,10 +150,10 @@ public class MainRepository {
     }
     
     /**
-     * Change password
+     * Change password - No manual token needed! AuthInterceptor handles it
      */
-    public void changePassword(String authToken, ChangePasswordRequest request, AuthCallback<Void> callback) {
-        Call<ApiResponse<Void>> call = authApiService.changePassword(authToken, request);
+    public void changePassword(ChangePasswordRequest request, AuthCallback<Void> callback) {
+        Call<ApiResponse<Void>> call = authApiService.changePassword("", request); // Empty string, interceptor will inject token
         
         call.enqueue(new Callback<ApiResponse<Void>>() {
             @Override
@@ -217,10 +178,10 @@ public class MainRepository {
     }
     
     /**
-     * Get user profile
+     * Get user profile - No manual token needed! AuthInterceptor handles it
      */
-    public void getProfile(String authToken, AuthCallback<User> callback) {
-        Call<ApiResponse<User>> call = authApiService.getProfile(authToken);
+    public void getProfile(AuthCallback<User> callback) {
+        Call<ApiResponse<User>> call = authApiService.getProfile(""); // Empty string, interceptor will inject token
         
         call.enqueue(new Callback<ApiResponse<User>>() {
             @Override
@@ -245,38 +206,38 @@ public class MainRepository {
     }
     
     /**
-     * Refresh token
+     * Update profile - No manual token needed! AuthInterceptor handles it
      */
-    public void refreshToken(RefreshTokenRequest request, AuthCallback<TokenResponse> callback) {
-        Call<ApiResponse<TokenResponse>> call = authApiService.refreshToken(request);
-        
-        call.enqueue(new Callback<ApiResponse<TokenResponse>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<TokenResponse>> call, Response<ApiResponse<TokenResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<TokenResponse> apiResponse = response.body();
-                    if (apiResponse.isSucceeded()) {
-                        callback.onSuccess(apiResponse.getData());
-                    } else {
-                        callback.onError(apiResponse.getFirstErrorMessage());
-                    }
-                } else {
-                    callback.onError("Failed to refresh token. Please login again.");
-                }
-            }
-            
-            @Override
-            public void onFailure(Call<ApiResponse<TokenResponse>> call, Throwable t) {
-                callback.onError("Network error: " + t.getMessage());
-            }
-        });
-    }
+//    public void updateProfile(UpdateProfileRequest request, AuthCallback<User> callback) {
+//        Call<ApiResponse<User>> call = authApiService.updateProfile("", request); // Empty string, interceptor will inject token
+//
+//        call.enqueue(new Callback<ApiResponse<User>>() {
+//            @Override
+//            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    ApiResponse<User> apiResponse = response.body();
+//                    if (apiResponse.isSucceeded()) {
+//                        callback.onSuccess(apiResponse.getData());
+//                    } else {
+//                        callback.onError(apiResponse.getFirstErrorMessage());
+//                    }
+//                } else {
+//                    callback.onError("Failed to update profile. Please try again.");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+//                callback.onError("Network error: " + t.getMessage());
+//            }
+//        });
+//    }
     
     /**
-     * Logout user
+     * Logout user - No manual token needed! AuthInterceptor handles it
      */
-    public void logout(String authToken, AuthCallback<Void> callback) {
-        Call<ApiResponse<Void>> call = authApiService.logout(authToken);
+    public void logout(AuthCallback<Void> callback) {
+        Call<ApiResponse<Void>> call = authApiService.logout(""); // Empty string, interceptor will inject token
         
         call.enqueue(new Callback<ApiResponse<Void>>() {
             @Override
@@ -284,19 +245,60 @@ public class MainRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<Void> apiResponse = response.body();
                     if (apiResponse.isSucceeded()) {
+                        // Clear local session after successful server logout
+                        tokenManager.clearTokens();
                         callback.onSuccess(null);
                     } else {
                         callback.onError(apiResponse.getFirstErrorMessage());
                     }
                 } else {
-                    callback.onError("Logout failed. Please try again.");
+                    // Even if server logout fails, clear local session
+                    tokenManager.clearTokens();
+                    callback.onError("Logout failed on server, but local session cleared.");
                 }
             }
             
             @Override
             public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
-                callback.onError("Network error: " + t.getMessage());
+                // Clear local session even on network failure
+                tokenManager.clearTokens();
+                callback.onError("Network error during logout, but local session cleared.");
             }
         });
+    }
+    
+    /**
+     * Check if user is authenticated with valid token
+     */
+    public boolean isAuthenticated() {
+        return tokenManager.isAuthenticated();
+    }
+    
+    /**
+     * Save user session after successful login/register
+     */
+    public void saveUserSession(AuthResponse authResponse, boolean rememberMe) {
+        sessionManager.saveUserSession(authResponse, rememberMe);
+    }
+    
+    /**
+     * Get saved email for auto-fill
+     */
+    public String getSavedEmail() {
+        return sessionManager.getSavedEmail();
+    }
+    
+    /**
+     * Check if remember me is enabled
+     */
+    public boolean isRememberMeEnabled() {
+        return sessionManager.isRememberMeEnabled();
+    }
+    
+    /**
+     * Get current user role
+     */
+    public String getUserRole() {
+        return sessionManager.getUserRole();
     }
 } 
