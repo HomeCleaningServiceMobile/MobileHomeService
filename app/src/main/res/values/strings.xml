@@ -27,6 +27,7 @@
     <!-- Reset Email Sent Screen -->
     <string name="reset_email_sent_title">Reset email sent</string>
     <string name="reset_email_sent_subtitle">We have sent all required instructions details to your mail.</string>
+    <string name="reset_email_sent_message">We have sent all required instructions details to %1$s.</string>
     <string name="go_to_login_page">Go to Login page</string>
     
     <!-- Set New Password Screen -->
@@ -36,5 +37,19 @@
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="save_password">Save Password</string>
+    <string name="saving_password">Saving Password…</string>
     <string name="password_requirements">At least 8 characters with uppercase, lowercase, and number</string>
+    
+    <!-- Validation Messages -->
+    <string name="email_required">Email is required</string>
+    <string name="invalid_email_format">Please enter a valid email address</string>
+    <string name="password_required">Password is required</string>
+    <string name="password_too_short">Password must be at least 6 characters</string>
+    <string name="confirm_password_required">Please confirm your password</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_reset_success_message">Password reset successfully! Please login with your new password.</string>
+    
+    <!-- Loading States -->
+    <string name="logging_in">Logging in…</string>
+    <string name="sending_reset_email">Sending…</string>
 </resources>

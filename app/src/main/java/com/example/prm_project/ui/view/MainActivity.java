@@ -7,12 +7,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.databinding.DataBindingUtil;
 
 import com.example.prm_project.R;
 import com.example.prm_project.databinding.ActivityMainBinding;
 import com.example.prm_project.ui.viewmodel.MainViewModel;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     
     private ActivityMainBinding binding;
@@ -24,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         
         // Initialize data binding
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -48,5 +50,11 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getMessage().observe(this, message -> {
             // Handle message changes if needed
         });
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 } 

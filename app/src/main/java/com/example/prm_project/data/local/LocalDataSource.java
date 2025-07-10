@@ -51,20 +51,20 @@ public class LocalDataSource {
         }
     }
     
-    public User getUser(int userId) {
-        if (userDao != null) {
-            // In a real app, this should be done on a background thread
-            // For now, returning a mock user
-            return new User(userId, "John Doe", "john@example.com", "123-456-7890");
-        }
-        
-        // Return mock data for demonstration
-        if (userId == 1) {
-            return new User(1, "Mock User", "mock@example.com", "000-000-0000");
-        }
-        
-        return null;
-    }
+//    public User getUser(int userId) {
+//        if (userDao != null) {
+//            // In a real app, this should be done on a background thread
+//            // For now, returning a mock user
+//            return new User(userId, "John Doe", "john@example.com", "123-456-7890");
+//        }
+//
+//        // Return mock data for demonstration
+//        if (userId == 1) {
+//            return new User(1, "Mock", "User", "mock@example.com", "000-000-0000");
+//        }
+//
+//        return null;
+//    }
     
     public void deleteUser(int userId) {
         if (userDao != null) {
