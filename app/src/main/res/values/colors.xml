@@ -86,4 +86,37 @@
     <color name="md_theme_dark_surfaceTint">#FFB690</color>
     <color name="md_theme_dark_outlineVariant">#52443C</color>
     <color name="md_theme_dark_scrim">#000000</color>
+
+<!--    main_frag-->
+    <!-- Primary Colors -->
+    <color name="orange_500">#FF7043</color>
+    <color name="orange_100">#FFE0B2</color>
+
+    <!-- Secondary Colors -->
+    <color name="purple_400">#AB47BC</color>
+    <color name="purple_100">#E1BEE7</color>
+
+    <color name="blue_500">#2196F3</color>
+    <color name="blue_400">#42A5F5</color>
+    <color name="blue_100">#BBDEFB</color>
+
+    <color name="green_500">#4CAF50</color>
+    <color name="green_100">#C8E6C9</color>
+
+    <color name="red_500">#F44336</color>
+    <color name="red_100">#FFCDD2</color>
+
+    <color name="pink_100">#F8BBD9</color>
+
+    <!-- Neutral Colors -->
+<!--    <color name="black">#000000</color>-->
+<!--    <color name="white">#FFFFFF</color>-->
+    <color name="gray_900">#212121</color>
+    <color name="gray_700">#616161</color>
+    <color name="gray_500">#9E9E9E</color>
+    <color name="gray_100">#F5F5F5</color>
+
+    <!-- Bottom Navigation Colors -->
+<!--    <color name="bottom_nav_color">@color/bottom_nav_selector</color>-->
+
 </resources>

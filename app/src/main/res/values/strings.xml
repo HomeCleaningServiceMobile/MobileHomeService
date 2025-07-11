@@ -7,7 +7,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="email_hint">username@email.com</string>
-    <string name="password_hint">••••••</string>
+    <string name="password_hint">Password</string>
     <string name="remember_me">Remember Me</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="login">Login</string>
@@ -39,7 +39,7 @@
 <!--    <string name="new_password">New Password</string>-->
     <string name="confirm_password">Confirm Password</string>
 <!--    <string name="save_password">Save Password</string>-->
-<!--    <string name="saving_password">Saving Password…</string>-->
+<!--    <string name="saving_password">Saving Password...</string>-->
     <string name="password_requirements">At least 8 characters with uppercase, lowercase, and number</string>
     
     <!-- Validation Messages -->
@@ -52,8 +52,8 @@
     <string name="password_reset_success_message">Password reset successfully! Please login with your new password.</string>
     
     <!-- Loading States -->
-    <string name="logging_in">Logging in…</string>
-    <string name="sending_reset_email">Sending…</string>
+    <string name="logging_in">Logging in...</string>
+    <string name="sending_reset_email">Sending...</string>
     
     <!-- Fragment-specific strings -->
     <string name="welcome_to_main_screen">Welcome to Main Screen</string>
@@ -162,5 +162,34 @@
     <string name="hello_staff">Hello Staff!</string>
     <string name="admin_welcome_message">Welcome to the admin panel. You have full access to manage the system.</string>
     <string name="staff_welcome_message">Welcome to the staff panel. You can manage assigned services and bookings.</string>
+
+    <!-- Updated Home Screen -->
+    <string name="welcome_emoji">Welcome</string>
+    <string name="need_helping_hand">Need a helping hand today?</string>
+    <string name="house_shifting">House\nShifting</string>
+    <string name="office_shifting">Office\nShifting</string>
+    <string name="commercial_shifting">Commercial\nShifting</string>
+    <string name="offers_news">Offers &amp; News</string>
+    <string name="trending">Trending</string>
+    <string name="promotion">Promotion</string>
+    <string name="summer_offer">Summer Offer</string>
+    <string name="new_label">New</string>
+    <string name="other_services">Other Services</string>
+    <string name="cleaning">Cleaning</string>
+    <string name="labour_service">Labour Service</string>
+    <string name="vehicle">Vehicle</string>
+    <string name="paint">Paint</string>
+    <string name="shifty_40_off">40% OFF</string>
+    <string name="on_first_cleaning_service">On First Cleaning Service</string>
+    <string name="shifty_15_off">15% OFF</string>
+    <string name="online_booking">Online Booking</string>
+    <string name="limited_time">Limited Time</string>
+    <string name="new_service">New</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">Home</string>
+    <string name="bookings">Bookings</string>
+    <string name="services">Services</string>
+    <string name="profile">Profile</string>
 
 </resources>
