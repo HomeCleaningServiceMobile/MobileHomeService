@@ -139,7 +139,6 @@
 
     <!-- Customer Dashboard -->
     <string name="home_services">Home Services</string>
-    <string name="quick_book">Quick Book</string>
     <string name="my_bookings">My Bookings</string>
     <string name="browse_services">Browse Services</string>
     <string name="cleaning_service">Cleaning</string>
@@ -148,7 +147,6 @@
     <string name="carpentry_service">Carpentry</string>
     <string name="painting_service">Painting</string>
     <string name="gardening_service">Gardening</string>
-    <string name="book_now">Book Now</string>
     <string name="popular_services">Popular Services</string>
     <string name="all_services">All Services</string>
     <string name="recent_bookings">Recent Bookings</string>
@@ -191,5 +189,10 @@
     <string name="bookings">Bookings</string>
     <string name="services">Services</string>
     <string name="profile">Profile</string>
+
+    <!-- Booking -->
+    <string name="book_service">Book a Service</string>
+    <string name="quick_book">Quick Book</string>
+    <string name="book_now">Book Now</string>
 
 </resources>
