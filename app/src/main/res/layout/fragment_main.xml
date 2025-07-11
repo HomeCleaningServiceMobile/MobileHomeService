@@ -9,263 +9,533 @@
             type="com.example.prm_project.ui.viewmodel.MainViewModel" />
     </data>
 
-    <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="?attr/colorSurface">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="24dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Welcome Section -->
+        <TextView
+            android:id="@+id/welcomeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/welcome_emoji"
+            android:textColor="@color/gray_900"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/welcomeSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="sans-serif"
+            android:text="Need a helping hand today?"
+            android:textColor="@color/gray_500"
+            android:textSize="16sp" />
+
+        <!-- Service Categories -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="24dp"
-            tools:context=".ui.view.main.MainFragment">
+            android:orientation="horizontal"
+            android:layout_marginBottom="32dp">
 
-            <!-- App Bar -->
+            <!-- House Shifting -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_app_bar"
+                android:id="@+id/card_house_shifting"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
                 app:cardElevation="2dp"
                 app:cardCornerRadius="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:cardBackgroundColor="@color/pink_100"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <!-- App Icon -->
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginEnd="16dp"
-                        android:src="@drawable/ic_launcher_foreground"
-                        android:background="@drawable/ic_launcher_background" />
-
-                    <!-- Welcome Text -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/welcome_to_main_screen"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
-                            android:textColor="?attr/colorOnSurface" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Ready to explore!"
-                            android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="?attr/colorOnSurfaceVariant" />
-
-                    </LinearLayout>
-
-                    <!-- Logout Button -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_logout"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        app:icon="@drawable/ic_arrow_back"
-                        app:iconSize="20dp"
-                        app:iconTint="?attr/colorOnSurfaceVariant"
-                        android:contentDescription="@string/logout" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Quick Actions Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_quick_actions"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardElevation="1dp"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintTop_toBottomOf="@id/card_app_bar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <!-- Quick Book Button -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_quick_book"
-                        style="@style/Widget.MaterialComponents.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/quick_book"
-                        android:textAppearance="?attr/textAppearanceButton"
-                        app:cornerRadius="12dp" />
-
-                    <!-- My Bookings Button -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_my_bookings"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="@string/my_bookings"
-                        android:textAppearance="?attr/textAppearanceButton"
-                        app:cornerRadius="12dp"
-                        app:strokeColor="?attr/colorOutline"
-                        app:strokeWidth="1dp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Popular Services Card -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_services"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintTop_toBottomOf="@id/card_quick_actions"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:gravity="center"
+                    android:padding="12dp">
 
-                    <!-- Section Title -->
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_home"
+                        android:layout_marginBottom="8dp"
+                        app:tint="@color/gray_700" />
+
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="@string/popular_services"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="?attr/colorOnSurface" />
-
-                    <!-- Services Grid -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!-- Row 1 -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="12dp">
-
-                            <!-- Cleaning Service -->
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_cleaning"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_weight="1"
-                                android:layout_marginEnd="6dp"
-                                android:text="@string/cleaning_service"
-                                android:textAppearance="?attr/textAppearanceCaption"
-                                app:cornerRadius="8dp"
-                                app:strokeColor="?attr/colorOutline"
-                                app:strokeWidth="1dp" />
-
-                            <!-- Plumbing Service -->
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_plumbing"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="6dp"
-                                android:text="@string/plumbing_service"
-                                android:textAppearance="?attr/textAppearanceCaption"
-                                app:cornerRadius="8dp"
-                                app:strokeColor="?attr/colorOutline"
-                                app:strokeWidth="1dp" />
-
-                        </LinearLayout>
-
-                        <!-- Row 2 -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="12dp">
-
-                            <!-- Electrical Service -->
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_electrical"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_weight="1"
-                                android:layout_marginEnd="6dp"
-                                android:text="@string/electrical_service"
-                                android:textAppearance="?attr/textAppearanceCaption"
-                                app:cornerRadius="8dp"
-                                app:strokeColor="?attr/colorOutline"
-                                app:strokeWidth="1dp" />
-
-                            <!-- Carpentry Service -->
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_carpentry"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                                android:layout_width="0dp"
-                                android:layout_height="48dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="6dp"
-                                android:text="@string/carpentry_service"
-                                android:textAppearance="?attr/textAppearanceCaption"
-                                app:cornerRadius="8dp"
-                                app:strokeColor="?attr/colorOutline"
-                                app:strokeWidth="1dp" />
-
-                        </LinearLayout>
-
-                        <!-- Browse All Services Button -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_browse_all"
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/all_services"
-                            android:textAppearance="?attr/textAppearanceButton" />
-
-                    </LinearLayout>
+                        android:text="@string/house_shifting"
+                        android:textAppearance="?attr/textAppearanceCaption"
+                        android:textColor="@color/gray_700"
+                        android:textStyle="bold"
+                        android:gravity="center" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Bottom Spacer -->
-            <View
+            <!-- Office Shifting -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_office_shifting"
                 android:layout_width="0dp"
-                android:layout_height="24dp"
-                app:layout_constraintTop_toBottomOf="@id/card_services"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="4dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/orange_100"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
 
-    </ScrollView>
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_office_building"
+                        android:layout_marginBottom="8dp"
+                        app:tint="@color/gray_700" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/office_shifting"
+                        android:textAppearance="?attr/textAppearanceCaption"
+                        android:textColor="@color/gray_700"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Commercial Shifting -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_commercial_shifting"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/blue_100"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_factory"
+                        android:layout_marginBottom="8dp"
+                        app:tint="@color/gray_700" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/commercial_shifting"
+                        android:textAppearance="?attr/textAppearanceCaption"
+                        android:textColor="@color/gray_700"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <!-- Offers & News Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/offers_news"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/gray_900"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Tabs -->
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:singleSelection="true"
+            app:checkedChip="@+id/chip_trending"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_trending"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trending"
+                android:checked="true" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_promotion"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/promotion" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_summer_offer"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/summer_offer" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_new"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_label" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- Promotional Cards -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="32dp">
+
+            <!-- Shifty 40% OFF Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_shifty_offer"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="2"
+                android:layout_marginEnd="8dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/purple_500"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Shifty"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/white"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/shifty_40_off"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/on_first_cleaning_service"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/white"
+                            android:alpha="0.9" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_launcher_foreground"
+                        android:layout_gravity="center_vertical" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Second Offer Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_second_offer"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="@color/blue_400"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shifty"
+                        android:textAppearance="?attr/textAppearanceCaption"
+                        android:textColor="@color/white"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/shifty_15_off"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/online_booking"
+                        android:textAppearance="?attr/textAppearanceCaption"
+                        android:textColor="@color/white"
+                        android:alpha="0.9" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <!-- Other Services Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/other_services"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/gray_900"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Service Grid -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Cleaning -->
+            <LinearLayout
+                android:id="@+id/service_cleaning"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:cardBackgroundColor="@color/green_100"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="2dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_cleaning"
+                            app:tint="@color/gray_700" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="-8dp"
+                        android:layout_marginEnd="-8dp"
+                        android:text="New"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        app:chipBackgroundColor="@color/green_500"
+                        app:chipCornerRadius="12dp"
+                        app:chipMinHeight="24dp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/cleaning"
+                    android:textAppearance="?attr/textAppearanceCaption"
+                    android:textColor="@color/gray_700"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Labour Service -->
+            <LinearLayout
+                android:id="@+id/service_labour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    app:cardBackgroundColor="@color/blue_100"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_worker"
+                        app:tint="@color/gray_700" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/labour_service"
+                    android:textAppearance="?attr/textAppearanceCaption"
+                    android:textColor="@color/gray_700"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Vehicle -->
+            <LinearLayout
+                android:id="@+id/service_vehicle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    app:cardBackgroundColor="@color/purple_100"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_vehicle"
+                        app:tint="@color/gray_700" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/vehicle"
+                    android:textAppearance="?attr/textAppearanceCaption"
+                    android:textColor="@color/gray_700"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Paint -->
+            <LinearLayout
+                android:id="@+id/service_paint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    app:cardBackgroundColor="@color/red_100"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_paint"
+                        app:tint="@color/gray_700" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/paint"
+                    android:textAppearance="?attr/textAppearanceCaption"
+                    android:textColor="@color/gray_700"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </layout> 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -50,46 +51,71 @@ public class MainFragment extends Fragment {
     }
     
     private void initializeComponents() {
-        // Add logout functionality
-        binding.btnLogout.setOnClickListener(v -> {
-            authViewModel.logout();
-        });
-        
-        // Quick action buttons
-        binding.btnQuickBook.setOnClickListener(v -> {
-            // TODO: Navigate to quick booking
-            showToast("Quick Book - Coming Soon!");
-        });
-        
-        binding.btnMyBookings.setOnClickListener(v -> {
-            // TODO: Navigate to my bookings
-            showToast("My Bookings - Coming Soon!");
-        });
+        // TODO: Add logout functionality to toolbar/profile section
+        // For now, logout functionality is commented out as btnLogout doesn't exist in layout
+        // binding.btnLogout.setOnClickListener(v -> {
+        //     authViewModel.logout();
+        // });
         
         // Service category buttons
-        binding.btnCleaning.setOnClickListener(v -> {
+        binding.cardHouseShifting.setOnClickListener(v -> {
+            showToast("House Shifting Service - Coming Soon!");
+        });
+        
+        binding.cardOfficeShifting.setOnClickListener(v -> {
+            showToast("Office Shifting Service - Coming Soon!");
+        });
+        
+        binding.cardCommercialShifting.setOnClickListener(v -> {
+            showToast("Commercial Shifting Service - Coming Soon!");
+        });
+        
+        // Chip selection (Material Design tabs)
+        binding.chipTrending.setOnClickListener(v -> {
+            showToast("Trending offers loaded!");
+        });
+        
+        binding.chipPromotion.setOnClickListener(v -> {
+            showToast("Promotion offers loaded!");
+        });
+        
+        binding.chipSummerOffer.setOnClickListener(v -> {
+            showToast("Summer offers loaded!");
+        });
+        
+        binding.chipNew.setOnClickListener(v -> {
+            showToast("New offers loaded!");
+        });
+        
+        // Promotional cards
+        binding.cardShiftyOffer.setOnClickListener(v -> {
+            showToast("40% OFF on First Cleaning Service!");
+        });
+        
+        binding.cardSecondOffer.setOnClickListener(v -> {
+            showToast("15% OFF on Online Booking!");
+        });
+        
+        // Other services
+        binding.serviceCleaning.setOnClickListener(v -> {
             showToast("Cleaning Service - Coming Soon!");
         });
         
-        binding.btnPlumbing.setOnClickListener(v -> {
-            showToast("Plumbing Service - Coming Soon!");
+        binding.serviceLabour.setOnClickListener(v -> {
+            showToast("Labour Service - Coming Soon!");
         });
         
-        binding.btnElectrical.setOnClickListener(v -> {
-            showToast("Electrical Service - Coming Soon!");
+        binding.serviceVehicle.setOnClickListener(v -> {
+            showToast("Vehicle Service - Coming Soon!");
         });
         
-        binding.btnCarpentry.setOnClickListener(v -> {
-            showToast("Carpentry Service - Coming Soon!");
-        });
-        
-        binding.btnBrowseAll.setOnClickListener(v -> {
-            showToast("Browse All Services - Coming Soon!");
+        binding.servicePaint.setOnClickListener(v -> {
+            showToast("Paint Service - Coming Soon!");
         });
     }
     
     private void showToast(String message) {
-        android.widget.Toast.makeText(getContext(), message, android.widget.Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
     
     private void observeViewModels() {
@@ -104,7 +130,24 @@ public class MainFragment extends Fragment {
             if (successMessage != null && !successMessage.isEmpty() && successMessage.contains("Logged out")) {
                 // Navigate back to login after successful logout
                 NavController navController = Navigation.findNavController(requireView());
-                navController.navigate(R.id.action_mainFragment_to_loginFragment);
+                // Try to find the correct navigation action based on current destination
+                try {
+                    if (navController.getCurrentDestination().getId() == R.id.nav_home) {
+                        navController.navigate(R.id.action_nav_home_to_loginFragment);
+                    } else if (navController.getCurrentDestination().getId() == R.id.nav_bookings) {
+                        navController.navigate(R.id.action_nav_bookings_to_loginFragment);
+                    } else if (navController.getCurrentDestination().getId() == R.id.nav_services) {
+                        navController.navigate(R.id.action_nav_services_to_loginFragment);
+                    } else if (navController.getCurrentDestination().getId() == R.id.nav_profile) {
+                        navController.navigate(R.id.action_nav_profile_to_loginFragment);
+                    } else {
+                        // Fallback to main fragment action
+                        navController.navigate(R.id.action_mainFragment_to_loginFragment);
+                    }
+                } catch (Exception e) {
+                    // Fallback navigation
+                    navController.navigate(R.id.loginFragment);
+                }
             }
         });
     }
