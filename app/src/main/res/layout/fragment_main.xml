@@ -37,6 +37,22 @@
             android:textColor="@color/gray_500"
             android:textSize="16sp" />
 
+        <!-- Quick Book Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_book_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/book_service"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/primary_orange"
+            app:cornerRadius="16dp"
+            app:icon="@drawable/ic_bookings"
+            app:iconGravity="start"
+            app:iconTint="@color/white"
+            android:paddingVertical="16dp" />
+
         <!-- Service Categories -->
         <LinearLayout
             android:layout_width="match_parent"
