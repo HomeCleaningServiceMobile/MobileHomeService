@@ -5,15 +5,23 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.prm_project.data.repository.MainRepository;
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import javax.inject.Inject;
 
+@HiltViewModel
 public class MainViewModel extends ViewModel {
     
     private MainRepository repository;
     private MutableLiveData<String> message = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     
-    public MainViewModel() {
-        repository = new MainRepository();
+    /**
+     * Constructor with dependency injection
+     * MainRepository is automatically provided by Hilt
+     */
+    @Inject
+    public MainViewModel(MainRepository repository) {
+        this.repository = repository;
         message.setValue("Hello World from MVVM!");
         isLoading.setValue(false);
     }

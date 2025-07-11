@@ -1,26 +1,83 @@
 package com.example.prm_project.data.model;
 
-public class ApiResponse {
+import com.google.gson.annotations.SerializedName;
+import java.util.Map;
+
+public class ApiResponse<T> {
+
+    @SerializedName("isSucceeded")
     private boolean isSucceeded;
-    private String message;
-    private Object data;
+
+    @SerializedName("timestamp")
+    private String timestamp;
+
+    @SerializedName("messages")
+    private Map<String, String[]> messages;
+
+    @SerializedName("data")
+    private T data;
 
     // Constructors
     public ApiResponse() {}
 
-    public ApiResponse(boolean isSucceeded, String message, Object data) {
+    public ApiResponse(boolean isSucceeded, String timestamp, Map<String, String[]> messages, T data) {
         this.isSucceeded = isSucceeded;
-        this.message = message;
+        this.timestamp = timestamp;
+        this.messages = messages;
         this.data = data;
     }
 
-    // Getters and setters
-    public boolean isSucceeded() { return isSucceeded; }
-    public void setSucceeded(boolean succeeded) { isSucceeded = succeeded; }
+    // Getters and Setters
+    public boolean isSucceeded() {
+        return isSucceeded;
+    }
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public void setSucceeded(boolean succeeded) {
+        isSucceeded = succeeded;
+    }
 
-    public Object getData() { return data; }
-    public void setData(Object data) { this.data = data; }
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Map<String, String[]> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Map<String, String[]> messages) {
+        this.messages = messages;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    // Helper methods
+    public String getFirstErrorMessage() {
+        if (messages != null && messages.containsKey("Error")) {
+            String[] errors = messages.get("Error");
+            if (errors != null && errors.length > 0) {
+                return errors[0];
+            }
+        }
+        return "Unknown error occurred";
+    }
+
+    public String getFirstSuccessMessage() {
+        if (messages != null && messages.containsKey("Success")) {
+            String[] successes = messages.get("Success");
+            if (successes != null && successes.length > 0) {
+                return successes[0];
+            }
+        }
+        return "Operation completed successfully";
+    }
 }

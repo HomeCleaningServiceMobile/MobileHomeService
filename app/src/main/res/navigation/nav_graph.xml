@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <!-- Login Fragment -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.prm_project.ui.view.auth.LoginFragment"
+        android:label="@string/login"
+        tools:layout="@layout/fragment_login">
+        
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+        <action
+            android:id="@+id/action_loginFragment_to_adminFragment"
+            app:destination="@id/adminFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+        <action
+            android:id="@+id/action_loginFragment_to_staffFragment"
+            app:destination="@id/staffFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+            
+        <action
+            android:id="@+id/action_loginFragment_to_registerPersonalInfoFragment"
+            app:destination="@id/registerPersonalInfoFragment" />
+            
+    </fragment>
+
+    <!-- Registration - Personal Info Fragment -->
+    <fragment
+        android:id="@+id/registerPersonalInfoFragment"
+        android:name="com.example.prm_project.ui.view.auth.RegisterPersonalInfoFragment"
+        android:label="@string/personal_information"
+        tools:layout="@layout/fragment_register_personal_info">
+        
+        <action
+            android:id="@+id/action_registerPersonalInfoFragment_to_registerAddressFragment"
+            app:destination="@id/registerAddressFragment" />
+            
+        <action
+            android:id="@+id/action_registerPersonalInfoFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+            
+    </fragment>
+
+    <!-- Registration - Address Fragment -->
+    <fragment
+        android:id="@+id/registerAddressFragment"
+        android:name="com.example.prm_project.ui.view.auth.RegisterAddressFragment"
+        android:label="@string/address_information"
+        tools:layout="@layout/fragment_register_address">
+        
+        <action
+            android:id="@+id/action_registerAddressFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+            
+    </fragment>
+
+    <!-- Forgot Password Fragment -->
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.prm_project.ui.view.auth.ForgotPasswordFragment"
+        android:label="@string/forgot_password_nav_title"
+        tools:layout="@layout/fragment_forgot_password">
+        
+        <action
+            android:id="@+id/action_forgotPasswordFragment_to_resetEmailSentFragment"
+            app:destination="@id/resetEmailSentFragment" />
+            
+        <action
+            android:id="@+id/action_forgotPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+            
+    </fragment>
+
+    <!-- Reset Email Sent Fragment -->
+    <fragment
+        android:id="@+id/resetEmailSentFragment"
+        android:name="com.example.prm_project.ui.view.auth.ResetEmailSentFragment"
+        android:label="@string/reset_email_sent_title"
+        tools:layout="@layout/fragment_reset_email_sent">
+        
+        <action
+            android:id="@+id/action_resetEmailSentFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+            
+        <action
+            android:id="@+id/action_resetEmailSentFragment_to_setNewPasswordFragment"
+            app:destination="@id/setNewPasswordFragment" />
+            
+    </fragment>
+
+    <!-- Set New Password Fragment -->
+    <fragment
+        android:id="@+id/setNewPasswordFragment"
+        android:name="com.example.prm_project.ui.view.auth.SetNewPasswordFragment"
+        android:label="@string/set_new_password_nav_title"
+        tools:layout="@layout/fragment_set_new_password">
+        
+        <action
+            android:id="@+id/action_setNewPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="false" />
+            
+    </fragment>
+
+    <!-- Main Fragment (Customer Dashboard) -->
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.prm_project.ui.view.main.MainFragment"
+        android:label="@string/welcome_to_main_screen"
+        tools:layout="@layout/fragment_main">
+        
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+    
+    <!-- Bottom Navigation Destinations -->
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.prm_project.ui.view.main.MainFragment"
+        android:label="@string/home"
+        tools:layout="@layout/fragment_main">
+        
+        <action
+            android:id="@+id/action_nav_home_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+    
+    <fragment
+        android:id="@+id/nav_bookings"
+        android:name="com.example.prm_project.ui.view.main.BookingsFragment"
+        android:label="@string/bookings"
+        tools:layout="@layout/fragment_bookings">
+        
+        <action
+            android:id="@+id/action_nav_bookings_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+    
+    <fragment
+        android:id="@+id/nav_services"
+        android:name="com.example.prm_project.ui.view.main.ServicesFragment"
+        android:label="@string/services"
+        tools:layout="@layout/fragment_services">
+        
+        <action
+            android:id="@+id/action_nav_services_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+    
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.prm_project.ui.view.main.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile">
+        
+        <action
+            android:id="@+id/action_nav_profile_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+
+    <!-- Admin Fragment -->
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.example.prm_project.ui.view.admin.AdminFragment"
+        android:label="@string/admin_dashboard"
+        tools:layout="@layout/fragment_admin">
+        
+        <action
+            android:id="@+id/action_adminFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+
+    <!-- Staff Fragment -->
+    <fragment
+        android:id="@+id/staffFragment"
+        android:name="com.example.prm_project.ui.view.staff.StaffFragment"
+        android:label="@string/staff_dashboard"
+        tools:layout="@layout/fragment_staff">
+        
+        <action
+            android:id="@+id/action_staffFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+            
+    </fragment>
+
+</navigation> 

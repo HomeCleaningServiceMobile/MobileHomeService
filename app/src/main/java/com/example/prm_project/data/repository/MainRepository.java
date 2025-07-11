@@ -2,16 +2,30 @@ package com.example.prm_project.data.repository;
 
 import com.example.prm_project.data.local.LocalDataSource;
 import com.example.prm_project.data.remote.RemoteDataSource;
-import com.example.prm_project.data.model.User;
+import com.example.prm_project.data.remote.AuthApiService;
+import com.example.prm_project.data.model.*;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class MainRepository {
     
     private LocalDataSource localDataSource;
     private RemoteDataSource remoteDataSource;
+    private AuthApiService authApiService;
     
-    public MainRepository() {
-        localDataSource = new LocalDataSource();
-        remoteDataSource = new RemoteDataSource();
+    /**
+     * Constructor with dependency injection
+     * All dependencies are automatically provided by Hilt
+     */
+    @Inject
+    public MainRepository(AuthApiService authApiService) {
+        this.localDataSource = new LocalDataSource(); // TODO: Make this injectable too
+        this.remoteDataSource = new RemoteDataSource(); // TODO: Make this injectable too
+        this.authApiService = authApiService;
     }
     
     // Callback interface for async operations
@@ -22,6 +36,12 @@ public class MainRepository {
     
     public interface UserCallback {
         void onSuccess(User user);
+        void onError(String error);
+    }
+    
+    // Authentication callback interface
+    public interface AuthCallback<T> {
+        void onSuccess(T data);
         void onError(String error);
     }
     
@@ -51,7 +71,8 @@ public class MainRepository {
     
     public void getUser(int userId, UserCallback callback) {
         // First check local database
-        User localUser = localDataSource.getUser(userId);
+//        User localUser = localDataSource.getUser(userId);
+        User localUser = null;
         if (localUser != null) {
             callback.onSuccess(localUser);
             return;
@@ -79,5 +100,203 @@ public class MainRepository {
     
     public void clearCache() {
         localDataSource.clearCache();
+    }
+    
+    // Authentication methods
+    
+    /**
+     * Login user
+     */
+    public void login(LoginRequest loginRequest, AuthCallback<AuthResponse> callback) {
+        Call<ApiResponse<AuthResponse>> call = authApiService.login(loginRequest);
+        
+        call.enqueue(new Callback<ApiResponse<AuthResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<AuthResponse>> call, Response<ApiResponse<AuthResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<AuthResponse> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Login failed. Please try again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<AuthResponse>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Forgot password
+     */
+    public void forgotPassword(ForgotPasswordRequest request, AuthCallback<Void> callback) {
+        Call<ApiResponse<Void>> call = authApiService.forgotPassword(request);
+        
+        call.enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Void> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Failed to send reset email. Please try again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Reset password
+     */
+    public void resetPassword(ResetPasswordRequest request, AuthCallback<Void> callback) {
+        Call<ApiResponse<Void>> call = authApiService.resetPassword(request);
+        
+        call.enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Void> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Failed to reset password. Please try again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Change password
+     */
+    public void changePassword(String authToken, ChangePasswordRequest request, AuthCallback<Void> callback) {
+        Call<ApiResponse<Void>> call = authApiService.changePassword(authToken, request);
+        
+        call.enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Void> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Failed to change password. Please try again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Get user profile
+     */
+    public void getProfile(String authToken, AuthCallback<User> callback) {
+        Call<ApiResponse<User>> call = authApiService.getProfile(authToken);
+        
+        call.enqueue(new Callback<ApiResponse<User>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<User> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Failed to get profile. Please try again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Refresh token
+     */
+    public void refreshToken(RefreshTokenRequest request, AuthCallback<TokenResponse> callback) {
+        Call<ApiResponse<TokenResponse>> call = authApiService.refreshToken(request);
+        
+        call.enqueue(new Callback<ApiResponse<TokenResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<TokenResponse>> call, Response<ApiResponse<TokenResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<TokenResponse> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Failed to refresh token. Please login again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<TokenResponse>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    /**
+     * Logout user
+     */
+    public void logout(String authToken, AuthCallback<Void> callback) {
+        Call<ApiResponse<Void>> call = authApiService.logout(authToken);
+        
+        call.enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Void> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        callback.onSuccess(null);
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Logout failed. Please try again.");
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
     }
 } 
