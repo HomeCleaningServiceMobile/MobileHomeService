@@ -119,4 +119,7 @@
     <!-- Bottom Navigation Colors -->
 <!--    <color name="bottom_nav_color">@color/bottom_nav_selector</color>-->
 
+    <!-- Design Default Colors -->
+    <color name="design_default_color_primary">@color/primary_orange</color>
+
 </resources>

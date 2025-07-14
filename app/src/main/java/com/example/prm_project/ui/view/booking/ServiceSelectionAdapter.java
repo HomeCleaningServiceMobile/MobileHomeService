@@ -79,7 +79,7 @@ public class ServiceSelectionAdapter extends RecyclerView.Adapter<ServiceSelecti
             tvServiceName.setText(service.getName());
             tvServiceDescription.setText(service.getDescription());
             tvServicePrice.setText("From $" + String.format("%.0f", service.getBasePrice()));
-            tvServiceCategory.setText(service.getCategory());
+            tvServiceCategory.setText(getServiceTypeText(service.getType()));
             
             // Update selection state
             if (isSelected) {
@@ -98,6 +98,20 @@ public class ServiceSelectionAdapter extends RecyclerView.Adapter<ServiceSelecti
                 tvServiceDescription.setTextColor(itemView.getContext().getColor(R.color.text_secondary));
                 tvServicePrice.setTextColor(itemView.getContext().getColor(R.color.primary_orange));
                 tvServiceCategory.setTextColor(itemView.getContext().getColor(R.color.text_hint));
+            }
+        }
+        private String getServiceTypeText(int type) {
+            switch (type) {
+                case 1: return "House Cleaning";
+                case 2: return "Cooking";
+                case 3: return "Laundry";
+                case 4: return "Ironing";
+                case 5: return "Gardening";
+                case 6: return "Babysitting";
+                case 7: return "Elder Care";
+                case 8: return "Pet Care";
+                case 9: return "General Maintenance";
+                default: return "Other";
             }
         }
     }

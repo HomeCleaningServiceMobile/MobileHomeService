@@ -79,7 +79,7 @@ public class PackageSelectionAdapter extends RecyclerView.Adapter<PackageSelecti
             tvPackageName.setText(servicePackage.getName());
             tvPackageDescription.setText(servicePackage.getDescription());
             tvPackagePrice.setText("$" + String.format("%.0f", servicePackage.getPrice()));
-            tvPackageDuration.setText(servicePackage.getDurationDisplayText());
+            tvPackageDuration.setText(formatDuration(servicePackage.getDurationMinutes()));
             
             // Update selection state
             if (isSelected) {
@@ -98,6 +98,17 @@ public class PackageSelectionAdapter extends RecyclerView.Adapter<PackageSelecti
                 tvPackageDescription.setTextColor(itemView.getContext().getColor(R.color.text_secondary));
                 tvPackagePrice.setTextColor(itemView.getContext().getColor(R.color.primary_orange));
                 tvPackageDuration.setTextColor(itemView.getContext().getColor(R.color.text_hint));
+            }
+        }
+        private String formatDuration(int minutes) {
+            int hours = minutes / 60;
+            int mins = minutes % 60;
+            if (hours > 0 && mins > 0) {
+                return hours + "h " + mins + "m";
+            } else if (hours > 0) {
+                return hours + "h";
+            } else {
+                return mins + "m";
             }
         }
     }

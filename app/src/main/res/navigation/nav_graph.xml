@@ -177,7 +177,7 @@
     
     <fragment
         android:id="@+id/nav_services"
-        android:name="com.example.prm_project.ui.view.main.ServicesFragment"
+        android:name="com.example.prm_project.ui.view.service.ServicesFragment"
         android:label="@string/services"
         tools:layout="@layout/fragment_services">
         

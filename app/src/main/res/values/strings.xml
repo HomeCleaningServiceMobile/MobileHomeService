@@ -152,6 +152,7 @@
     <string name="recent_bookings">Recent Bookings</string>
     <string name="no_recent_bookings">No recent bookings</string>
     <string name="view_all_bookings">View All Bookings</string>
+    <string name="no_services_available">No services available</string>
     
     <!-- Role-based Views -->
     <string name="admin_dashboard">Admin Dashboard</string>

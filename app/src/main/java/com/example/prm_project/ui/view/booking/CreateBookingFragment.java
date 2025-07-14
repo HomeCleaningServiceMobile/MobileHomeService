@@ -405,40 +405,41 @@ public class CreateBookingFragment extends Fragment {
     }
     
     private void populateReviewData() {
+        PaymentMethod paymentMethod = bookingViewModel.getSelectedPaymentMethod().getValue();
         Service service = bookingViewModel.getSelectedService().getValue();
         ServicePackage pkg = bookingViewModel.getSelectedServicePackage().getValue();
         String date = bookingViewModel.getSelectedDate().getValue();
         String time = bookingViewModel.getSelectedTime().getValue();
-        PaymentMethod paymentMethod = bookingViewModel.getSelectedPaymentMethod().getValue();
-        
+
         if (service != null) {
             binding.tvReviewService.setText(service.getName());
         }
-        
         if (pkg != null) {
             binding.tvReviewPackage.setText(pkg.getName());
             binding.tvReviewPrice.setText("$" + pkg.getPrice());
-            binding.tvReviewDuration.setText(pkg.getDurationDisplayText());
+            binding.tvReviewDuration.setText(formatDuration(pkg.getDurationMinutes()));
         }
-        
         if (date != null) {
             binding.tvReviewDate.setText(formatDateForDisplay(date));
         }
-        
         if (time != null) {
             binding.tvReviewTime.setText(formatTimeForDisplay(time));
         }
-        
-        binding.tvReviewAddress.setText(binding.etAddress.getText().toString());
-        binding.tvReviewInstructions.setText(binding.etSpecialInstructions.getText().toString());
-        
         if (paymentMethod != null) {
             binding.tvReviewPayment.setText(paymentMethod.getDisplayName());
         }
-        
-        // Update form data before final submission
-        bookingViewModel.setServiceAddress(binding.etAddress.getText().toString());
-        bookingViewModel.setSpecialInstructions(binding.etSpecialInstructions.getText().toString());
+    }
+
+    private String formatDuration(int minutes) {
+        int hours = minutes / 60;
+        int mins = minutes % 60;
+        if (hours > 0 && mins > 0) {
+            return hours + "h " + mins + "m";
+        } else if (hours > 0) {
+            return hours + "h";
+        } else {
+            return mins + "m";
+        }
     }
     
     private String formatDateForDisplay(String isoDate) {

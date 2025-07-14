@@ -29,27 +29,27 @@ public class MockBookingApiService implements BookingApiService {
     
     private void initializeMockData() {
         // Initialize mock services
-        mockServices.add(new Service(1, "House Cleaning", "Professional house cleaning service", 50.0, 1, "Cleaning"));
-        mockServices.add(new Service(2, "Office Cleaning", "Commercial office cleaning service", 80.0, 1, "Cleaning"));
-        mockServices.add(new Service(3, "Deep Cleaning", "Comprehensive deep cleaning service", 120.0, 1, "Cleaning"));
-        mockServices.add(new Service(4, "Plumbing Service", "Professional plumbing repair and maintenance", 75.0, 2, "Maintenance"));
-        mockServices.add(new Service(5, "Electrical Service", "Electrical repair and installation", 85.0, 2, "Maintenance"));
-        mockServices.add(new Service(6, "Painting Service", "Interior and exterior painting", 100.0, 3, "Renovation"));
+        mockServices.add(new Service(1, "House Cleaning", "Professional house cleaning service", 50.0, 1));
+        mockServices.add(new Service(2, "Office Cleaning", "Commercial office cleaning service", 80.0, 1));
+        mockServices.add(new Service(3, "Deep Cleaning", "Comprehensive deep cleaning service", 120.0, 1));
+        mockServices.add(new Service(4, "Plumbing Service", "Professional plumbing repair and maintenance", 75.0, 2));
+        mockServices.add(new Service(5, "Electrical Service", "Electrical repair and installation", 85.0, 2));
+        mockServices.add(new Service(6, "Painting Service", "Interior and exterior painting", 100.0, 3));
         
         // Initialize mock service packages
         // House Cleaning packages
-        mockServicePackages.add(new ServicePackage(1, "Basic Cleaning", "Standard house cleaning", 50.0, 120, 1));
-        mockServicePackages.add(new ServicePackage(2, "Deep Cleaning Package", "Complete deep cleaning service", 80.0, 180, 1));
-        mockServicePackages.add(new ServicePackage(3, "Premium Cleaning", "Premium cleaning with extras", 100.0, 240, 1));
+        mockServicePackages.add(new ServicePackage(1, 1, "Basic Cleaning", "Standard house cleaning", 50.0, 120));
+        mockServicePackages.add(new ServicePackage(2, 1, "Deep Cleaning Package", "Complete deep cleaning service", 80.0, 180));
+        mockServicePackages.add(new ServicePackage(3, 1, "Premium Cleaning", "Premium cleaning with extras", 100.0, 240));
         
         // Office Cleaning packages
-        mockServicePackages.add(new ServicePackage(4, "Small Office", "Up to 500 sq ft", 80.0, 90, 2));
-        mockServicePackages.add(new ServicePackage(5, "Medium Office", "500-1000 sq ft", 120.0, 150, 2));
-        mockServicePackages.add(new ServicePackage(6, "Large Office", "1000+ sq ft", 180.0, 240, 2));
+        mockServicePackages.add(new ServicePackage(4, 2, "Small Office", "Up to 500 sq ft", 80.0, 90));
+        mockServicePackages.add(new ServicePackage(5, 2, "Medium Office", "500-1000 sq ft", 120.0, 150));
+        mockServicePackages.add(new ServicePackage(6, 2, "Large Office", "1000+ sq ft", 180.0, 240));
         
         // Plumbing packages
-        mockServicePackages.add(new ServicePackage(7, "Basic Plumbing", "Minor repairs and fixes", 75.0, 60, 4));
-        mockServicePackages.add(new ServicePackage(8, "Advanced Plumbing", "Major repairs and installation", 150.0, 180, 4));
+        mockServicePackages.add(new ServicePackage(7, 4, "Basic Plumbing", "Minor repairs and fixes", 75.0, 60));
+        mockServicePackages.add(new ServicePackage(8, 4, "Advanced Plumbing", "Major repairs and installation", 150.0, 180));
         
         // Initialize some sample bookings
         initializeSampleBookings();
