@@ -80,7 +80,10 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.11.0")
-    
+
+    implementation("com.stripe:stripe-android:20.40.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
