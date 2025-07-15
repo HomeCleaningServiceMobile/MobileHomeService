@@ -36,7 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Select Service"
+                android:text="@string/select_service"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="@color/text_primary"
                 android:gravity="center"
@@ -144,7 +144,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Choose the service you need"
+                android:text="@string/choose_service_instruction"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/text_secondary"
                 android:gravity="center"
@@ -161,7 +161,7 @@
                 android:id="@+id/tv_selected_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No service selected"
+                android:text="@string/no_service_selected"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="@color/primary_orange"
                 android:gravity="center"
@@ -183,7 +183,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select a package that fits your needs"
+                android:text="@string/select_package_instruction"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/text_secondary"
                 android:gravity="center"
@@ -199,7 +199,7 @@
                 android:id="@+id/tv_selected_package"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No package selected"
+                android:text="@string/no_package_selected"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="@color/primary_orange"
                 android:gravity="center"
@@ -221,7 +221,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="When would you like the service?"
+                android:text="@string/select_date_time_instruction"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/text_secondary"
                 android:gravity="center"
@@ -244,7 +244,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select Date"
+                        android:text="@string/select_date"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         android:textColor="@color/text_primary"
                         android:layout_marginBottom="8dp" />
@@ -254,14 +254,14 @@
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Choose Date"
+                        android:text="@string/choose_date"
                         app:icon="@drawable/ic_check_circle" />
 
                     <TextView
                         android:id="@+id/tv_selected_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="No date selected"
+                        android:text="@string/no_date_selected"
                         android:textAppearance="?attr/textAppearanceCaption"
                         android:textColor="@color/text_hint"
                         android:layout_marginTop="4dp" />
@@ -286,7 +286,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Select Time"
+                        android:text="@string/select_time"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         android:textColor="@color/text_primary"
                         android:layout_marginBottom="8dp" />
@@ -314,7 +314,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Where should we provide the service?"
+                android:text="@string/enter_address_instruction"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/text_secondary"
                 android:gravity="center"
@@ -330,7 +330,7 @@
                     android:id="@+id/et_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter service address"
+                    android:hint="@string/enter_service_address"
                     android:minLines="2"
                     android:maxLines="3"
                     android:inputType="textMultiLine" />
@@ -346,7 +346,7 @@
                     android:id="@+id/et_special_instructions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Special instructions (optional)"
+                    android:hint="@string/special_instructions_optional"
                     android:minLines="2"
                     android:maxLines="4"
                     android:inputType="textMultiLine" />
@@ -366,7 +366,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="How would you like to pay?"
+                android:text="@string/payment_method_instruction"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/text_secondary"
                 android:gravity="center"
@@ -387,7 +387,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Payment Method"
+                        android:text="@string/payment_method"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         android:textColor="@color/text_primary"
                         android:layout_marginBottom="8dp" />
@@ -415,7 +415,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Please review your booking details"
+                android:text="@string/review_booking_instruction"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@color/text_secondary"
                 android:gravity="center"
@@ -437,7 +437,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Service Details"
+                        android:text="@string/service_details"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         android:textColor="@color/text_primary"
                         android:textStyle="bold"
@@ -453,7 +453,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Service:"
+                            android:text="@string/service_label"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_secondary" />
 
@@ -462,7 +462,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="House Cleaning"
+                            android:text="@string/service_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_primary"
                             android:gravity="end" />
@@ -479,7 +479,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Package:"
+                            android:text="@string/package_label"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_secondary" />
 
@@ -488,7 +488,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Basic Cleaning"
+                            android:text="@string/package_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_primary"
                             android:gravity="end" />
@@ -505,7 +505,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Duration:"
+                            android:text="@string/duration_label"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_secondary" />
 
@@ -514,7 +514,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="2h"
+                            android:text="@string/duration_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_primary"
                             android:gravity="end" />
@@ -525,7 +525,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Schedule"
+                        android:text="@string/schedule"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         android:textColor="@color/text_primary"
                         android:textStyle="bold"
@@ -541,7 +541,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Date:"
+                            android:text="@string/date_label"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_secondary" />
 
@@ -550,7 +550,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Mar 15, 2024"
+                            android:text="@string/date_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_primary"
                             android:gravity="end" />
@@ -567,7 +567,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Time:"
+                            android:text="@string/time_label"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_secondary" />
 
@@ -576,7 +576,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="2:30 PM"
+                            android:text="@string/time_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_primary"
                             android:gravity="end" />
@@ -587,7 +587,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Address"
+                        android:text="@string/address"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         android:textColor="@color/text_primary"
                         android:textStyle="bold"
@@ -597,7 +597,7 @@
                         android:id="@+id/tv_review_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="123 Main Street, District 1"
+                        android:text="@string/address_placeholder"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="@color/text_primary"
                         android:layout_marginBottom="4dp" />
@@ -606,7 +606,7 @@
                         android:id="@+id/tv_review_instructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Special instructions here"
+                        android:text="@string/instructions_placeholder"
                         android:textAppearance="?attr/textAppearanceCaption"
                         android:textColor="@color/text_secondary"
                         android:layout_marginBottom="16dp" />
@@ -622,7 +622,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Payment:"
+                            android:text="@string/payment_label"
                             android:textAppearance="?attr/textAppearanceSubtitle1"
                             android:textColor="@color/text_primary"
                             android:textStyle="bold" />
@@ -632,7 +632,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Cash"
+                            android:text="@string/payment_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/text_primary"
                             android:gravity="end" />
@@ -655,7 +655,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Total:"
+                            android:text="@string/total_label"
                             android:textAppearance="?attr/textAppearanceHeadline6"
                             android:textColor="@color/text_primary"
                             android:textStyle="bold" />
@@ -665,7 +665,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="$50.00"
+                            android:text="@string/price_placeholder"
                             android:textAppearance="?attr/textAppearanceHeadline6"
                             android:textColor="@color/primary_orange"
                             android:textStyle="bold"
@@ -701,7 +701,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="Previous"
+                android:text="@string/previous"
                 android:textColor="@color/text_primary" />
 
             <com.google.android.material.button.MaterialButton
@@ -710,7 +710,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="Next"
+                android:text="@string/next"
                 app:backgroundTint="@color/primary_orange" />
 
         </LinearLayout>

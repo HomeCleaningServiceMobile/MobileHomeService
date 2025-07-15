@@ -31,9 +31,8 @@ public class BookingRepository {
     private final MutableLiveData<Boolean> loadingLiveData = new MutableLiveData<>();
 
     @Inject
-    public BookingRepository() {
-        // For now, using mock service. In production, inject real service
-        this.bookingApiService = new MockBookingApiService();
+    public BookingRepository(BookingApiService bookingApiService) {
+        this.bookingApiService = bookingApiService;
     }
 
     // Create new booking
@@ -185,14 +184,14 @@ public class BookingRepository {
     // Get available services
     public void getServices() {
         loadingLiveData.setValue(true);
-        bookingApiService.getServices().enqueue(new Callback<ApiResponse<List<Service>>>() {
+        bookingApiService.getServices(null, true, null, null, null, 1, 10).enqueue(new Callback<ApiResponse<ItemsWrapper<Service>>>() {
             @Override
-            public void onResponse(Call<ApiResponse<List<Service>>> call, Response<ApiResponse<List<Service>>> response) {
+            public void onResponse(Call<ApiResponse<ItemsWrapper<Service>>> call, Response<ApiResponse<ItemsWrapper<Service>>> response) {
                 loadingLiveData.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<List<Service>> apiResponse = response.body();
-                    if (apiResponse.isSucceeded()) {
-                        servicesLiveData.setValue(apiResponse.getData());
+                    ApiResponse<ItemsWrapper<Service>> apiResponse = response.body();
+                    if (apiResponse.isSucceeded() && apiResponse.getData() != null) {
+                        servicesLiveData.setValue(apiResponse.getData().getItems());
                     } else {
                         errorLiveData.setValue("Failed to load services");
                     }
@@ -202,7 +201,7 @@ public class BookingRepository {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<List<Service>>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<ItemsWrapper<Service>>> call, Throwable t) {
                 loadingLiveData.setValue(false);
                 errorLiveData.setValue("Network error: " + t.getMessage());
             }

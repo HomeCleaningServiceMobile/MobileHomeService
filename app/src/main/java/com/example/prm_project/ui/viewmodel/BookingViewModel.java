@@ -160,7 +160,7 @@ public class BookingViewModel extends ViewModel {
             loadServicePackages(service.getId());
         }
     }
-
+    
     public void setSelectedServicePackage(ServicePackage servicePackage) {
         selectedServicePackage.setValue(servicePackage);
     }
