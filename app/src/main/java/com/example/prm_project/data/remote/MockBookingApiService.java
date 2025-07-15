@@ -245,9 +245,45 @@ public class MockBookingApiService implements BookingApiService {
     }
     
     @Override
-    public Call<ApiResponse<List<Service>>> getServices() {
+    public Call<ApiResponse<ItemsWrapper<Service>>> getServices(Integer type, Boolean isActive, Double minPrice, Double maxPrice, String searchTerm, Integer pageNumber, Integer pageSize) {
         return new MockCall<>(() -> {
-            return new ApiResponse<>(true, "Services retrieved successfully", new ArrayList<>(mockServices));
+            List<Service> filteredServices = new ArrayList<>(mockServices);
+            
+            // Apply filters
+            if (type != null) {
+                filteredServices.removeIf(service -> service.getType() != type);
+            }
+            
+            if (isActive != null) {
+                filteredServices.removeIf(service -> service.isActive() != isActive);
+            }
+            
+            if (minPrice != null) {
+                filteredServices.removeIf(service -> service.getBasePrice() < minPrice);
+            }
+            
+            if (maxPrice != null) {
+                filteredServices.removeIf(service -> service.getBasePrice() > maxPrice);
+            }
+            
+            if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+                String term = searchTerm.toLowerCase();
+                filteredServices.removeIf(service -> 
+                    !service.getName().toLowerCase().contains(term) && 
+                    !service.getDescription().toLowerCase().contains(term));
+            }
+            
+            // Apply pagination
+            int page = pageNumber != null ? pageNumber : 1;
+            int size = pageSize != null ? pageSize : 10;
+            int startIndex = (page - 1) * size;
+            int endIndex = Math.min(startIndex + size, filteredServices.size());
+            
+            List<Service> paginatedServices = filteredServices.subList(startIndex, endIndex);
+            
+            ItemsWrapper<Service> wrapper = new ItemsWrapper<>();
+            wrapper.setItems(paginatedServices);
+            return new ApiResponse<>(true, "Services retrieved successfully", wrapper);
         });
     }
     

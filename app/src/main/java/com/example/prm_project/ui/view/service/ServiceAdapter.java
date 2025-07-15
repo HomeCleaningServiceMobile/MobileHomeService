@@ -63,9 +63,8 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         
         private ImageView serviceImage;
         private TextView serviceName;
-        private TextView serviceDescription;
+        private TextView serviceProvider;
         private TextView servicePrice;
-        private TextView serviceType;
         private TextView serviceDuration;
         
         public ServiceViewHolder(@NonNull View itemView) {
@@ -73,9 +72,8 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
             
             serviceImage = itemView.findViewById(R.id.service_image);
             serviceName = itemView.findViewById(R.id.service_name);
-            serviceDescription = itemView.findViewById(R.id.service_description);
+            serviceProvider = itemView.findViewById(R.id.service_provider);
             servicePrice = itemView.findViewById(R.id.service_price);
-            serviceType = itemView.findViewById(R.id.service_type);
             serviceDuration = itemView.findViewById(R.id.service_duration);
             
             itemView.setOnClickListener(v -> {
@@ -88,35 +86,35 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         
         public void bind(Service service) {
             serviceName.setText(service.getName());
-            serviceDescription.setText(service.getDescription());
-            servicePrice.setText(String.format("$%.2f", service.getBasePrice()));
-            serviceType.setText(getServiceTypeText(service.getType()));
+            serviceProvider.setText(service.getDescription());
+            servicePrice.setText(String.format("From $%.0f", service.getBasePrice()));
             serviceDuration.setText(formatDuration(service.getEstimatedDurationMinutes()));
             
             // Load image using Glide
             if (service.getImageUrl() != null && !service.getImageUrl().isEmpty()) {
                 Glide.with(itemView.getContext())
                         .load(service.getImageUrl())
-                        .placeholder(R.drawable.service_icon_placeholder)
-                        .error(R.drawable.service_icon_placeholder)
+                        .placeholder(R.drawable.ic_cleaning)
+                        .error(R.drawable.ic_cleaning)
                         .into(serviceImage);
             } else {
-                serviceImage.setImageResource(R.drawable.service_icon_placeholder);
+                // Set default icon based on service type
+                serviceImage.setImageResource(getServiceIcon(service.getType()));
             }
         }
         
-        private String getServiceTypeText(int type) {
+        private int getServiceIcon(int type) {
             switch (type) {
-                case 1: return "House Cleaning";
-                case 2: return "Cooking";
-                case 3: return "Laundry";
-                case 4: return "Ironing";
-                case 5: return "Gardening";
-                case 6: return "Babysitting";
-                case 7: return "Elder Care";
-                case 8: return "Pet Care";
-                case 9: return "General Maintenance";
-                default: return "Other";
+                case 1: return R.drawable.ic_cleaning; // House Cleaning
+                case 2: return R.drawable.ic_cooking; // Cooking
+                case 3: return R.drawable.ic_laundry; // Laundry
+                case 4: return R.drawable.ic_ironing; // Ironing
+                case 5: return R.drawable.ic_gardening; // Gardening
+                case 6: return R.drawable.ic_babysitting; // Babysitting
+                case 7: return R.drawable.ic_elder_care; // Elder Care
+                case 8: return R.drawable.ic_pet_care; // Pet Care
+                case 9: return R.drawable.ic_maintenance; // General Maintenance
+                default: return R.drawable.ic_cleaning; // Default
             }
         }
         

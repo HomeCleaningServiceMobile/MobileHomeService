@@ -56,6 +56,13 @@ public class ServiceViewModel extends ViewModel {
     }
     
     /**
+     * Refresh services (same as loadServices but for pull-to-refresh)
+     */
+    public void refreshServices() {
+        loadServices(null, true, null, null, null, 1, 10);
+    }
+    
+    /**
      * Load services with filtering and pagination
      */
     public void loadServices(Integer type, Boolean isActive, Double minPrice, Double maxPrice, 

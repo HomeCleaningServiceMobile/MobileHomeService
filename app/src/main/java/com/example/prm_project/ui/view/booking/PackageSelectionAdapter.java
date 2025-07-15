@@ -26,6 +26,28 @@ public class PackageSelectionAdapter extends RecyclerView.Adapter<PackageSelecti
         this.listener = listener;
     }
     
+    public void setSelectedPosition(int position) {
+        int oldPosition = selectedPosition;
+        selectedPosition = position;
+        
+        // Notify changes for visual updates
+        if (oldPosition != -1 && oldPosition < packages.size()) {
+            notifyItemChanged(oldPosition);
+        }
+        if (selectedPosition != -1 && selectedPosition < packages.size()) {
+            notifyItemChanged(selectedPosition);
+        }
+    }
+    
+    public void setSelectedPackage(ServicePackage packageToSelect) {
+        for (int i = 0; i < packages.size(); i++) {
+            if (packages.get(i).getId() == packageToSelect.getId()) {
+                setSelectedPosition(i);
+                break;
+            }
+        }
+    }
+    
     @NonNull
     @Override
     public PackageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

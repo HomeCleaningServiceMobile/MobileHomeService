@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.*;
 import com.example.prm_project.data.model.ItemsWrapper;
 import java.util.List;
+import com.example.prm_project.data.model.ServicePackage;
 
 public interface ServiceApiService {
     
@@ -28,6 +29,9 @@ public interface ServiceApiService {
      */
     @GET("services/{id}")
     Call<ApiResponse<Service>> getServiceById(@Path("id") int id);
+    
+    @GET("services/{id}/packages")
+    Call<ApiResponse<List<ServicePackage>>> getServicePackages(@Path("id") int serviceId);
     
     /**
      * Get services by type

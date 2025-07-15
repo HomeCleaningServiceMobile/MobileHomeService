@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,9 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.prm_project.R;
 import com.example.prm_project.data.model.Service;
@@ -30,7 +33,8 @@ public class ServicesFragment extends Fragment implements ServiceAdapter.OnServi
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView errorText;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private LinearLayout emptyState;
+    private ImageView btnBack;
     
     @Nullable
     @Override
@@ -46,13 +50,14 @@ public class ServicesFragment extends Fragment implements ServiceAdapter.OnServi
         recyclerView = view.findViewById(R.id.services_recycler_view);
         progressBar = view.findViewById(R.id.progress_bar);
         errorText = view.findViewById(R.id.error_text);
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        emptyState = view.findViewById(R.id.empty_state);
+        btnBack = view.findViewById(R.id.btn_back);
         
         // Setup RecyclerView
         setupRecyclerView();
         
-        // Setup SwipeRefreshLayout
-        setupSwipeRefresh();
+        // Setup back button
+        setupBackButton();
         
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(ServiceViewModel.class);
@@ -68,13 +73,27 @@ public class ServicesFragment extends Fragment implements ServiceAdapter.OnServi
         adapter = new ServiceAdapter();
         adapter.setOnServiceClickListener(this);
         
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), 2);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        
+        // Set item decoration for better spacing
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull android.graphics.Rect outRect, @NonNull View view, 
+                                     @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.bottom = 8; // Add bottom margin between items
+            }
+        });
     }
     
-    private void setupSwipeRefresh() {
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            loadServices();
+    private void setupBackButton() {
+        btnBack.setOnClickListener(v -> {
+            // Navigate back or close fragment
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
         });
     }
     
@@ -114,40 +133,40 @@ public class ServicesFragment extends Fragment implements ServiceAdapter.OnServi
     private void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
-        errorText.setVisibility(View.GONE);
+        emptyState.setVisibility(View.GONE);
     }
     
     private void hideLoading() {
         progressBar.setVisibility(View.GONE);
-        swipeRefreshLayout.setRefreshing(false);
     }
     
     private void showContent() {
         recyclerView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
-        errorText.setVisibility(View.GONE);
+        emptyState.setVisibility(View.GONE);
     }
     
     private void showError(String error) {
-        errorText.setVisibility(View.VISIBLE);
         errorText.setText(error);
+        emptyState.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
     }
     
     private void showEmptyState() {
-        errorText.setVisibility(View.VISIBLE);
         errorText.setText(getString(R.string.no_services_available));
+        emptyState.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
     }
     
     @Override
     public void onServiceClick(Service service) {
-        // Handle service click - navigate to service detail or booking
-        Toast.makeText(requireContext(), "Selected: " + service.getName(), Toast.LENGTH_SHORT).show();
+        // Navigate to service detail fragment
+        Bundle args = new Bundle();
+        args.putInt("serviceId", service.getId());
         
-        // TODO: Navigate to service detail or booking fragment
-        // You can use Navigation component or Fragment transaction here
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.action_nav_services_to_serviceDetailFragment, args);
     }
 } 

@@ -56,6 +56,9 @@ public class CreateBookingFragment extends Fragment {
         setupUI();
         setupObservers();
         
+        // Handle navigation arguments for auto-selection
+        handleNavigationArguments();
+        
         // Inform user about demo mode
         showToast("Demo Mode: Date picker shows UI but uses default values (tomorrow 10:00 AM)");
         
@@ -116,6 +119,15 @@ public class CreateBookingFragment extends Fragment {
                 servicesList.clear();
                 servicesList.addAll(services);
                 binding.servicesRecyclerView.getAdapter().notifyDataSetChanged();
+                
+                // Debug: Log service data
+                System.out.println("=== Services Loaded ===");
+                for (Service service : services) {
+                    System.out.println("Service: " + service.getName() + 
+                                     " - Duration: " + service.getEstimatedDurationMinutes() + " minutes" +
+                                     " - Price: $" + service.getBasePrice());
+                }
+                System.out.println("======================");
             }
         });
         
@@ -125,6 +137,15 @@ public class CreateBookingFragment extends Fragment {
                 packagesList.clear();
                 packagesList.addAll(packages);
                 binding.packagesRecyclerView.getAdapter().notifyDataSetChanged();
+                
+                // Debug: Log package data
+                System.out.println("=== Packages Loaded ===");
+                for (ServicePackage pkg : packagesList) {
+                    System.out.println("Package: " + pkg.getName() + 
+                                     " - Duration: " + pkg.getDurationMinutes() + " minutes" +
+                                     " - Price: $" + pkg.getPrice());
+                }
+                System.out.println("======================");
             }
         });
         
@@ -148,6 +169,12 @@ public class CreateBookingFragment extends Fragment {
         bookingViewModel.getSelectedServicePackage().observe(getViewLifecycleOwner(), pkg -> {
             if (pkg != null) {
                 binding.tvSelectedPackage.setText(pkg.getName() + " - $" + pkg.getPrice());
+                
+                // Auto-select in adapter
+                PackageSelectionAdapter adapter = (PackageSelectionAdapter) binding.packagesRecyclerView.getAdapter();
+                if (adapter != null) {
+                    adapter.setSelectedPackage(pkg);
+                }
             }
         });
         
@@ -464,6 +491,67 @@ public class CreateBookingFragment extends Fragment {
     
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+    
+    private void handleNavigationArguments() {
+        Bundle args = getArguments();
+        if (args != null) {
+            int serviceId = args.getInt("serviceId", -1);
+            int packageId = args.getInt("packageId", -1);
+            
+            System.out.println("Navigation args - serviceId: " + serviceId + ", packageId: " + packageId);
+            
+            // Flow 1: User selected service first (serviceId provided, no packageId)
+            if (serviceId != -1 && packageId == -1) {
+                System.out.println("Flow 1: Service selected first");
+                // Auto-select service when services are loaded
+                bookingViewModel.getServices().observe(getViewLifecycleOwner(), services -> {
+                    if (services != null) {
+                        for (Service service : services) {
+                            if (service.getId() == serviceId) {
+                                bookingViewModel.setSelectedService(service);
+                                // Start at step 1 (SELECT_SERVICE)
+                                bookingViewModel.setCurrentStep(BookingViewModel.BookingFormStep.SELECT_SERVICE);
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Flow 2: User selected package first (both serviceId and packageId provided)
+            else if (serviceId != -1 && packageId != -1) {
+                System.out.println("Flow 2: Package selected first");
+                // Auto-select service and package when data is loaded
+                bookingViewModel.getServices().observe(getViewLifecycleOwner(), services -> {
+                    if (services != null) {
+                        for (Service service : services) {
+                            if (service.getId() == serviceId) {
+                                bookingViewModel.setSelectedService(service);
+                                // Load packages for this service
+                                bookingViewModel.loadServicePackages(serviceId);
+                                break;
+                            }
+                        }
+                    }
+                });
+                
+                // Auto-select package when packages are loaded from API
+                bookingViewModel.getServicePackages().observe(getViewLifecycleOwner(), packages -> {
+                    if (packages != null) {
+                        for (ServicePackage pkg : packages) {
+                            if (pkg.getId() == packageId) {
+                                bookingViewModel.setSelectedServicePackage(pkg);
+                                // Start at step 2 (SELECT_PACKAGE) with auto-selection
+                                bookingViewModel.setCurrentStep(BookingViewModel.BookingFormStep.SELECT_PACKAGE);
+                                System.out.println("Auto-selected package: " + pkg.getName());
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
     
     @Override

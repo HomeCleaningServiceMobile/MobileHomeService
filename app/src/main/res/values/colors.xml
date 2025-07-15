@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base Colors -->
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    
-    <!-- Primary Colors -->
-    <color name="primary_orange">#FF6B3A</color>
-    <color name="purple_500">#9C27B0</color>
-    
-    <!-- Background Colors -->
+    <color name="white">#FFFFFF</color>
     <color name="background_light">#F8F9FA</color>
-    <color name="edit_text_bg">#F3F4F6</color>
-    <color name="button_secondary_bg">#E5E7EB</color>
     
     <!-- Text Colors -->
-    <color name="text_primary">#1F2937</color>
+    <color name="text_primary">#1A1A1A</color>
     <color name="text_secondary">#6B7280</color>
     <color name="text_hint">#9CA3AF</color>
     
-    <!-- Divider Colors -->
-    <color name="divider_gray">#E5E7EB</color>
+    <!-- Primary Colors -->
+    <color name="primary_orange">#FF6B35</color>
+    <color name="primary_orange_light">#FFB088</color>
+    <color name="primary_blue">#3B82F6</color>
+    <color name="primary_blue_light">#DBEAFE</color>
     
-    <!-- Error Colors -->
+    <!-- UI Colors -->
+    <color name="card_border">#E0E0E0</color>
+    <color name="button_background">#F3F4F6</color>
+    <color name="success_green">#10B981</color>
+    
+    <!-- Legacy Colors (keeping for compatibility) -->
+    <color name="purple_500">#9C27B0</color>
+    <color name="edit_text_bg">#F3F4F6</color>
+    <color name="button_secondary_bg">#E5E7EB</color>
+    <color name="divider_gray">#E5E7EB</color>
     <color name="error_red">#EF4444</color>
     
     <!-- Material 3 Light Theme Colors -->
-    <color name="md_theme_light_primary">#FF6B3A</color>
+    <color name="md_theme_light_primary">#FF6B35</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#FFDBCC</color>
     <color name="md_theme_light_onPrimaryContainer">#2C1000</color>
@@ -51,7 +56,7 @@
     <color name="md_theme_light_inverseOnSurface">#F7F0E7</color>
     <color name="md_theme_light_inversePrimary">#FFB690</color>
     <color name="md_theme_light_shadow">#000000</color>
-    <color name="md_theme_light_surfaceTint">#FF6B3A</color>
+    <color name="md_theme_light_surfaceTint">#FF6B35</color>
     <color name="md_theme_light_outlineVariant">#D6C2B9</color>
     <color name="md_theme_light_scrim">#000000</color>
     
@@ -81,45 +86,32 @@
     <color name="md_theme_dark_onSurfaceVariant">#D6C2B9</color>
     <color name="md_theme_dark_inverseSurface">#EAE1D9</color>
     <color name="md_theme_dark_inverseOnSurface">#34302A</color>
-    <color name="md_theme_dark_inversePrimary">#FF6B3A</color>
+    <color name="md_theme_dark_inversePrimary">#FF6B35</color>
     <color name="md_theme_dark_shadow">#000000</color>
     <color name="md_theme_dark_surfaceTint">#FFB690</color>
     <color name="md_theme_dark_outlineVariant">#52443C</color>
     <color name="md_theme_dark_scrim">#000000</color>
 
-<!--    main_frag-->
-    <!-- Primary Colors -->
+    <!-- Legacy Color Palette -->
     <color name="orange_500">#FF7043</color>
     <color name="orange_100">#FFE0B2</color>
-
-    <!-- Secondary Colors -->
     <color name="purple_400">#AB47BC</color>
     <color name="purple_100">#E1BEE7</color>
-
     <color name="blue_500">#2196F3</color>
     <color name="blue_400">#42A5F5</color>
     <color name="blue_100">#BBDEFB</color>
-
     <color name="green_500">#4CAF50</color>
     <color name="green_100">#C8E6C9</color>
-
     <color name="red_500">#F44336</color>
     <color name="red_100">#FFCDD2</color>
-
     <color name="pink_100">#F8BBD9</color>
-
-    <!-- Neutral Colors -->
-<!--    <color name="black">#000000</color>-->
-<!--    <color name="white">#FFFFFF</color>-->
     <color name="gray_900">#212121</color>
     <color name="gray_700">#616161</color>
     <color name="gray_500">#9E9E9E</color>
     <color name="gray_100">#F5F5F5</color>
 
-    <!-- Bottom Navigation Colors -->
-<!--    <color name="bottom_nav_color">@color/bottom_nav_selector</color>-->
-
     <!-- Design Default Colors -->
     <color name="design_default_color_primary">@color/primary_orange</color>
+    <color name="primary_orange_dark">#E65100</color>
 
 </resources>

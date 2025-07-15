@@ -4,6 +4,7 @@ import android.content.Context;
 import com.example.prm_project.data.remote.ApiService;
 import com.example.prm_project.data.remote.AuthApiService;
 import com.example.prm_project.data.remote.ServiceApiService;
+import com.example.prm_project.data.remote.BookingApiService;
 import com.example.prm_project.utils.AuthInterceptor;
 import com.example.prm_project.utils.Constants;
 import dagger.Module;
@@ -133,5 +134,14 @@ public class NetworkModule {
     @Singleton
     public ServiceApiService provideServiceApiService(@Named("base") Retrofit retrofit) {
         return retrofit.create(ServiceApiService.class);
+    }
+    
+    /**
+     * Provides booking API service
+     */
+    @Provides
+    @Singleton
+    public BookingApiService provideBookingApiService(@Named("base") Retrofit retrofit) {
+        return retrofit.create(BookingApiService.class);
     }
 } 

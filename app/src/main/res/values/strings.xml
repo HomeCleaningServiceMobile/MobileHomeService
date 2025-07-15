@@ -196,4 +196,47 @@
     <string name="quick_book">Quick Book</string>
     <string name="book_now">Book Now</string>
 
+    <!-- Create Booking Fragment -->
+    <string name="select_service">Select Service</string>
+    <string name="choose_service_instruction">Choose the service you need</string>
+    <string name="no_service_selected">No service selected</string>
+    <string name="select_package_instruction">Select a package that fits your needs</string>
+    <string name="no_package_selected">No package selected</string>
+    <string name="select_date_time_instruction">When would you like the service?</string>
+    <string name="select_date">Select Date</string>
+    <string name="choose_date">Choose Date</string>
+    <string name="no_date_selected">No date selected</string>
+    <string name="select_time">Select Time</string>
+    <string name="enter_address_instruction">Where should we provide the service?</string>
+    <string name="enter_service_address">Enter service address</string>
+    <string name="special_instructions_optional">Special instructions (optional)</string>
+    <string name="payment_method_instruction">How would you like to pay?</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="review_booking_instruction">Please review your booking details</string>
+    
+    <!-- Review Section -->
+    <string name="service_details">Service Details</string>
+    <string name="service_label">Service:</string>
+    <string name="service_placeholder">House Cleaning</string>
+    <string name="package_label">Package:</string>
+    <string name="package_placeholder">Basic Cleaning</string>
+    <string name="duration_label">Duration:</string>
+    <string name="duration_placeholder">2h</string>
+    <string name="schedule">Schedule</string>
+    <string name="date_label">Date:</string>
+    <string name="date_placeholder">Mar 15, 2024</string>
+    <string name="time_label">Time:</string>
+    <string name="time_placeholder">2:30 PM</string>
+    <string name="address">Address</string>
+    <string name="address_placeholder">123 Main Street, District 1</string>
+    <string name="instructions_placeholder">Special instructions here</string>
+    <string name="payment_label">Payment:</string>
+    <string name="payment_placeholder">Cash</string>
+    <string name="total_label">Total:</string>
+    <string name="price_placeholder">$50.00</string>
+    
+    <!-- Navigation -->
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+
 </resources>

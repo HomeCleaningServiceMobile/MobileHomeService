@@ -4,6 +4,7 @@ import com.example.prm_project.data.remote.ServiceApiService;
 import com.example.prm_project.data.model.ApiResponse;
 import com.example.prm_project.data.model.Service;
 import com.example.prm_project.data.model.ItemsWrapper;
+import com.example.prm_project.data.model.ServicePackage;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,8 +71,8 @@ public class ServiceRepository {
     /**
      * Get service by ID
      */
-    public void getServiceById(int id, ServiceCallback<Service> callback) {
-        Call<ApiResponse<Service>> call = serviceApiService.getServiceById(id);
+    public void getServiceById(int serviceId, ServiceCallback<Service> callback) {
+        Call<ApiResponse<Service>> call = serviceApiService.getServiceById(serviceId);
         
         call.enqueue(new Callback<ApiResponse<Service>>() {
             @Override
@@ -154,6 +155,34 @@ public class ServiceRepository {
 
             @Override
             public void onFailure(Call<ApiResponse<ItemsWrapper<Service>>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Get service packages
+     */
+    public void getServicePackages(int serviceId, ServiceCallback<List<ServicePackage>> callback) {
+        Call<ApiResponse<List<ServicePackage>>> call = serviceApiService.getServicePackages(serviceId);
+
+        call.enqueue(new Callback<ApiResponse<List<ServicePackage>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<ServicePackage>>> call, Response<ApiResponse<List<ServicePackage>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<List<ServicePackage>> apiResponse = response.body();
+                    if (apiResponse.isSucceeded() && apiResponse.getData() != null) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    callback.onError("Failed to get service packages. Please try again.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<ServicePackage>>> call, Throwable t) {
                 callback.onError("Network error: " + t.getMessage());
             }
         });
