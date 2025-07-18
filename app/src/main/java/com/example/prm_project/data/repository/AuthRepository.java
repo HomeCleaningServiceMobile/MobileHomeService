@@ -301,4 +301,11 @@ public class AuthRepository {
     public String getUserRole() {
         return sessionManager.getUserRole();
     }
+    
+    /**
+     * Get current user email
+     */
+    public String getUserEmail() {
+        return sessionManager.getUserEmail();
+    }
 } 

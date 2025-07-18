@@ -5,6 +5,7 @@ import com.example.prm_project.data.remote.ApiService;
 import com.example.prm_project.data.remote.AuthApiService;
 import com.example.prm_project.data.remote.ServiceApiService;
 import com.example.prm_project.data.remote.BookingApiService;
+import com.example.prm_project.data.remote.TimeSlotApiService;
 import com.example.prm_project.utils.AuthInterceptor;
 import com.example.prm_project.utils.Constants;
 import dagger.Module;
@@ -110,6 +111,20 @@ public class NetworkModule {
     }
     
     /**
+     * Provides authenticated Retrofit instance for booking services
+     */
+    @Provides
+    @Singleton
+    @Named("booking")
+    public Retrofit provideBookingRetrofit(@Named("auth") OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+    
+    /**
      * Provides general API service
      */
     @Provides
@@ -137,11 +152,20 @@ public class NetworkModule {
     }
     
     /**
-     * Provides booking API service
+     * Provides booking API service with authentication
      */
     @Provides
     @Singleton
-    public BookingApiService provideBookingApiService(@Named("base") Retrofit retrofit) {
+    public BookingApiService provideBookingApiService(@Named("booking") Retrofit retrofit) {
         return retrofit.create(BookingApiService.class);
+    }
+    
+    /**
+     * Provides time slot API service with authentication
+     */
+    @Provides
+    @Singleton
+    public TimeSlotApiService provideTimeSlotApiService(@Named("booking") Retrofit retrofit) {
+        return retrofit.create(TimeSlotApiService.class);
     }
 } 

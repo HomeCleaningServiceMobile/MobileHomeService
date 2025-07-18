@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.prm_project.utils.payment.stripe.StripeProcessor;
-//import com.example.prm_project.utils.payment.vnpay.VNPayProcessor;
+import com.example.prm_project.utils.payment.vnpay.VNPayProcessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ public class PaymentManager {
 
     private void initializeProcessors() {
         // Initialize VNPay processor
-//        processors.put(PaymentProcessor.PaymentMethod.VNPAY, new VNPayProcessor());
+        processors.put(PaymentProcessor.PaymentMethod.VNPAY, new VNPayProcessor());
         
         // Initialize Stripe processor
         processors.put(PaymentProcessor.PaymentMethod.STRIPE, new StripeProcessor());

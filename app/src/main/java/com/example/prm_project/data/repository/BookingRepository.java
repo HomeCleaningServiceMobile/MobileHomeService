@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.prm_project.data.model.*;
 import com.example.prm_project.data.remote.BookingApiService;
-import com.example.prm_project.data.remote.MockBookingApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -170,6 +169,36 @@ public class BookingRepository {
                     }
                 } else {
                     errorLiveData.setValue("Failed to cancel booking");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Booking>> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    // Update booking status
+    public void updateBookingStatus(int bookingId, BookingStatus status) {
+        loadingLiveData.setValue(true);
+        bookingApiService.updateBookingStatus(bookingId, status).enqueue(new Callback<ApiResponse<Booking>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Booking>> call, Response<ApiResponse<Booking>> response) {
+                loadingLiveData.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<Booking> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        currentBookingLiveData.setValue(apiResponse.getData());
+                        successLiveData.setValue("Booking status updated successfully!");
+                        // Refresh bookings list
+                        getBookings(null, null, null, 1, 10);
+                    } else {
+                        errorLiveData.setValue(apiResponse.getMessages().get("Error")[0]);
+                    }
+                } else {
+                    errorLiveData.setValue("Failed to update booking status");
                 }
             }
 

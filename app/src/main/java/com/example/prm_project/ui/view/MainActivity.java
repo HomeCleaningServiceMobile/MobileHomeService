@@ -77,9 +77,8 @@ public class MainActivity extends AppCompatActivity {
                     destination.getId() == R.id.nav_home ||
                     destination.getId() == R.id.nav_bookings ||
                     destination.getId() == R.id.nav_services ||
-                    destination.getId() == R.id.nav_profile ||
-                    destination.getId() == R.id.adminFragment ||
-                    destination.getId() == R.id.staffFragment) {
+                    destination.getId() == R.id.nav_profile
+                    ) {
                     binding.topAppBar.setVisibility(View.VISIBLE);
                     binding.bottomNavigation.setVisibility(View.VISIBLE);
                     // Set rounded background for main content

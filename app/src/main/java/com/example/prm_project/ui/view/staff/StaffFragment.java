@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,6 +15,7 @@ import androidx.navigation.Navigation;
 import com.example.prm_project.R;
 import com.example.prm_project.databinding.FragmentStaffBinding;
 import com.example.prm_project.ui.viewmodel.AuthViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -38,6 +40,12 @@ public class StaffFragment extends Fragment {
         // Initialize UI components
         initializeComponents();
         
+        // Setup bottom navigation
+        setupBottomNavigation();
+        
+        // Load default fragment
+        loadFragment(new StaffDashboardFragment());
+        
         // Observe ViewModel
         observeViewModel();
     }
@@ -47,6 +55,35 @@ public class StaffFragment extends Fragment {
         binding.btnLogout.setOnClickListener(v -> {
             authViewModel.logout();
         });
+    }
+    
+    private void setupBottomNavigation() {
+        binding.staffBottomNavigation.setOnItemSelectedListener(item -> {
+            Fragment fragment = null;
+            
+            if (item.getItemId() == R.id.staff_nav_dashboard) {
+                fragment = new StaffDashboardFragment();
+            } else if (item.getItemId() == R.id.staff_nav_assignments) {
+                fragment = new StaffAssignmentsFragment();
+            } else if (item.getItemId() == R.id.staff_nav_schedule) {
+                fragment = new StaffScheduleFragment();
+            } else if (item.getItemId() == R.id.staff_nav_profile) {
+                fragment = new StaffProfileFragment();
+            }
+            
+            if (fragment != null) {
+                loadFragment(fragment);
+                return true;
+            }
+            
+            return false;
+        });
+    }
+    
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.staff_content_container, fragment);
+        transaction.commit();
     }
     
     private void observeViewModel() {
