@@ -1,6 +1,7 @@
 package com.example.prm_project.ui.view.booking;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -18,11 +20,13 @@ import com.example.prm_project.R;
 import com.example.prm_project.databinding.FragmentCreateBookingBinding;
 import com.example.prm_project.data.model.*;
 import com.example.prm_project.ui.viewmodel.BookingViewModel;
+import com.example.prm_project.ui.viewmodel.TimeSlotViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Arrays;
@@ -35,6 +39,7 @@ public class CreateBookingFragment extends Fragment {
     
     private FragmentCreateBookingBinding binding;
     private BookingViewModel bookingViewModel;
+    private TimeSlotViewModel timeSlotViewModel;
     private List<Service> servicesList = new ArrayList<>();
     private List<ServicePackage> packagesList = new ArrayList<>();
     private List<String> timeSlotsList = new ArrayList<>();
@@ -49,8 +54,9 @@ public class CreateBookingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        // Initialize ViewModel
+        // Initialize ViewModels
         bookingViewModel = new ViewModelProvider(this).get(BookingViewModel.class);
+        timeSlotViewModel = new ViewModelProvider(this).get(TimeSlotViewModel.class);
         
         // Setup UI
         setupUI();
@@ -59,8 +65,8 @@ public class CreateBookingFragment extends Fragment {
         // Handle navigation arguments for auto-selection
         handleNavigationArguments();
         
-        // Inform user about demo mode
-        showToast("Demo Mode: Date picker shows UI but uses default values (tomorrow 10:00 AM)");
+        // Inform user that date picker is enabled
+        showToast("Date picker is now enabled! Select your preferred date and time.");
         
         // Load initial data
         bookingViewModel.loadServices();
@@ -72,14 +78,19 @@ public class CreateBookingFragment extends Fragment {
         binding.btnNext.setOnClickListener(v -> bookingViewModel.nextStep());
         binding.btnPrevious.setOnClickListener(v -> bookingViewModel.previousStep());
         
-        // Date picker
-        // DEMO MODE - Button visible but disabled to avoid ANR
-        // binding.btnSelectDate.setOnClickListener(v -> showDatePicker());
-        binding.btnSelectDate.setEnabled(false);
-        binding.btnSelectDate.setText("📅 Tomorrow (Demo Mode - Click Next)");
+        // Date picker - ENABLED
+        binding.btnSelectDate.setOnClickListener(v -> showDatePicker());
+
+        binding.btnSelectDate.setEnabled(true);
+        binding.btnSelectDate.setText("📅 Select Date");
         
-        // Show default values in the UI for demo
-        binding.tvSelectedDate.setText("Tomorrow at 10:00 AM (Default)");
+        // Initialize with tomorrow's date
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String tomorrowDate = dateFormat.format(tomorrow.getTime());
+        bookingViewModel.setSelectedDate(tomorrowDate);
+        binding.tvSelectedDate.setText("Tomorrow at 10:00 AM");
         
         // Service selection
         binding.servicesRecyclerView.setAdapter(new ServiceSelectionAdapter(
@@ -149,12 +160,40 @@ public class CreateBookingFragment extends Fragment {
             }
         });
         
-        // Observe available time slots
-        bookingViewModel.getAvailableTimeSlots().observe(getViewLifecycleOwner(), timeSlots -> {
-            if (timeSlots != null) {
+        // Observe available time slots from TimeSlotViewModel
+        timeSlotViewModel.getAvailableSlots().observe(getViewLifecycleOwner(), timeSlots -> {
+            if (timeSlots != null && !timeSlots.isEmpty()) {
                 timeSlotsList.clear();
-                timeSlotsList.addAll(timeSlots);
+                for (TimeSlotDto slot : timeSlots) {
+                    if (slot.isAvailable()) {
+                        timeSlotsList.add(slot.getDisplayTime());
+                    }
+                }
                 updateTimeSlotSpinner();
+                showToast("Loaded " + timeSlotsList.size() + " available time slots");
+            } else {
+                // Fallback to default time slots if no data from API
+                timeSlotsList.clear();
+                timeSlotsList.addAll(Arrays.asList(
+                    "10:00 AM", "08:00 AM", "09:00 AM", "11:00 AM", 
+                    "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"
+                ));
+                updateTimeSlotSpinner();
+                showToast("Using default time slots (API not available)");
+            }
+        });
+        
+        // Observe loading state from TimeSlotViewModel
+        timeSlotViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                showToast("Loading available time slots...");
+            }
+        });
+        
+        // Observe error messages from TimeSlotViewModel
+        timeSlotViewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                showToast("Error loading time slots: " + error);
             }
         });
         
@@ -181,7 +220,14 @@ public class CreateBookingFragment extends Fragment {
         // Observe selected date
         bookingViewModel.getSelectedDate().observe(getViewLifecycleOwner(), date -> {
             if (date != null) {
-                binding.tvSelectedDate.setText("Tomorrow at 10:00 AM (Default)");
+                try {
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    SimpleDateFormat displayFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+                    String displayDate = displayFormat.format(inputFormat.parse(date));
+                    binding.tvSelectedDate.setText(displayDate);
+                } catch (Exception e) {
+                    binding.tvSelectedDate.setText(date);
+                }
             }
         });
         
@@ -220,8 +266,18 @@ public class CreateBookingFragment extends Fragment {
         bookingViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), message -> {
             if (message != null) {
                 showToast(message);
-                // Navigate back after successful booking
-                Navigation.findNavController(requireView()).navigateUp();
+                // Check if we need to process payment
+                if (message.contains("Booking created successfully")) {
+                    // Get the created booking and process payment
+                    Booking createdBooking = bookingViewModel.getCurrentBooking().getValue();
+                    if (createdBooking != null) {
+                        bookingViewModel.setCreatedBooking(createdBooking);
+                        processPaymentAfterBooking();
+                    }
+                } else {
+                    // Navigate back after successful booking (for non-payment operations)
+                    Navigation.findNavController(requireView()).navigateUp();
+                }
                 bookingViewModel.clearSuccessMessage();
             }
         });
@@ -231,6 +287,24 @@ public class CreateBookingFragment extends Fragment {
             if (error != null) {
                 showToast("Error: " + error);
                 bookingViewModel.clearErrorMessage();
+            }
+        });
+        
+        // Observe payment processing state
+        bookingViewModel.getIsProcessingPayment().observe(getViewLifecycleOwner(), isProcessing -> {
+            if (isProcessing != null && isProcessing) {
+                showToast("Processing payment...");
+            }
+        });
+        
+        // Observe payment status
+        bookingViewModel.getPaymentStatus().observe(getViewLifecycleOwner(), status -> {
+            if (status != null) {
+                showToast(status);
+                if (status.contains("Payment successful") || status.contains("Cash payment")) {
+                    // Navigate back after successful payment
+                    Navigation.findNavController(requireView()).navigateUp();
+                }
             }
         });
     }
@@ -325,16 +399,42 @@ public class CreateBookingFragment extends Fragment {
             requireContext(),
             (view, year, month, dayOfMonth) -> {
                 calendar.set(year, month, dayOfMonth);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'00:00:00'Z'", Locale.getDefault());
+                
+                // Check if selected date is not in the past
+                if (calendar.getTime().before(new Date())) {
+                    Toast.makeText(requireContext(), "Cannot select past dates", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String selectedDate = dateFormat.format(calendar.getTime());
+                
+                // Format date for display
+                SimpleDateFormat displayFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+                String displayDate = displayFormat.format(calendar.getTime());
                 
                 // Set address coordinates before setting date (needed for time slots loading)
                 bookingViewModel.setServiceAddress(binding.etAddress.getText().toString());
                 bookingViewModel.setAddressLatitude(10.762622); // Mock coordinates
                 bookingViewModel.setAddressLongitude(106.660172);
                 
-                // Only set the date - this will trigger time slots loading in ViewModel
+                // Set the date - this will trigger time slots loading in ViewModel
                 bookingViewModel.setSelectedDate(selectedDate);
+                
+                // Update UI to show selected date
+                binding.tvSelectedDate.setText(displayDate);
+                
+                // Load real time slots from API
+                Service selectedService = bookingViewModel.getSelectedService().getValue();
+                if (selectedService != null) {
+                    timeSlotViewModel.loadAvailableSlots(selectedDate, selectedService.getId(), null);
+                } else {
+                    // If no service selected, load time slots without service filter
+                    timeSlotViewModel.loadAvailableSlots(selectedDate, null, null);
+                }
+                
+                // Show success message
+                Toast.makeText(requireContext(), "Date selected: " + displayDate + "\nLoading time slots...", Toast.LENGTH_SHORT).show();
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -343,26 +443,93 @@ public class CreateBookingFragment extends Fragment {
         
         // Set minimum date to today
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        
+        // Set title
+        datePickerDialog.setTitle("Select Booking Date");
+        
         datePickerDialog.show();
     }
-    
+
+
+    private void handleDateSelection(int year, int month, int dayOfMonth) {
+        if (!isAdded() || getContext() == null) {
+            return;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, dayOfMonth);
+
+        // Check if selected date is not in the past
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+
+        if (calendar.before(today)) {
+            Toast.makeText(getContext(), "Cannot select past dates", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String selectedDate = dateFormat.format(calendar.getTime());
+
+        // Format date for display
+        SimpleDateFormat displayFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        String displayDate = displayFormat.format(calendar.getTime());
+
+        // Set address coordinates before setting date (needed for time slots loading)
+        if (binding != null && binding.etAddress != null) {
+            bookingViewModel.setServiceAddress(binding.etAddress.getText().toString());
+        }
+        bookingViewModel.setAddressLatitude(10.762622); // Mock coordinates
+        bookingViewModel.setAddressLongitude(106.660172);
+
+        // Update ViewModel and UI
+        bookingViewModel.setSelectedDate(selectedDate);
+
+        if (binding != null && binding.tvSelectedDate != null) {
+            binding.tvSelectedDate.setText(displayDate);
+        }
+
+        // Load time slots
+        Service selectedService = bookingViewModel.getSelectedService().getValue();
+        if (selectedService != null) {
+            timeSlotViewModel.loadAvailableSlots(selectedDate, selectedService.getId(), null);
+        } else {
+            timeSlotViewModel.loadAvailableSlots(selectedDate, null, null);
+        }
+
+        Toast.makeText(getContext(), "Date selected: " + displayDate + "\nLoading time slots...", Toast.LENGTH_SHORT).show();
+    }
     private void setupTimeSlotSpinner() {
-        // Demo mode - show default time slots
-        List<String> demoTimeSlots = Arrays.asList(
-            "10:00 AM (Selected - Default)", 
-            "08:00 AM", "09:00 AM", "11:00 AM", 
+        // Initialize with default time slots (fallback)
+        List<String> defaultTimeSlots = Arrays.asList(
+            "10:00 AM", "08:00 AM", "09:00 AM", "11:00 AM", 
             "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"
         );
         
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
             requireContext(),
             android.R.layout.simple_spinner_item,
-            demoTimeSlots
+            defaultTimeSlots
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerTimeSlot.setAdapter(adapter);
-        binding.spinnerTimeSlot.setSelection(0); // Select the default time
-        binding.spinnerTimeSlot.setEnabled(false); // Disable for demo
+        binding.spinnerTimeSlot.setSelection(0); // Select the first time
+        binding.spinnerTimeSlot.setEnabled(true); // Enable for real use
+        
+        // Set default time
+        bookingViewModel.setSelectedTime("10:00 AM");
+        
+        // Load initial time slots for tomorrow
+        Calendar tomorrow = Calendar.getInstance();
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String tomorrowDate = dateFormat.format(tomorrow.getTime());
+        
+        // Load time slots for tomorrow
+        timeSlotViewModel.loadAvailableSlots(tomorrowDate, null, null);
     }
     
     private void updateTimeSlotSpinner() {
@@ -493,6 +660,66 @@ public class CreateBookingFragment extends Fragment {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
     
+    /**
+     * Show the TimeSlotSelectionFragment for advanced time slot selection
+     * This can be called from a button or menu option
+     * Note: This requires a fragment container in the layout
+     */
+    private void showTimeSlotSelection() {
+        Service selectedService = bookingViewModel.getSelectedService().getValue();
+        if (selectedService == null) {
+            showToast("Please select a service first");
+            return;
+        }
+        
+        // For now, show a message that this feature requires layout modification
+        showToast("Advanced time slot selection requires layout modification.\n" +
+                 "Currently using basic time slot spinner.");
+        
+        // TODO: To enable this feature, add a FrameLayout with id "fragment_container" 
+        // to the fragment_create_booking.xml layout file
+        /*
+        TimeSlotSelectionFragment timeSlotFragment = new TimeSlotSelectionFragment();
+        timeSlotFragment.setServiceId(selectedService.getId());
+        timeSlotFragment.setOnTimeSlotSelectionListener((date, timeSlot, staff) -> {
+            // Handle the selection
+            bookingViewModel.setSelectedDate(date);
+            bookingViewModel.setSelectedTime(timeSlot.getDisplayTime());
+            
+            // Show success message
+            showToast("Time slot selected: " + date + " at " + timeSlot.getDisplayTime() + 
+                     " with " + staff.getStaffName());
+            
+            // Close the fragment
+            getChildFragmentManager().popBackStack();
+        });
+        
+        // Add to fragment container
+        getChildFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, timeSlotFragment)
+            .addToBackStack(null)
+            .commit();
+        */
+    }
+    
+    private void processPaymentAfterBooking() {
+        PaymentMethod paymentMethod = bookingViewModel.getSelectedPaymentMethod().getValue();
+        if (paymentMethod == null) {
+            showToast("No payment method selected");
+            return;
+        }
+        
+        // Don't process payment for cash method
+        if (paymentMethod == PaymentMethod.CASH) {
+            showToast("Cash payment selected - booking confirmed!");
+            Navigation.findNavController(requireView()).navigateUp();
+            return;
+        }
+        
+        // Process payment for online payment methods
+        bookingViewModel.processPayment(requireContext());
+    }
+    
     private void handleNavigationArguments() {
         Bundle args = getArguments();
         if (args != null) {
@@ -551,6 +778,16 @@ public class CreateBookingFragment extends Fragment {
                     }
                 });
             }
+        }
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        // Handle VNPay payment result
+        if (requestCode == 1001) { // VNPay payment request code
+            bookingViewModel.handleVNPayPaymentResult(requireContext(), requestCode, resultCode, data);
         }
     }
     

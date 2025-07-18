@@ -1,382 +1,581 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/background_light"
+    android:background="?attr/colorSurface"
     tools:context=".ui.view.booking.CreateBookingFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Header -->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
+            android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/btn_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_back"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="4dp"
-                app:tint="@color/text_primary" />
-
-            <TextView
-                android:id="@+id/tv_step_title"
+            <!-- Header -->
+            <LinearLayout
+                android:id="@+id/header_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/select_service"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/text_primary"
-                android:gravity="center"
-                android:layout_marginHorizontal="16dp" />
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp" />
-
-        </LinearLayout>
-
-        <!-- Step Indicator -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="32dp">
-
-            <View
-                android:id="@+id/step1"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:background="@drawable/step_active"
-                android:layout_margin="4dp" />
-
-            <View
-                android:layout_width="20dp"
-                android:layout_height="2dp"
-                android:background="@color/divider_gray" />
-
-            <View
-                android:id="@+id/step2"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:background="@drawable/step_inactive"
-                android:layout_margin="4dp" />
-
-            <View
-                android:layout_width="20dp"
-                android:layout_height="2dp"
-                android:background="@color/divider_gray" />
-
-            <View
-                android:id="@+id/step3"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:background="@drawable/step_inactive"
-                android:layout_margin="4dp" />
-
-            <View
-                android:layout_width="20dp"
-                android:layout_height="2dp"
-                android:background="@color/divider_gray" />
-
-            <View
-                android:id="@+id/step4"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:background="@drawable/step_inactive"
-                android:layout_margin="4dp" />
-
-            <View
-                android:layout_width="20dp"
-                android:layout_height="2dp"
-                android:background="@color/divider_gray" />
-
-            <View
-                android:id="@+id/step5"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:background="@drawable/step_inactive"
-                android:layout_margin="4dp" />
-
-            <View
-                android:layout_width="20dp"
-                android:layout_height="2dp"
-                android:background="@color/divider_gray" />
-
-            <View
-                android:id="@+id/step6"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:background="@drawable/step_inactive"
-                android:layout_margin="4dp" />
-
-        </LinearLayout>
-
-        <!-- Progress Bar -->
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <!-- Step 1: Select Service -->
-        <LinearLayout
-            android:id="@+id/layout_select_service"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/choose_service_instruction"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/text_secondary"
-                android:gravity="center"
-                android:layout_marginBottom="24dp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/services_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2" />
-
-            <TextView
-                android:id="@+id/tv_selected_service"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no_service_selected"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="@color/primary_orange"
-                android:gravity="center"
-                android:layout_marginTop="16dp"
-                android:padding="12dp"
-                android:background="@drawable/rounded_border"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-        <!-- Step 2: Select Package -->
-        <LinearLayout
-            android:id="@+id/layout_select_package"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/select_package_instruction"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/text_secondary"
-                android:gravity="center"
-                android:layout_marginBottom="24dp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/packages_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            <TextView
-                android:id="@+id/tv_selected_package"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/no_package_selected"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="@color/primary_orange"
-                android:gravity="center"
-                android:layout_marginTop="16dp"
-                android:padding="12dp"
-                android:background="@drawable/rounded_border"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-        <!-- Step 3: Select Date & Time -->
-        <LinearLayout
-            android:id="@+id/layout_select_date_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/select_date_time_instruction"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/text_secondary"
-                android:gravity="center"
-                android:layout_marginBottom="24dp" />
-
-            <!-- Date Selection -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/btn_back"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
+                    android:contentDescription="@string/back_button_description"
+                    app:tint="?attr/colorOnSurface" />
+
+                <TextView
+                    android:id="@+id/tv_step_title"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_weight="1"
+                    android:text="@string/select_service"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="?attr/colorOnSurface"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="16dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/select_date"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="8dp" />
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_select_date"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/choose_date"
-                        app:icon="@drawable/ic_check_circle" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_selected_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/no_date_selected"
-                        android:textAppearance="?attr/textAppearanceCaption"
-                        android:textColor="@color/text_hint"
-                        android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Time Selection -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
+            <!-- Step Indicator -->
+            <LinearLayout
+                android:id="@+id/step_indicator"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/select_time"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="8dp" />
-
-                    <Spinner
-                        android:id="@+id/spinner_time_slot"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="48dp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
-        <!-- Step 4: Enter Address -->
-        <LinearLayout
-            android:id="@+id/layout_enter_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/enter_address_instruction"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/text_secondary"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="24dp"
+                app:layout_constraintTop_toBottomOf="@id/header_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/step1"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="1"
+                    android:textSize="14sp"
+                    app:backgroundTint="?attr/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_margin="4dp" />
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="2dp"
+                    android:background="?attr/colorOutline" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/step2"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="2"
+                    android:textSize="14sp"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:layout_margin="4dp" />
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="2dp"
+                    android:background="?attr/colorOutline" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/step3"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="3"
+                    android:textSize="14sp"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:layout_margin="4dp" />
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="2dp"
+                    android:background="?attr/colorOutline" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/step4"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="4"
+                    android:textSize="14sp"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:layout_margin="4dp" />
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="2dp"
+                    android:background="?attr/colorOutline" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/step5"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="5"
+                    android:textSize="14sp"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:layout_margin="4dp" />
+
+                <View
+                    android:layout_width="16dp"
+                    android:layout_height="2dp"
+                    android:background="?attr/colorOutline" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/step6"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:text="6"
+                    android:textSize="14sp"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:layout_margin="4dp" />
+
+            </LinearLayout>
+
+            <!-- Progress Bar -->
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:indicatorColor="?attr/colorPrimary"
+                app:layout_constraintTop_toBottomOf="@id/step_indicator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Step 1: Select Service -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layout_select_service"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:visibility="visible"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card"
+                app:layout_constraintTop_toBottomOf="@id/progress_bar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/choose_service_instruction"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/services_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2" />
+
+                    <TextView
+                        android:id="@+id/tv_selected_service"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_service_selected"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?attr/colorPrimary"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp"
+                        android:padding="12dp"
+                        android:background="@drawable/rounded_border"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Step 2: Select Package -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layout_select_package"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_select_service"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:text="@string/select_package_instruction"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/packages_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                    <TextView
+                        android:id="@+id/tv_selected_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/rounded_border"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:text="@string/no_package_selected"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="?attr/colorPrimary"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Step 3: Select Date & Time -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layout_select_date_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card"
+                app:layout_constraintTop_toBottomOf="@id/layout_select_package"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_date_time_instruction"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Date Selection -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/select_date"
+                                android:textAppearance="?attr/textAppearanceSubtitle1"
+                                android:textColor="?attr/colorOnSurface"
+                                android:layout_marginBottom="8dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_select_date"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:text="@string/choose_date"
+                                app:icon="@drawable/ic_check_circle"
+                                android:contentDescription="@string/select_date_description" />
+
+                            <TextView
+                                android:id="@+id/tv_selected_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/no_date_selected"
+                                android:textAppearance="?attr/textAppearanceCaption"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:layout_marginTop="4dp" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Time Selection -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/select_time"
+                                android:textAppearance="?attr/textAppearanceSubtitle1"
+                                android:textColor="?attr/colorOnSurface"
+                                android:layout_marginBottom="8dp" />
+
+                            <Spinner
+                                android:id="@+id/spinner_time_slot"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:contentDescription="@string/select_time_description" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Step 4: Enter Address -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layout_enter_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card"
+                app:layout_constraintTop_toBottomOf="@id/layout_select_date_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enter_address_instruction"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:errorEnabled="true"
+                        app:helperText="@string/address_helper">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/enter_service_address"
+                            android:minLines="2"
+                            android:maxLines="3"
+                            android:inputType="textMultiLine"
+                            android:contentDescription="@string/address_description" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:helperText="@string/special_instructions_helper">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_special_instructions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/special_instructions_optional"
+                            android:minLines="2"
+                            android:maxLines="4"
+                            android:inputType="textMultiLine"
+                            android:contentDescription="@string/special_instructions_description" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Step 5: Payment Method -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layout_payment_method"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card"
+                app:layout_constraintTop_toBottomOf="@id/layout_enter_address"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:text="@string/payment_method_instruction"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <!-- Payment Method Selection -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:text="@string/payment_method"
+                                android:textAppearance="?attr/textAppearanceSubtitle1"
+                                android:textColor="?attr/colorOnSurface" />
+
+                            <Spinner
+                                android:id="@+id/spinner_payment_method"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:contentDescription="@string/payment_method_description" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <!-- Payment Information -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:text="@string/payment_information"
+                                android:textAppearance="?attr/textAppearanceSubtitle2"
+                                android:textColor="?attr/colorOnSurface" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="• VNPay: Secure online payment gateway"
+                                android:textAppearance="?attr/textAppearanceBody2"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="• Stripe: International payment processing"
+                                android:textAppearance="?attr/textAppearanceBody2"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="• Cash: Pay on service completion"
+                                android:textAppearance="?attr/textAppearanceBody2"
+                                android:textColor="?attr/colorOnSurfaceVariant" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Step 6: Review Booking -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/layout_review_booking"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
                 android:layout_marginBottom="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_service_address"
-                    android:minLines="2"
-                    android:maxLines="3"
-                    android:inputType="textMultiLine" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_special_instructions"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/special_instructions_optional"
-                    android:minLines="2"
-                    android:maxLines="4"
-                    android:inputType="textMultiLine" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-
-        <!-- Step 5: Payment Method -->
-        <LinearLayout
-            android:id="@+id/layout_payment_method"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/payment_method_instruction"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/text_secondary"
-                android:gravity="center"
-                android:layout_marginBottom="24dp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                app:cardElevation="4dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card"
+                app:layout_constraintTop_toBottomOf="@id/layout_payment_method"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -385,53 +584,13 @@
                     android:padding="16dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/payment_method"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginBottom="8dp" />
-
-                    <Spinner
-                        android:id="@+id/spinner_payment_method"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="48dp" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
-        <!-- Step 6: Review Booking -->
-        <LinearLayout
-            android:id="@+id/layout_review_booking"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/review_booking_instruction"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/text_secondary"
-                android:gravity="center"
-                android:layout_marginBottom="24dp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                        android:text="@string/review_booking_instruction"
+                        android:textAppearance="?attr/textAppearanceBody1"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
 
                     <!-- Service Details -->
                     <TextView
@@ -439,7 +598,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/service_details"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
-                        android:textColor="@color/text_primary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
@@ -455,7 +614,7 @@
                             android:layout_weight="1"
                             android:text="@string/service_label"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_secondary" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/tv_review_service"
@@ -464,7 +623,7 @@
                             android:layout_weight="1"
                             android:text="@string/service_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:gravity="end" />
 
                     </LinearLayout>
@@ -481,7 +640,7 @@
                             android:layout_weight="1"
                             android:text="@string/package_label"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_secondary" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/tv_review_package"
@@ -490,7 +649,7 @@
                             android:layout_weight="1"
                             android:text="@string/package_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:gravity="end" />
 
                     </LinearLayout>
@@ -499,7 +658,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="12dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -507,7 +666,7 @@
                             android:layout_weight="1"
                             android:text="@string/duration_label"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_secondary" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/tv_review_duration"
@@ -516,7 +675,7 @@
                             android:layout_weight="1"
                             android:text="@string/duration_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:gravity="end" />
 
                     </LinearLayout>
@@ -527,7 +686,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/schedule"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
-                        android:textColor="@color/text_primary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
@@ -543,7 +702,7 @@
                             android:layout_weight="1"
                             android:text="@string/date_label"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_secondary" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/tv_review_date"
@@ -552,7 +711,7 @@
                             android:layout_weight="1"
                             android:text="@string/date_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:gravity="end" />
 
                     </LinearLayout>
@@ -561,7 +720,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="12dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -569,7 +728,7 @@
                             android:layout_weight="1"
                             android:text="@string/time_label"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_secondary" />
+                            android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/tv_review_time"
@@ -578,7 +737,7 @@
                             android:layout_weight="1"
                             android:text="@string/time_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:gravity="end" />
 
                     </LinearLayout>
@@ -589,7 +748,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/address"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
-                        android:textColor="@color/text_primary"
+                        android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
@@ -599,7 +758,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/address_placeholder"
                         android:textAppearance="?attr/textAppearanceBody2"
-                        android:textColor="@color/text_primary"
+                        android:textColor="?attr/colorOnSurface"
                         android:layout_marginBottom="4dp" />
 
                     <TextView
@@ -608,15 +767,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/instructions_placeholder"
                         android:textAppearance="?attr/textAppearanceCaption"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginBottom="12dp" />
 
                     <!-- Payment -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="12dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -624,7 +783,7 @@
                             android:layout_weight="1"
                             android:text="@string/payment_label"
                             android:textAppearance="?attr/textAppearanceSubtitle1"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:textStyle="bold" />
 
                         <TextView
@@ -634,7 +793,7 @@
                             android:layout_weight="1"
                             android:text="@string/payment_placeholder"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:gravity="end" />
 
                     </LinearLayout>
@@ -643,7 +802,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/divider_gray"
+                        android:background="?attr/colorOutline"
                         android:layout_marginVertical="8dp" />
 
                     <LinearLayout
@@ -657,7 +816,7 @@
                             android:layout_weight="1"
                             android:text="@string/total_label"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            android:textColor="@color/text_primary"
+                            android:textColor="?attr/colorOnSurface"
                             android:textStyle="bold" />
 
                         <TextView
@@ -667,54 +826,60 @@
                             android:layout_weight="1"
                             android:text="@string/price_placeholder"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            android:textColor="@color/primary_orange"
+                            android:textColor="?attr/colorPrimary"
                             android:textStyle="bold"
                             android:gravity="end" />
 
                     </LinearLayout>
 
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
-        <!-- Spacer to push buttons to bottom -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:minHeight="32dp" />
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Navigation Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="32dp">
+            android:padding="8dp"
+            android:gravity="center">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_previous"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 android:text="@string/previous"
-                android:textColor="@color/text_primary" />
+                android:textColor="?attr/colorOnSurface"
+                android:contentDescription="@string/previous_button_description" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_next"
+                style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:text="@string/next"
-                app:backgroundTint="@color/primary_orange" />
+                app:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/next_button_description" />
 
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    </LinearLayout>
-
-</ScrollView> 
+</androidx.constraintlayout.widget.ConstraintLayout>

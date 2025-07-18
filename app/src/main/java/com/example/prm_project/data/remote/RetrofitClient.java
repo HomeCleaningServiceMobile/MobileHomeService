@@ -75,6 +75,10 @@ public class RetrofitClient {
         return getAuthInstance().create(AuthApiService.class);
     }
     
+    public static PaymentApiService getPaymentApiService() {
+        return getAuthInstance().create(PaymentApiService.class);
+    }
+    
     public static void setBaseUrl(String baseUrl) {
         retrofit = createRetrofitInstance(baseUrl, false);
     }

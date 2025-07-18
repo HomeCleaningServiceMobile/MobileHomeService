@@ -20,11 +20,11 @@ public class VNPayRequest extends PaymentRequest {
     private String ipAddr;
 
     public VNPayRequest(double amount, String orderId, String description) {
-        super(amount, "VND", orderId, description);
+        super(amount, "USD", orderId, description); // API expects USD amount
         this.orderInfo = description;
         this.orderType = "billpayment";
         this.locale = "vn";
-        this.returnUrl = "hehe"; // Deep link for mobile app
+        this.returnUrl = "mobilehomeservice://payment/result"; // Deep link for mobile app
         this.ipAddr = "127.0.0.1"; // Will be set by backend
     }
 

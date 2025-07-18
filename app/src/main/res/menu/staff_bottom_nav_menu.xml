@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/staff_nav_dashboard"
+        android:title="@string/staff_dashboard"
+        android:icon="@drawable/ic_staff_dashboard" />
+
+    <item
+        android:id="@+id/staff_nav_assignments"
+        android:title="@string/staff_tasks"
+        android:icon="@drawable/ic_staff_tasks" />
+
+    <item
+        android:id="@+id/staff_nav_schedule"
+        android:title="@string/staff_schedule"
+        android:icon="@drawable/ic_staff_calendar" />
+
+    <item
+        android:id="@+id/staff_nav_profile"
+        android:title="@string/staff_profile"
+        android:icon="@drawable/ic_worker" />
+
+</menu> 

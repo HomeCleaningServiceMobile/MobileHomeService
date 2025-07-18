@@ -8,6 +8,7 @@ import com.example.prm_project.data.model.*;
 import com.example.prm_project.data.repository.AuthRepository;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import javax.inject.Inject;
+import android.util.Log;
 
 @HiltViewModel
 public class AuthViewModel extends ViewModel {
@@ -275,7 +276,28 @@ public class AuthViewModel extends ViewModel {
      * Get current user role from session
      */
     public String getUserRole() {
-        return authRepository.getUserRole();
+        String checker = authRepository.getUserRole();
+        String role = null;
+        switch (checker) {
+            case "1":
+                role = "customer";
+                break;
+            case "2":
+                role = "staff";
+                break;
+            default:
+                role = "admin";
+                break;
+        }
+        Log.d("AuthViewModel", "getUserRole() called, returned: " + role);
+        return role;
+    }
+    
+    /**
+     * Get current user email from session
+     */
+    public String getUserEmail() {
+        return authRepository.getUserEmail();
     }
     
     /**
@@ -283,7 +305,9 @@ public class AuthViewModel extends ViewModel {
      */
     public boolean isCustomer() {
         String role = getUserRole();
-        return role != null && (role.equalsIgnoreCase("CUSTOMER") || role.equalsIgnoreCase("customer"));
+        boolean isCustomer = role != null && (role.equalsIgnoreCase("CUSTOMER") || role.equalsIgnoreCase("customer"));
+        Log.d("AuthViewModel", "isCustomer() called, role: " + role + ", result: " + isCustomer);
+        return isCustomer;
     }
     
     /**
@@ -291,7 +315,9 @@ public class AuthViewModel extends ViewModel {
      */
     public boolean isAdmin() {
         String role = getUserRole();
-        return role != null && (role.equalsIgnoreCase("ADMIN") || role.equalsIgnoreCase("admin"));
+        boolean isAdmin = role != null && (role.equalsIgnoreCase("ADMIN") || role.equalsIgnoreCase("admin"));
+        Log.d("AuthViewModel", "isAdmin() called, role: " + role + ", result: " + isAdmin);
+        return isAdmin;
     }
     
     /**
@@ -299,7 +325,9 @@ public class AuthViewModel extends ViewModel {
      */
     public boolean isStaff() {
         String role = getUserRole();
-        return role != null && (role.equalsIgnoreCase("STAFF") || role.equalsIgnoreCase("staff"));
+        boolean isStaff = role != null && (role.equalsIgnoreCase("STAFF") || role.equalsIgnoreCase("staff"));
+        Log.d("AuthViewModel", "isStaff() called, role: " + role + ", result: " + isStaff);
+        return isStaff;
     }
     
     // Validation methods

@@ -6,7 +6,9 @@ public enum PaymentMethod {
     DEBIT_CARD(3, "Debit Card"),
     BANK_TRANSFER(4, "Bank Transfer"),
     E_WALLET(5, "E-Wallet"),
-    QR_CODE(6, "QR Code");
+    QR_CODE(6, "QR Code"),
+    VNPAY(7, "VNPay"),
+    STRIPE(8, "Stripe");
 
     private final int value;
     private final String displayName;

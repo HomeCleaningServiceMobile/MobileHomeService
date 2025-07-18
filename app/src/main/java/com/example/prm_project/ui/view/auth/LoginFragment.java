@@ -17,6 +17,7 @@ import com.example.prm_project.databinding.FragmentLoginBinding;
 import com.example.prm_project.ui.viewmodel.AuthViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import dagger.hilt.android.AndroidEntryPoint;
+import android.util.Log;
 
 @AndroidEntryPoint
 public class LoginFragment extends Fragment {
@@ -165,13 +166,35 @@ public class LoginFragment extends Fragment {
     private void navigateBasedOnRole() {
         NavController navController = Navigation.findNavController(requireView());
         
+        // Debug logging to see what role is detected
+        String userRole = authViewModel.getUserRole();
+        boolean isAdmin = authViewModel.isAdmin();
+        boolean isStaff = authViewModel.isStaff();
+        boolean isCustomer = authViewModel.isCustomer();
+        
+        Log.d("LoginFragment", "User Role: " + userRole);
+        Log.d("LoginFragment", "isAdmin: " + isAdmin);
+        Log.d("LoginFragment", "isStaff: " + isStaff);
+        Log.d("LoginFragment", "isCustomer: " + isCustomer);
+        
+        // TEMPORARY: Force staff navigation for testing if email contains "staff"
+//        String userEmail = authViewModel.getUserEmail();
+//        if (userEmail != null && userEmail.toLowerCase().contains("staff")) {
+//            Log.d("LoginFragment", "TEMP: Forcing staff navigation based on email: " + userEmail);
+//            navController.navigate(R.id.action_loginFragment_to_staffFragment);
+//            return;
+//        }
+//
         // Check user role and navigate to appropriate dashboard
         if (authViewModel.isAdmin()) {
+            Log.d("LoginFragment", "Navigating to Admin Fragment");
             navController.navigate(R.id.action_loginFragment_to_adminFragment);
         } else if (authViewModel.isStaff()) {
+            Log.d("LoginFragment", "Navigating to Staff Fragment");
             navController.navigate(R.id.action_loginFragment_to_staffFragment);
         } else {
             // Default to customer dashboard (includes customer role or any other role)
+            Log.d("LoginFragment", "Navigating to Customer Main Fragment");
             navController.navigate(R.id.action_loginFragment_to_mainFragment);
         }
     }
