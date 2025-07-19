@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.prm_project.R;
 import com.example.prm_project.data.model.ApiResponse;
 import com.example.prm_project.data.model.StaffResponseRequest;
-import com.example.prm_project.data.remote.BookingAPIService;
+import com.example.prm_project.data.remote.BookingApiService;
 import com.example.prm_project.data.remote.RetrofitClient;
 
 import retrofit2.Call;
@@ -20,7 +20,7 @@ import retrofit2.Response;
 
 public class BookingActivity extends AppCompatActivity {
 
-    private BookingAPIService bookingApiService;
+    private BookingApiService bookingApiService;
     private EditText etDeclineReason;
     private Button btnAccept, btnDecline;
     private int currentBookingId;

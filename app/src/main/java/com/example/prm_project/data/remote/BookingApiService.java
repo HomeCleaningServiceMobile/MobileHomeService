@@ -8,17 +8,102 @@ import com.example.prm_project.data.model.Service;
 import com.example.prm_project.data.model.ServicePackage;
 import com.example.prm_project.data.model.ItemsWrapper;
 import com.example.prm_project.data.model.Staff;
+import com.example.prm_project.data.model.StaffResponseRequest;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.*;
 
-public interface BookingAPIService {
+public interface BookingApiService {
 
     @POST("{id}/respond")
     Call<ApiResponse> respondToBooking(
             @Path("id") int bookingId,
-            @Body StaffResponseRequest request,
+            @Body com.example.prm_project.data.model.StaffResponseRequest request,
             @Header("Authorization") String token
+    );
+
+    // Create a new booking
+    @POST("booking")
+    Call<ApiResponse<Booking>> createBooking(@Body CreateBookingRequest request);
+
+    // Get booking by ID
+    @GET("booking/{id}")
+    Call<ApiResponse<Booking>> getBookingById(@Path("id") int bookingId);
+
+    // Get bookings with filters
+    @GET("booking")
+    Call<ApiResponse<List<Booking>>> getBookings(
+        @Query("status") Integer status,
+        @Query("startDate") String startDate,
+        @Query("endDate") String endDate,
+        @Query("pageNumber") Integer pageNumber,
+        @Query("pageSize") Integer pageSize
+    );
+
+    // Update booking
+    @PUT("booking/{id}")
+    Call<ApiResponse<Booking>> updateBooking(@Path("id") int bookingId, @Body CreateBookingRequest request);
+
+    // Cancel booking
+    @POST("booking/{id}/cancel")
+    Call<ApiResponse<Booking>> cancelBooking(@Path("id") int bookingId, @Body CancelBookingRequest request);
+
+    // Update booking status
+    @PUT("booking/{id}/status")
+    Call<ApiResponse<Booking>> updateBookingStatus(@Path("id") int bookingId, @Query("status") BookingStatus status);
+
+    // Staff respond to booking
+    @POST("booking/{id}/respond")
+    Call<ApiResponse<Booking>> staffRespond(@Path("id") int bookingId, @Body StaffResponseRequest request);
+
+    // Staff check-in
+    @POST("booking/{id}/checkin")
+    Call<ApiResponse<Booking>> staffCheckIn(@Path("id") int bookingId, @Body CheckInRequest request);
+
+    // Staff check-out
+    @POST("booking/{id}/checkout")
+    Call<ApiResponse<Booking>> staffCheckOut(@Path("id") int bookingId, @Body CheckOutRequest request);
+
+    // Auto-assign staff (Admin)
+    @POST("booking/{id}/auto-assign")
+    Call<ApiResponse<Booking>> autoAssignStaff(@Path("id") int bookingId);
+
+    // Manual assign staff (Admin)
+    @POST("booking/{id}/assign")
+    Call<ApiResponse<Booking>> manualAssignStaff(@Path("id") int bookingId, @Body AssignStaffRequest request);
+
+    // Force complete booking (Admin)
+    @POST("booking/{id}/force-complete")
+    Call<ApiResponse<Booking>> forceCompleteBooking(@Path("id") int bookingId, @Body ForceCompleteRequest request);
+
+    // Customer confirm completion
+    @POST("booking/{id}/confirm")
+    Call<ApiResponse<Booking>> customerConfirmCompletion(@Path("id") int bookingId);
+
+    // Get available services
+    @GET("services")
+    Call<ApiResponse<ItemsWrapper<Service>>> getServices(
+        @Query("type") Integer type,
+        @Query("isActive") Boolean isActive,
+        @Query("minPrice") Double minPrice,
+        @Query("maxPrice") Double maxPrice,
+        @Query("searchTerm") String searchTerm,
+        @Query("pageNumber") Integer pageNumber,
+        @Query("pageSize") Integer pageSize
+    );
+
+    // Get service packages for a service
+    @GET("services/{serviceId}/packages")
+    Call<ApiResponse<List<ServicePackage>>> getServicePackages(@Path("serviceId") int serviceId);
+
+    // Get available time slots
+    @GET("booking/available-slots")
+    Call<ApiResponse<List<String>>> getAvailableTimeSlots(
+        @Query("serviceId") int serviceId,
+        @Query("date") String date,
+        @Query("latitude") double latitude,
+        @Query("longitude") double longitude
     );
     
     // Find available staff (Admin)
