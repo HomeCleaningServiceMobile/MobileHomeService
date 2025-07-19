@@ -83,7 +83,5 @@ public class RetrofitClient {
         retrofit = createRetrofitInstance(baseUrl, false);
     }
 
-    public static BookingAPIService getBookingApiService() {
-        return getInstance().create(BookingAPIService.class);
-    }
+
 }
