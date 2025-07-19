@@ -109,7 +109,7 @@ public class BookingActivity extends AppCompatActivity {
                         finish(); // Close activity
                     } else {
                         // Handle API error
-                        showErrorMessage(apiResponse.getMessage());
+                        showErrorMessage(apiResponse.getFirstErrorMessage());
                     }
                 } else {
                     // Handle HTTP error
