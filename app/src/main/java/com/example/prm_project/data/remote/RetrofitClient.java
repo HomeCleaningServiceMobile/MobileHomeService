@@ -51,7 +51,7 @@ public class RetrofitClient {
                 .connectTimeout(Constants.NETWORK_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(Constants.NETWORK_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(Constants.NETWORK_TIMEOUT, TimeUnit.SECONDS);
-
+        
         // Add auth interceptor for authenticated endpoints
         if (includeAuth && applicationContext != null) {
             clientBuilder.addInterceptor(new AuthInterceptor(applicationContext));
@@ -73,6 +73,10 @@ public class RetrofitClient {
 
     public static AuthApiService getAuthApiService() {
         return getAuthInstance().create(AuthApiService.class);
+    }
+
+    public static PaymentApiService getPaymentApiService() {
+        return getAuthInstance().create(PaymentApiService.class);
     }
 
     public static void setBaseUrl(String baseUrl) {

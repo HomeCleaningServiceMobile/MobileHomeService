@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/background_light"
+    tools:context=".ui.view.service.ServiceDetailFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:elevation="2dp"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="24dp">
+
+            <!-- Top Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <ImageView
+                    android:id="@+id/btn_back"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:background="@drawable/circular_button_background"
+                    android:padding="8dp"
+                    app:tint="@color/text_primary" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Service Details"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:gravity="center" />
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Service Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Service Hero Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/card_border"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Service Image Section -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="@drawable/service_image_background">
+
+                        <!-- Circular Image Container -->
+                        <FrameLayout
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/circular_image_background">
+
+                            <ImageView
+                                android:id="@+id/service_image"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_cleaning"
+                                app:tint="@color/white"
+                                tools:src="@drawable/ic_cleaning" />
+
+                        </FrameLayout>
+
+                        <!-- Service Type Badge -->
+                        <TextView
+                            android:id="@+id/service_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|start"
+                            android:layout_margin="16dp"
+                            android:background="@drawable/category_badge_background"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="6dp"
+                            tools:text="House Cleaning" />
+
+                        <!-- Base Price Badge -->
+                        <TextView
+                            android:id="@+id/base_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|end"
+                            android:layout_margin="16dp"
+                            android:background="@drawable/price_badge_modern"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="8dp"
+                            tools:text="From $50" />
+
+                    </FrameLayout>
+
+                    <!-- Service Info -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <!-- Service Name -->
+                        <TextView
+                            android:id="@+id/service_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="8dp"
+                            tools:text="House Cleaning Service" />
+
+                        <!-- Service Description -->
+                        <TextView
+                            android:id="@+id/service_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_secondary"
+                            android:lineSpacingExtra="4dp"
+                            android:layout_marginBottom="16dp"
+                            tools:text="Professional house cleaning service with experienced staff and eco-friendly products. We provide comprehensive cleaning solutions for your home." />
+
+                        <!-- Service Stats -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <TextView
+                                android:id="@+id/service_duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/duration_badge_modern"
+                                android:textColor="@color/primary_blue"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:paddingHorizontal="12dp"
+                                android:paddingVertical="8dp"
+                                tools:text="2h 30m" />
+
+                            <TextView
+                                android:id="@+id/service_hourly_rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_secondary"
+                                tools:text="Hourly rate: $25" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Service Booking Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/card_border"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Standard Service"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hourly Rate"
+                            android:textSize="12sp"
+                            android:textColor="@color/primary_blue"
+                            android:background="@drawable/duration_badge_modern"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Book this service with flexible duration and hourly pricing. Perfect for custom cleaning needs."
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:lineSpacingExtra="2dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Requirements Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/requirements_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/card_border"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Requirements"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginBottom="12dp" />
+
+                    <TextView
+                        android:id="@+id/service_requirements"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary"
+                        android:lineSpacingExtra="2dp"
+                        tools:text="• Access to all rooms\n• Water and electricity\n• Cleaning supplies provided\n• 24-hour notice required" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Packages Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/packages_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/card_border"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Premium Packages"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fixed Price"
+                            android:textSize="12sp"
+                            android:background="@drawable/price_badge_modern"
+                            android:textColor="@color/white"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/packages_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="200dp"
+                        android:scrollbars="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_package_detail" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Loading Indicator -->
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:indeterminateTint="@color/primary_orange"
+                android:visibility="gone" />
+
+            <!-- Error State -->
+            <LinearLayout
+                android:id="@+id/error_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="32dp"
+                android:layout_marginTop="40dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_empty_services"
+                    android:layout_marginBottom="16dp"
+                    app:tint="@color/text_hint" />
+
+                <TextView
+                    android:id="@+id/error_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Failed to load service details"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="8dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Bottom Action Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:elevation="8dp"
+            android:padding="20dp">
+
+            <!-- Book Service Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_book_service"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Book Service"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/primary_blue"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Book Package Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_book_package"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Book Package"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/primary_orange"
+                app:cornerRadius="12dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView> 

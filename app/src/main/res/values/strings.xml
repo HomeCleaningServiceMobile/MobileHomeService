@@ -139,7 +139,6 @@
 
     <!-- Customer Dashboard -->
     <string name="home_services">Home Services</string>
-    <string name="quick_book">Quick Book</string>
     <string name="my_bookings">My Bookings</string>
     <string name="browse_services">Browse Services</string>
     <string name="cleaning_service">Cleaning</string>
@@ -148,12 +147,12 @@
     <string name="carpentry_service">Carpentry</string>
     <string name="painting_service">Painting</string>
     <string name="gardening_service">Gardening</string>
-    <string name="book_now">Book Now</string>
     <string name="popular_services">Popular Services</string>
     <string name="all_services">All Services</string>
     <string name="recent_bookings">Recent Bookings</string>
     <string name="no_recent_bookings">No recent bookings</string>
     <string name="view_all_bookings">View All Bookings</string>
+    <string name="no_services_available">No services available</string>
     
     <!-- Role-based Views -->
     <string name="admin_dashboard">Admin Dashboard</string>
@@ -192,4 +191,82 @@
     <string name="services">Services</string>
     <string name="profile">Profile</string>
 
+    <!-- Booking -->
+    <string name="book_service">Book a Service</string>
+    <string name="quick_book">Quick Book</string>
+    <string name="book_now">Book Now</string>
+
+    <!-- Create Booking Fragment -->
+    <string name="select_service">Select Service</string>
+    <string name="choose_service_instruction">Choose the service you need</string>
+    <string name="no_service_selected">No service selected</string>
+    <string name="select_package_instruction">Select a package that fits your needs</string>
+    <string name="no_package_selected">No package selected</string>
+    <string name="select_date_time_instruction">When would you like the service?</string>
+    <string name="select_date">Select Date</string>
+    <string name="choose_date">Choose Date</string>
+    <string name="no_date_selected">No date selected</string>
+    <string name="select_time">Select Time</string>
+    <string name="enter_address_instruction">Where should we provide the service?</string>
+    <string name="enter_service_address">Enter service address</string>
+    <string name="special_instructions_optional">Special instructions (optional)</string>
+    <string name="payment_method_instruction">How would you like to pay?</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="payment_information">Payment Information</string>
+    <string name="vnpay_description">VNPay: Secure online payment gateway</string>
+    <string name="stripe_description">Stripe: International payment processing</string>
+    <string name="cash_description">Cash: Pay on service completion</string>
+    <string name="review_booking_instruction">Please review your booking details</string>
+    
+    <!-- Review Section -->
+    <string name="service_details">Service Details</string>
+    <string name="service_label">Service:</string>
+    <string name="service_placeholder">House Cleaning</string>
+    <string name="package_label">Package:</string>
+    <string name="package_placeholder">Basic Cleaning</string>
+    <string name="duration_label">Duration:</string>
+    <string name="duration_placeholder">2h</string>
+    <string name="schedule">Schedule</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="assignments">Assignments</string>
+    <string name="staff_tasks">Tasks</string>
+    <string name="staff_schedule">Schedule</string>
+    <string name="staff_profile">Profile</string>
+    <string name="date_label">Date:</string>
+    <string name="date_placeholder">Mar 15, 2024</string>
+    <string name="time_label">Time:</string>
+    <string name="time_placeholder">2:30 PM</string>
+    <string name="address">Address</string>
+    <string name="address_placeholder">123 Main Street, District 1</string>
+    <string name="instructions_placeholder">Special instructions here</string>
+    <string name="payment_label">Payment:</string>
+    <string name="payment_placeholder">Cash</string>
+    <string name="total_label">Total:</string>
+    <string name="price_placeholder">$50.00</string>
+    
+    <!-- Navigation -->
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+
+
+    <string name="app_logo_description">App logo</string>
+    <string name="email_helper">Enter your email address</string>
+    <string name="password_helper">Enter your password</string>
+    <string name="remember_me_description">Remember me checkbox</string>
+    <string name="forgot_password_description">Forgot password button</string>
+    <string name="login_button_description">Login button</string>
+    <string name="google_signin_description">Sign in with Google button</string>
+    <string name="signup_button_description">Sign up button</string>
+    <string name="error_message_description">Error message</string>
+
+    <string name="back_button_description">Back to previous screen</string>
+    <string name="select_date_description">Select booking date</string>
+    <string name="select_time_description">Select time slot</string>
+    <string name="address_description">Enter service address</string>
+    <string name="special_instructions_description">Enter special instructions</string>
+    <string name="payment_method_description">Select payment method</string>
+    <string name="previous_button_description">Go to previous step</string>
+    <string name="next_button_description">Go to next step</string>
+    <string name="address_helper">Enter the address where the service will be performed</string>
+    <string name="special_instructions_helper">Optional: Add any special instructions</string>
 </resources>

@@ -2,8 +2,10 @@ package com.example.prm_project.di;
 
 import com.example.prm_project.data.repository.AuthRepository;
 import com.example.prm_project.data.repository.MainRepository;
+import com.example.prm_project.data.repository.TimeSlotRepository;
 import com.example.prm_project.data.remote.AuthApiService;
 import com.example.prm_project.data.remote.ApiService;
+import com.example.prm_project.data.remote.TimeSlotApiService;
 import com.example.prm_project.utils.SessionManager;
 import com.example.prm_project.utils.TokenManager;
 import dagger.Module;
@@ -41,5 +43,15 @@ public class RepositoryModule {
     public MainRepository provideMainRepository(
             AuthApiService authApiService) {
         return new MainRepository(authApiService);
+    }
+    
+    /**
+     * Provides TimeSlotRepository for time slot operations
+     */
+    @Provides
+    @Singleton
+    public TimeSlotRepository provideTimeSlotRepository(
+            TimeSlotApiService timeSlotApiService) {
+        return new TimeSlotRepository(timeSlotApiService);
     }
 } 

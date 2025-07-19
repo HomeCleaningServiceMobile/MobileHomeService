@@ -155,6 +155,10 @@
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
             
+        <action
+            android:id="@+id/action_nav_home_to_createBookingFragment"
+            app:destination="@id/createBookingFragment" />
+            
     </fragment>
     
     <fragment
@@ -173,7 +177,7 @@
     
     <fragment
         android:id="@+id/nav_services"
-        android:name="com.example.prm_project.ui.view.main.ServicesFragment"
+        android:name="com.example.prm_project.ui.view.service.ServicesFragment"
         android:label="@string/services"
         tools:layout="@layout/fragment_services">
         
@@ -182,6 +186,27 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+            
+        <action
+            android:id="@+id/action_nav_services_to_serviceDetailFragment"
+            app:destination="@id/serviceDetailFragment" />
+            
+    </fragment>
+    
+    <!-- Service Detail Fragment -->
+    <fragment
+        android:id="@+id/serviceDetailFragment"
+        android:name="com.example.prm_project.ui.view.service.ServiceDetailFragment"
+        android:label="Service Details"
+        tools:layout="@layout/fragment_service_detail">
+        
+        <argument
+            android:name="serviceId"
+            app:argType="integer" />
+            
+        <action
+            android:id="@+id/action_serviceDetailFragment_to_createBookingFragment"
+            app:destination="@id/createBookingFragment" />
             
     </fragment>
     
@@ -226,6 +251,21 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+            
+    </fragment>
+
+    <!-- Create Booking Fragment -->
+    <fragment
+        android:id="@+id/createBookingFragment"
+        android:name="com.example.prm_project.ui.view.booking.CreateBookingFragment"
+        android:label="@string/book_service"
+        tools:layout="@layout/fragment_create_booking">
+        
+        <action
+            android:id="@+id/action_createBookingFragment_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="false" />
             
     </fragment>
 

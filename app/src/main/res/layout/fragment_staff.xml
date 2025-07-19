@@ -4,57 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:background="?attr/colorSurface"
+    android:background="@color/black"
     tools:context=".ui.view.staff.StaffFragment">
 
-    <!-- Header Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_header"
+    <!-- Top App Bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/black"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Staff Dashboard"
+        app:titleTextColor="@color/white"
+        app:titleTextAppearance="@style/TextAppearance.Material3.HeadlineSmall">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <!-- App Icon -->
+            <!-- Grid Icon -->
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:id="@+id/gridIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_launcher_foreground"
-                android:background="@drawable/ic_launcher_background" />
+                android:src="@drawable/ic_grid_view"
+                app:tint="@color/white" />
 
-            <!-- Welcome Text -->
+            <!-- Staff Dashboard Logo and Text -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/orange_500"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_worker"
+                        app:tint="@color/white" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/staff_dashboard"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="?attr/colorOnSurface" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hello_staff"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?attr/colorSecondary" />
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Staff Dashboard"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -66,64 +79,36 @@
                 android:layout_height="48dp"
                 app:icon="@drawable/ic_arrow_back"
                 app:iconSize="20dp"
-                app:iconTint="?attr/colorOnSurfaceVariant"
+                app:iconTint="@color/white"
                 android:contentDescription="@string/logout" />
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.appbar.MaterialToolbar>
 
-    <!-- Welcome Message Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_welcome"
+    <!-- Content Area -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/staff_content_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_top_background"
+        app:layout_constraintBottom_toTopOf="@id/staff_bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar" />
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/staff_bottom_navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardElevation="1dp"
-        app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:layout_constraintTop_toBottomOf="@id/card_header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/black"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.3">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="32dp"
-            android:gravity="center">
-
-            <!-- Large Hello Icon -->
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="24dp"
-                android:src="@drawable/ic_check_circle"
-                app:tint="?attr/colorSecondary" />
-
-            <!-- Welcome Title -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/hello_staff"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:gravity="center" />
-
-            <!-- Welcome Message -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/staff_welcome_message"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:gravity="center"
-                android:lineSpacingExtra="4dp" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/staff_bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout> 

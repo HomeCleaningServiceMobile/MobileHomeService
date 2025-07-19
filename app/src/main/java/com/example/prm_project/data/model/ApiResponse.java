@@ -27,6 +27,21 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    // Convenience constructor for simple success/error responses
+    public ApiResponse(boolean isSucceeded, String message, T data) {
+        this.isSucceeded = isSucceeded;
+        this.timestamp = java.time.Instant.now().toString();
+        this.data = data;
+
+        // Create messages map with appropriate message
+        this.messages = new java.util.HashMap<>();
+        if (isSucceeded) {
+            this.messages.put("Success", new String[]{message});
+        } else {
+            this.messages.put("Error", new String[]{message});
+        }
+    }
+
     // Getters and Setters
     public boolean isSucceeded() {
         return isSucceeded;
@@ -79,5 +94,21 @@ public class ApiResponse<T> {
             }
         }
         return "Operation completed successfully";
+    }
+
+    // Helper method for backend trả về data: { items: [...] }
+    public <E> java.util.List<E> getItemsForList(Class<E> clazz) {
+        if (data == null) return null;
+        try {
+            java.lang.reflect.Field itemsField = data.getClass().getDeclaredField("items");
+            itemsField.setAccessible(true);
+            Object items = itemsField.get(data);
+            if (items instanceof java.util.List<?>) {
+                return (java.util.List<E>) items;
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+        return null;
     }
 }

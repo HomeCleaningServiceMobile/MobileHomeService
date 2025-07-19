@@ -112,6 +112,12 @@ public class MainFragment extends Fragment {
         binding.servicePaint.setOnClickListener(v -> {
             showToast("Paint Service - Coming Soon!");
         });
+        
+        // Book Service button
+        binding.btnBookService.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireView());
+            navController.navigate(R.id.action_nav_home_to_createBookingFragment);
+        });
     }
     
     private void showToast(String message) {

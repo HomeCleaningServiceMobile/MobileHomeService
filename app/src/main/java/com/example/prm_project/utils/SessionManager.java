@@ -76,6 +76,7 @@ public class SessionManager {
             editor.apply();
             
             Log.d(TAG, "User session saved successfully" + (isEncrypted ? " (encrypted)" : " (unencrypted)"));
+            Log.d(TAG, "User role saved: " + user.getRole());
         } catch (Exception e) {
             Log.e(TAG, "Failed to save user session", e);
         }
@@ -172,6 +173,18 @@ public class SessionManager {
     }
     
     /**
+     * Get current customer ID (same as user ID for customers)
+     */
+    public int getCurrentCustomerId() {
+        try {
+            return prefs.getInt(Constants.KEY_USER_ID, -1);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to retrieve customer ID", e);
+            return -1;
+        }
+    }
+    
+    /**
      * Get user email
      */
     public String getUserEmail() {
@@ -200,7 +213,9 @@ public class SessionManager {
      */
     public String getUserRole() {
         try {
-            return prefs.getString(Constants.KEY_USER_ROLE, null);
+            String role = prefs.getString(Constants.KEY_USER_ROLE, null);
+            Log.d(TAG, "getUserRole() called, retrieved role: " + role);
+            return role;
         } catch (Exception e) {
             Log.e(TAG, "Failed to retrieve user role", e);
             return null;

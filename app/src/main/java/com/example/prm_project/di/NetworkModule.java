@@ -3,6 +3,9 @@ package com.example.prm_project.di;
 import android.content.Context;
 import com.example.prm_project.data.remote.ApiService;
 import com.example.prm_project.data.remote.AuthApiService;
+import com.example.prm_project.data.remote.ServiceApiService;
+import com.example.prm_project.data.remote.BookingApiService;
+import com.example.prm_project.data.remote.TimeSlotApiService;
 import com.example.prm_project.utils.AuthInterceptor;
 import com.example.prm_project.utils.Constants;
 import dagger.Module;
@@ -108,6 +111,20 @@ public class NetworkModule {
     }
     
     /**
+     * Provides authenticated Retrofit instance for booking services
+     */
+    @Provides
+    @Singleton
+    @Named("booking")
+    public Retrofit provideBookingRetrofit(@Named("auth") OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+    
+    /**
      * Provides general API service
      */
     @Provides
@@ -123,5 +140,32 @@ public class NetworkModule {
     @Singleton
     public AuthApiService provideAuthApiService(@Named("auth") Retrofit retrofit) {
         return retrofit.create(AuthApiService.class);
+    }
+    
+    /**
+     * Provides service API service
+     */
+    @Provides
+    @Singleton
+    public ServiceApiService provideServiceApiService(@Named("base") Retrofit retrofit) {
+        return retrofit.create(ServiceApiService.class);
+    }
+    
+    /**
+     * Provides booking API service with authentication
+     */
+    @Provides
+    @Singleton
+    public BookingApiService provideBookingApiService(@Named("booking") Retrofit retrofit) {
+        return retrofit.create(BookingApiService.class);
+    }
+    
+    /**
+     * Provides time slot API service with authentication
+     */
+    @Provides
+    @Singleton
+    public TimeSlotApiService provideTimeSlotApiService(@Named("booking") Retrofit retrofit) {
+        return retrofit.create(TimeSlotApiService.class);
     }
 } 
