@@ -47,7 +47,6 @@
         <!--            android:name=".ui.view.SetNewPasswordActivity"-->
         <!--            android:exported="false"-->
         <!--            android:screenOrientation="portrait" />-->
-        
         <!-- Payment Activities -->
         <activity
             android:name=".ui.view.payment.PaymentWebViewActivity"

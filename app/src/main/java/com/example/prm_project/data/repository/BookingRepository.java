@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 
 @Singleton
 public class BookingRepository {
-    
+
     private final BookingApiService bookingApiService;
-    
+
     // Call tracking for cancellation
     private Call<ApiResponse<List<String>>> timeSlotCall;
-    
+
     // LiveData for UI observation
     private final MutableLiveData<List<Booking>> bookingsLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Service>> servicesLiveData = new MutableLiveData<>();
@@ -179,7 +179,7 @@ public class BookingRepository {
             }
         });
     }
-    
+
     // Update booking status
     public void updateBookingStatus(int bookingId, BookingStatus status) {
         loadingLiveData.setValue(true);
@@ -209,6 +209,61 @@ public class BookingRepository {
             }
         });
     }
+
+    // Respond to booking (accept or decline) - NEW METHOD
+    public void respondToBooking(int bookingId, StaffResponseRequest request) {
+        loadingLiveData.setValue(true);
+        bookingApiService.respondToBooking(bookingId, request).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                loadingLiveData.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        // Handle success
+                        String message = request.isAccept() ?
+                                "Booking accepted successfully!" :
+                                "Booking declined successfully!";
+                        successLiveData.setValue(message);
+                        // Refresh bookings list
+                        getBookings(null, null, null, 1, 10);
+                    } else {
+                        // Handle API error
+                        errorLiveData.setValue(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    // Handle HTTP error
+                    errorLiveData.setValue("Failed to response to booking");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue("Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    // Accept booking - convenience method
+    public void acceptBooking(int bookingId) {
+        StaffResponseRequest request = new StaffResponseRequest();
+        request.setBookingId(bookingId);
+        request.setAccept(true);
+        request.setDeclineReason(null);
+        respondToBooking(bookingId, request);
+    }
+
+    // Decline booking - convenience method
+    public void declineBooking(int bookingId, String declineReason) {
+        StaffResponseRequest request = new StaffResponseRequest();
+        request.setBookingId(bookingId);
+        request.setAccept(false);
+        request.setDeclineReason(declineReason);
+        respondToBooking(bookingId, request);
+    }
+
 
     // Get available services
     public void getServices() {
@@ -271,25 +326,25 @@ public class BookingRepository {
             errorLiveData.setValue("Date is required");
             return;
         }
-        
+
         // Cancel previous call if still running
         if (timeSlotCall != null && !timeSlotCall.isCanceled()) {
             timeSlotCall.cancel();
         }
-        
+
         loadingLiveData.setValue(true);
-        
+
         try {
             timeSlotCall = bookingApiService.getAvailableTimeSlots(serviceId, date, latitude, longitude);
             timeSlotCall.enqueue(new Callback<ApiResponse<List<String>>>() {
                 @Override
                 public void onResponse(Call<ApiResponse<List<String>>> call, Response<ApiResponse<List<String>>> response) {
                     loadingLiveData.setValue(false);
-                    
+
                     if (call.isCanceled()) {
                         return; // Request was cancelled, don't process response
                     }
-                    
+
                     if (response.isSuccessful() && response.body() != null) {
                         ApiResponse<List<String>> apiResponse = response.body();
                         if (apiResponse.isSucceeded() && apiResponse.getData() != null) {
@@ -305,11 +360,11 @@ public class BookingRepository {
                 @Override
                 public void onFailure(Call<ApiResponse<List<String>>> call, Throwable t) {
                     loadingLiveData.setValue(false);
-                    
+
                     if (call.isCanceled()) {
                         return; // Request was cancelled, don't show error
                     }
-                    
+
                     errorLiveData.setValue("Network error: " + (t.getMessage() != null ? t.getMessage() : "Unknown error"));
                 }
             });
@@ -381,11 +436,11 @@ public class BookingRepository {
     public void getCompletedBookings() {
         getBookingsByStatus(BookingStatus.COMPLETED);
     }
-    
+
     // Cancel ongoing API calls
     public void cancelOngoingCalls() {
         if (timeSlotCall != null && !timeSlotCall.isCanceled()) {
             timeSlotCall.cancel();
         }
     }
-} 
+}

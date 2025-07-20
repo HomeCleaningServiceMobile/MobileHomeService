@@ -4,35 +4,35 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map;
 
 public class ApiResponse<T> {
-    
+
     @SerializedName("isSucceeded")
     private boolean isSucceeded;
-    
+
     @SerializedName("timestamp")
     private String timestamp;
-    
+
     @SerializedName("messages")
     private Map<String, String[]> messages;
-    
+
     @SerializedName("data")
     private T data;
-    
+
     // Constructors
     public ApiResponse() {}
-    
+
     public ApiResponse(boolean isSucceeded, String timestamp, Map<String, String[]> messages, T data) {
         this.isSucceeded = isSucceeded;
         this.timestamp = timestamp;
         this.messages = messages;
         this.data = data;
     }
-    
+
     // Convenience constructor for simple success/error responses
     public ApiResponse(boolean isSucceeded, String message, T data) {
         this.isSucceeded = isSucceeded;
         this.timestamp = java.time.Instant.now().toString();
         this.data = data;
-        
+
         // Create messages map with appropriate message
         this.messages = new java.util.HashMap<>();
         if (isSucceeded) {
@@ -41,40 +41,40 @@ public class ApiResponse<T> {
             this.messages.put("Error", new String[]{message});
         }
     }
-    
+
     // Getters and Setters
     public boolean isSucceeded() {
         return isSucceeded;
     }
-    
+
     public void setSucceeded(boolean succeeded) {
         isSucceeded = succeeded;
     }
-    
+
     public String getTimestamp() {
         return timestamp;
     }
-    
+
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
-    
+
     public Map<String, String[]> getMessages() {
         return messages;
     }
-    
+
     public void setMessages(Map<String, String[]> messages) {
         this.messages = messages;
     }
-    
+
     public T getData() {
         return data;
     }
-    
+
     public void setData(T data) {
         this.data = data;
     }
-    
+
     // Helper methods
     public String getFirstErrorMessage() {
         if (messages != null && messages.containsKey("Error")) {
@@ -85,7 +85,7 @@ public class ApiResponse<T> {
         }
         return "Unknown error occurred";
     }
-    
+
     public String getFirstSuccessMessage() {
         if (messages != null && messages.containsKey("Success")) {
             String[] successes = messages.get("Success");
@@ -111,4 +111,4 @@ public class ApiResponse<T> {
         }
         return null;
     }
-} 
+}
