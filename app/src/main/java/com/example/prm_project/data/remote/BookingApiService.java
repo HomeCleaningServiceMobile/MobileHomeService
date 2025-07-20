@@ -16,11 +16,10 @@ import retrofit2.http.*;
 
 public interface BookingApiService {
 
-    @POST("{id}/respond")
+    @POST("booking/{id}/respond")
     Call<ApiResponse> respondToBooking(
             @Path("id") int bookingId,
-            @Body com.example.prm_project.data.model.StaffResponseRequest request,
-            @Header("Authorization") String token
+            @Body com.example.prm_project.data.model.StaffResponseRequest request
     );
 
     // Create a new booking

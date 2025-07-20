@@ -308,4 +308,8 @@ public class AuthRepository {
     public String getUserEmail() {
         return sessionManager.getUserEmail();
     }
+
+    public int getUserId() {
+        return sessionManager.getUserId();
+    }
 } 
