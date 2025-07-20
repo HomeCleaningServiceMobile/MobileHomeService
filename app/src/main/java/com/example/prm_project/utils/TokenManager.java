@@ -6,6 +6,12 @@ import com.example.prm_project.data.model.RefreshTokenRequest;
 import com.example.prm_project.data.model.TokenResponse;
 import com.example.prm_project.data.remote.AuthApiService;
 import com.example.prm_project.data.remote.RetrofitClient;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -54,15 +60,39 @@ public class TokenManager {
             return true;
         }
         
+//        try {
+//            long expirationTime = Long.parseLong(expiresAt);
+//            long currentTime = System.currentTimeMillis();
+//            long timeUntilExpiry = expirationTime - currentTime;
+//
+//            // Refresh if token expires within threshold
+//            return timeUntilExpiry <= TOKEN_REFRESH_THRESHOLD;
+//        } catch (NumberFormatException e) {
+//            Log.e(TAG, "Invalid expiration time format", e);
+//            return true;
+//        }
+
         try {
-            long expirationTime = Long.parseLong(expiresAt);
+            long expirationTime;
+
+            // Check if the string is already a timestamp (numeric)
+            if (expiresAt.matches("\\d+")) {
+                expirationTime = Long.parseLong(expiresAt);
+            } else {
+                // Parse ISO 8601 datetime string
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'", Locale.US);
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date date = sdf.parse(expiresAt);
+                expirationTime = date.getTime();
+            }
+
             long currentTime = System.currentTimeMillis();
             long timeUntilExpiry = expirationTime - currentTime;
-            
+
             // Refresh if token expires within threshold
             return timeUntilExpiry <= TOKEN_REFRESH_THRESHOLD;
-        } catch (NumberFormatException e) {
-            Log.e(TAG, "Invalid expiration time format", e);
+        } catch (NumberFormatException | ParseException e) {
+            Log.e(TAG, "Invalid expiration time format: " + expiresAt, e);
             return true;
         }
     }
