@@ -5,6 +5,7 @@ public class Constants {
     // API Constants
     public static final String BASE_URL = "http://10.0.2.2:5233/api/";
     public static final String AUTH_BASE_URL = "http://10.0.2.2:5233/api/auth/";
+    public static final String ADMIN_BASE_URL = "http://10.0.2.2:5233/api/admin/";
     public static final int NETWORK_TIMEOUT = 30;
     
     // Authentication Endpoints
@@ -56,4 +57,5 @@ public class Constants {
     private Constants() {
         // Private constructor to prevent instantiation
     }
-} 
+}
+

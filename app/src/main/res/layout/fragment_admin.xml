@@ -5,125 +5,288 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="?attr/colorSurface"
-    tools:context=".ui.view.admin.AdminFragment">
+    android:background="?attr/colorSurface">
 
-    <!-- Header Card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_header"
-        android:layout_width="0dp"
+    <!-- Header -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:text="Logout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Stats Cards Row 1 -->
+    <TextView
+        android:id="@+id/tv_dashboard_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/admin_dashboard"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnLogout" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_users"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
         app:cardElevation="2dp"
         app:cardCornerRadius="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dashboard_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toStartOf="@id/card_bookings"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginEnd="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/manage_accounts_24"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_total_users"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?attr/colorOnSurface" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_users"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_bookings"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_dashboard_title"
+        app:layout_constraintStart_toEndOf="@id/card_users"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight ="1"
+        android:layout_marginStart="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_bookings"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_total_bookings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?attr/colorOnSurface" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_bookings"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Stats Cards Row 2 -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_revenue"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintTop_toBottomOf="@id/card_users"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/card_services"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/manage_accounts_24"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_total_revenue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?attr/colorOnSurface" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_revenue"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_services"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintTop_toBottomOf="@id/card_bookings"
+        app:layout_constraintStart_toEndOf="@id/card_revenue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight ="1"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_services"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tv_total_services"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="?attr/colorOnSurface" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_services"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Add below the last stats card in your existing ConstraintLayout -->
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_manage_staff"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintTop_toBottomOf="@id/card_services"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:padding="16dp">
 
-            <!-- App Icon -->
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_launcher_foreground"
-                android:background="@drawable/ic_launcher_background" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/manage_accounts_24"
+                app:tint="?attr/colorPrimary"
+                android:layout_marginEnd="16dp" />
 
-            <!-- Welcome Text -->
-            <LinearLayout
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:text="@string/manage_staff"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textColor="?attr/colorOnSurface" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/admin_dashboard"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="?attr/colorOnSurface" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hello_admin"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?attr/colorPrimary" />
-
-            </LinearLayout>
-
-            <!-- Logout Button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_logout"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                app:icon="@drawable/ic_arrow_back"
-                app:iconSize="20dp"
-                app:iconTint="?attr/colorOnSurfaceVariant"
-                android:contentDescription="@string/logout" />
-
+                android:id="@+id/btn_manage_staff"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/view"
+                android:textAllCaps="false" />
         </LinearLayout>
-
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Welcome Message Card -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_welcome"
+        android:id="@+id/card_manage_service"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardElevation="1dp"
+        app:cardElevation="2dp"
         app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:layout_constraintTop_toBottomOf="@id/card_header"
+        app:layout_constraintTop_toBottomOf="@id/card_manage_staff"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.3">
+        android:layout_marginTop="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="32dp"
-            android:gravity="center">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
 
-            <!-- Large Hello Icon -->
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="24dp"
-                android:src="@drawable/ic_check_circle"
-                app:tint="?attr/colorPrimary" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/service_toolbox_24px"
+                app:tint="?attr/colorPrimary"
+                android:layout_marginEnd="16dp" />
 
-            <!-- Welcome Title -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/hello_admin"
-                android:textAppearance="?attr/textAppearanceHeadline5"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:gravity="center" />
+                android:layout_weight="1"
+                android:text="@string/manage_service"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textColor="?attr/colorOnSurface" />
 
-            <!-- Welcome Message -->
-            <TextView
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_manage_service"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/admin_welcome_message"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:gravity="center"
-                android:lineSpacingExtra="4dp" />
-
+                android:text="@string/view"
+                android:textAllCaps="false" />
         </LinearLayout>
-
     </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout> 
+    <!-- Add more cards or navigation buttons as needed -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

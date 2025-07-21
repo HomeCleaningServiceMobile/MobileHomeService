@@ -269,4 +269,14 @@
     <string name="next_button_description">Go to next step</string>
     <string name="address_helper">Enter the address where the service will be performed</string>
     <string name="special_instructions_helper">Optional: Add any special instructions</string>
+
+    <!--    Admin Dashboard-->
+    <string name="total_users">Total Users</string>
+    <string name="total_bookings">Total Bookings</string>
+    <string name="total_revenue">Total Revenue</string>
+    <string name="total_services">Total Services</string>
+    <string name="manage_staff">Manage Staff</string>
+    <string name="manage_service">Manage Service</string>
+    <string name="add_staff">Add Staff</string>
+    <string name="view">View</string>
 </resources>
