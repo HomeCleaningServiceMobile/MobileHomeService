@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.prm_project.data.model.ApiResponse;
-import com.example.prm_project.data.model.StaffAvailabilityDto;
+import com.example.prm_project.data.model.StaffAvailabilityResponse;
 import com.example.prm_project.data.model.TimeSlotDto;
 import com.example.prm_project.data.repository.TimeSlotRepository;
 
@@ -26,7 +26,7 @@ public class TimeSlotViewModel extends ViewModel {
     
     // LiveData for UI state
     private final MutableLiveData<List<TimeSlotDto>> availableSlots = new MutableLiveData<>();
-    private final MutableLiveData<List<StaffAvailabilityDto>> availableStaff = new MutableLiveData<>();
+    private final MutableLiveData<List<StaffAvailabilityResponse>> availableStaff = new MutableLiveData<>();
     private final MutableLiveData<Map<String, List<TimeSlotDto>>> availableSlotsRange = new MutableLiveData<>();
     private final MutableLiveData<TimeSlotDto> nextAvailableSlot = new MutableLiveData<>();
     
@@ -44,7 +44,7 @@ public class TimeSlotViewModel extends ViewModel {
         return availableSlots;
     }
     
-    public LiveData<List<StaffAvailabilityDto>> getAvailableStaff() {
+    public LiveData<List<StaffAvailabilityResponse>> getAvailableStaff() {
         return availableStaff;
     }
     
@@ -105,13 +105,13 @@ public class TimeSlotViewModel extends ViewModel {
         errorMessage.setValue(null);
         
         timeSlotRepository.getAvailableStaffForSlot(date, startTime, endTime, serviceId)
-                .enqueue(new Callback<ApiResponse<List<StaffAvailabilityDto>>>() {
+                .enqueue(new Callback<ApiResponse<List<StaffAvailabilityResponse>>>() {
                     @Override
-                    public void onResponse(Call<ApiResponse<List<StaffAvailabilityDto>>> call, Response<ApiResponse<List<StaffAvailabilityDto>>> response) {
+                    public void onResponse(Call<ApiResponse<List<StaffAvailabilityResponse>>> call, Response<ApiResponse<List<StaffAvailabilityResponse>>> response) {
                         isLoading.setValue(false);
                         
                         if (response.isSuccessful() && response.body() != null) {
-                            ApiResponse<List<StaffAvailabilityDto>> apiResponse = response.body();
+                            ApiResponse<List<StaffAvailabilityResponse>> apiResponse = response.body();
                             if (apiResponse.isSucceeded()) {
                                 availableStaff.setValue(apiResponse.getData());
                             } else {
@@ -123,7 +123,7 @@ public class TimeSlotViewModel extends ViewModel {
                     }
                     
                     @Override
-                    public void onFailure(Call<ApiResponse<List<StaffAvailabilityDto>>> call, Throwable t) {
+                    public void onFailure(Call<ApiResponse<List<StaffAvailabilityResponse>>> call, Throwable t) {
                         isLoading.setValue(false);
                         errorMessage.setValue("Network error: " + t.getMessage());
                     }

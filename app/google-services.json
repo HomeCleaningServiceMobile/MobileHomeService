@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "91713426960",
+    "project_id": "mobile-home-service-e2435",
+    "storage_bucket": "mobile-home-service-e2435.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91713426960:android:f49db0661728463e475c95",
+        "android_client_info": {
+          "package_name": "com.example.prm_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91713426960-hg36699oucce59nkpp4tu3f6pkqhml0b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.prm_project",
+            "certificate_hash": "52896ba038c19e7037c9aebfab61de3efa595ce1"
+          }
+        },
+        {
+          "client_id": "91713426960-vqmrp9go6mvlp84v1ehb3j829qkdfeuf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcQRgMlflnC9OecKJyiaKZ8-DXFPwK9Zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91713426960-vqmrp9go6mvlp84v1ehb3j829qkdfeuf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,7 @@
 package com.example.prm_project.data.remote;
 
 import com.example.prm_project.data.model.ApiResponse;
-import com.example.prm_project.data.model.StaffAvailabilityDto;
+import com.example.prm_project.data.model.StaffAvailabilityResponse;
 import com.example.prm_project.data.model.TimeSlotDto;
 
 import java.util.List;
@@ -17,14 +17,12 @@ public interface TimeSlotApiService {
      * Get available time slots for a specific date
      * @param date Date in YYYY-MM-DD format
      * @param serviceId Optional service ID to filter by
-     * @param staffId Optional staff ID to filter by
      * @return List of available time slots
      */
-    @GET("api/timeslot/available-slots")
+    @GET("timeslot/available-slots")
     Call<ApiResponse<List<TimeSlotDto>>> getAvailableSlots(
         @Query("date") String date,
-        @Query("serviceId") Integer serviceId,
-        @Query("staffId") Integer staffId
+        @Query("serviceId") Integer serviceId
     );
     
     /**
@@ -35,8 +33,8 @@ public interface TimeSlotApiService {
      * @param serviceId Optional service ID to filter by
      * @return List of available staff
      */
-    @GET("api/timeslot/available-staff-for-slot")
-    Call<ApiResponse<List<StaffAvailabilityDto>>> getAvailableStaffForSlot(
+    @GET("timeslot/available-staff-for-slot")
+    Call<ApiResponse<List<StaffAvailabilityResponse>>> getAvailableStaffForSlot(
         @Query("date") String date,
         @Query("startTime") String startTime,
         @Query("endTime") String endTime,
@@ -51,7 +49,7 @@ public interface TimeSlotApiService {
      * @param staffId Optional staff ID to filter by
      * @return Map of dates to available time slots
      */
-    @GET("api/timeslot/available-slots-range")
+    @GET("timeslot/available-slots-range")
     Call<ApiResponse<Map<String, List<TimeSlotDto>>>> getAvailableSlotsRange(
         @Query("startDate") String startDate,
         @Query("endDate") String endDate,
@@ -65,9 +63,14 @@ public interface TimeSlotApiService {
      * @param staffId Optional staff ID to filter by
      * @return Next available time slot
      */
-    @GET("api/timeslot/next-available-slot")
+    @GET("timeslot/next-available-slot")
     Call<ApiResponse<TimeSlotDto>> getNextAvailableSlot(
         @Query("serviceId") Integer serviceId,
         @Query("staffId") Integer staffId
+    );
+    @GET("timeslot/service-slots")
+    Call<ApiResponse<TimeSlotDto>> getAvailableSlot(
+            @Query("date") String date,
+            @Query("serviceId") Integer serviceId
     );
 } 
