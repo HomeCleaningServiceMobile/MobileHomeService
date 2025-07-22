@@ -1,13 +1,16 @@
 // file: data/remote/ManageStaffApi.java
 package com.example.prm_project.data.remote;
 
+import com.example.prm_project.data.model.AdminStaffDetailResponse;
 import com.example.prm_project.data.model.AdminStaffListResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ManageStaffApi {
+
     @GET("StaffManagement")
     Call<AdminStaffListResponse> getStaffList(
         @Header("Authorization") String bearerToken,
@@ -28,8 +31,8 @@ public interface ManageStaffApi {
         @Query("Skip") Integer skip
     );
 
-    @GET("api/admin/StaffManagement/{id}")
-    Call<StaffDetailResponse> getStaffDetail(
+    @GET("StaffManagement/{id}")
+    Call<AdminStaffDetailResponse> getStaffDetail(
             @Header("Authorization") String token,
             @Path("id") int staffId
     );

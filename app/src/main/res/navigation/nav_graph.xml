@@ -246,7 +246,22 @@
         android:id="@+id/manageStaffFragment"
         android:name="com.example.prm_project.ui.view.admin.ManageStaffFragment"
         android:label="Manage Staff"
-        tools:layout="@layout/fragment_manage_staff" />
+        tools:layout="@layout/fragment_admin_manage_staff">
+
+        <action
+            android:id="@+id/action_manageStaffFragment_to_adminStaffDetailFragment"
+            app:destination="@id/adminStaffDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminStaffDetailFragment"
+        android:name="com.example.prm_project.ui.view.admin.AdminStaffDetailFragment"
+        android:label="Staff Detail"
+        tools:layout="@layout/fragment_admin_staff_detail">
+        <argument
+            android:name="staffId"
+            app:argType="integer" />
+    </fragment>
 
 
     <!-- Staff Fragment -->

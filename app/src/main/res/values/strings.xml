@@ -279,4 +279,22 @@
     <string name="manage_service">Manage Service</string>
     <string name="add_staff">Add Staff</string>
     <string name="view">View</string>
+
+    <!--  Manage Staff Detail  -->
+    <string name="staff_detail_title">Staff Detail</string>
+    <string name="staff_full_name">Full Name</string>
+    <string name="staff_email">Email</string>
+    <string name="staff_phone">Phone Number</string>
+    <string name="staff_address">Address</string>
+    <string name="staff_skills">Skills</string>
+    <string name="staff_hourly_rate">Hourly Rate</string>
+    <string name="staff_status">Status</string>
+    <string name="staff_certification">Certification</string>
+    <string name="staff_id_card">ID Card</string>
+    <string name="staff_bio">Bio</string>
+    <string name="staff_available">Available</string>
+    <string name="staff_not_available">Not Available</string>
+    <string name="staff_hire_date">Hire Date</string>
+    <string name="staff_average_rating">Average Rating</string>
+    <string name="staff_total_completed_jobs">Total Completed Jobs</string>
 </resources>
