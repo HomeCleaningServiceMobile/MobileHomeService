@@ -68,7 +68,7 @@ public class StaffFragment extends Fragment {
             } else if (item.getItemId() == R.id.staff_nav_schedule) {
                 fragment = new StaffScheduleFragment();
             } else if (item.getItemId() == R.id.staff_nav_profile) {
-                fragment = new StaffProfileFragment();
+                fragment = new StaffProfileNguyenFragment();
             }
             
             if (fragment != null) {

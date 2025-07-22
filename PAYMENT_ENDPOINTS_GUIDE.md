@@ -372,3 +372,49 @@ Confirms the Stripe payment and deducts the amount from customer balance.
 - Customer balance is only deducted after successful payment validation
 - Booking status is updated to "Confirmed" only after successful payment processing
 - All endpoints include proper error handling and logging 
+
+---
+
+## Troubleshooting
+
+### VNPay Error Codes
+
+#### Error Code 03: "Merchant not found"
+This error occurs when the VNPay merchant configuration is incorrect.
+
+**Common Causes:**
+- Invalid TMN Code (Merchant Code)
+- Incorrect Secret Key
+- Merchant account not activated in sandbox/production
+- Wrong VNPay environment configuration
+
+**Solutions:**
+1. **Verify Merchant Code**: Ensure the `vnp_TmnCode` is correct
+   - Sandbox: Usually starts with "DEMO" (e.g., "DEMO123")
+   - Production: Your actual merchant code from VNPay
+2. **Check Secret Key**: Verify the secret key matches your VNPay account
+3. **Environment**: Ensure you're using the correct VNPay endpoint
+   - Sandbox: `https://sandbox.vnpayment.vn/paymentv2/vpcpay.html`
+   - Production: `https://pay.vnpay.vn/vpcpay.html`
+
+#### Error Code 02: "Invalid parameters"
+- Check all required parameters are present
+- Verify parameter formats (amount should be in VND cents)
+- Ensure secure hash is calculated correctly
+
+#### Error Code 04: "Invalid amount"
+- Amount must be greater than 0
+- Amount should be in VND cents (multiply USD by 25000 and by 100)
+- Maximum amount limits may apply
+
+### Backend Configuration Example
+
+```java
+// application.properties or environment variables
+vnpay.tmn-code=DEMO123
+vnpay.secret-key=your_secret_key_here
+vnpay.return-url=http://your-domain.com/api/payment/vnpay/callback
+vnpay.api-url=https://sandbox.vnpayment.vn/merchant_webapi/api/transaction
+```
+
+--- 

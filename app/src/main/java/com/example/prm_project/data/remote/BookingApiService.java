@@ -8,8 +8,8 @@ import com.example.prm_project.data.model.Service;
 import com.example.prm_project.data.model.ServicePackage;
 import com.example.prm_project.data.model.ItemsWrapper;
 import com.example.prm_project.data.model.Staff;
+import com.example.prm_project.data.model.TimeSlotDto;
 import com.example.prm_project.data.model.StaffResponseRequest;
-
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -104,7 +104,11 @@ public interface BookingApiService {
         @Query("latitude") double latitude,
         @Query("longitude") double longitude
     );
-    
+    @GET("timeslot/service-slots")
+    Call<ApiResponse<List<TimeSlotDto>>> getAvailableSlot(
+            @Query("date") String date,
+            @Query("serviceId") Integer serviceId
+    );
     // Find available staff (Admin)
     @GET("booking/available-staff")
     Call<ApiResponse<List<Staff>>> getAvailableStaff(
@@ -127,10 +131,9 @@ public interface BookingApiService {
         @Query("pageSize") Integer pageSize
     );
     
-    // Get staff bookings
-    @GET("booking/staff/{staffId}")
+    // Get staff bookings (backend will use UserId from token to get StaffId)
+    @GET("booking/staff")
     Call<ApiResponse<List<Booking>>> getStaffBookings(
-        @Path("staffId") int staffId,
         @Query("status") Integer status,
         @Query("startDate") String startDate,
         @Query("endDate") String endDate,

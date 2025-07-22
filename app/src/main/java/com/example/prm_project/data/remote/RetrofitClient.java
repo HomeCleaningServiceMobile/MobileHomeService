@@ -76,7 +76,20 @@ public class RetrofitClient {
     }
 
     public static PaymentApiService getPaymentApiService() {
-        return getAuthInstance().create(PaymentApiService.class);
+        return getInstance().create(PaymentApiService.class);
+    }
+    
+    public static StaffApiService getStaffApiService() {
+        return getAuthInstance().create(StaffApiService.class);
+    }
+    
+
+    public static ServiceApiService getServiceApiService() {
+        return getInstance().create(ServiceApiService.class);
+    }
+    
+    public static TimeSlotApiService getTimeSlotApiService() {
+        return getInstance().create(TimeSlotApiService.class);
     }
 
     public static void setBaseUrl(String baseUrl) {

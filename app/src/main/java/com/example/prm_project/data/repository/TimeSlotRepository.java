@@ -1,7 +1,7 @@
 package com.example.prm_project.data.repository;
 
 import com.example.prm_project.data.model.ApiResponse;
-import com.example.prm_project.data.model.StaffAvailabilityDto;
+import com.example.prm_project.data.model.StaffAvailabilityResponse;
 import com.example.prm_project.data.model.TimeSlotDto;
 import com.example.prm_project.data.remote.TimeSlotApiService;
 
@@ -27,13 +27,13 @@ public class TimeSlotRepository {
      * Get available time slots for a specific date
      */
     public Call<ApiResponse<List<TimeSlotDto>>> getAvailableSlots(String date, Integer serviceId, Integer staffId) {
-        return timeSlotApiService.getAvailableSlots(date, serviceId, staffId);
+        return timeSlotApiService.getAvailableSlots(date, serviceId);
     }
     
     /**
      * Get available staff for a specific time slot
      */
-    public Call<ApiResponse<List<StaffAvailabilityDto>>> getAvailableStaffForSlot(
+    public Call<ApiResponse<List<StaffAvailabilityResponse>>> getAvailableStaffForSlot(
             String date, String startTime, String endTime, Integer serviceId) {
         return timeSlotApiService.getAvailableStaffForSlot(date, startTime, endTime, serviceId);
     }

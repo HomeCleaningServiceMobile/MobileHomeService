@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Prm_Project</string>
-    
+
+    <!-- Google Maps API Key - Replace with your actual API key -->
+    <string name="google_maps_key">AIzaSyBzehDRbSRdBAH7gIYocWm3fKrNqNIF9x0</string>
+
     <!-- Login Screen -->
     <string name="lets_sign_you_in">Let\'s Sign You In</string>
     <string name="welcome_back_missed">Welcome back, you\'ve been missed!</string>
@@ -18,30 +21,30 @@
     <string name="dont_have_account_sign_up">Don\'t have an account? Sign Up</string>
     <string name="sign_up">Sign Up</string>
     <string name="wrong_password_error">Wrong password. Please try again.</string>
-    
+
     <!-- Forgot Password Screen -->
-<!--    <string name="forgot_password_title">Forget Password</string>-->
+    <!--    <string name="forgot_password_title">Forget Password</string>-->
     <string name="forgot_password_nav_title">Reset Password</string>
     <string name="enter_email_to_reset">Enter your email address to reset password</string>
     <string name="reset_password">Reset Password</string>
     <string name="back_to_login">Back to Login</string>
-    
+
     <!-- Reset Email Sent Screen -->
-<!--    <string name="reset_email_sent_title">Reset email sent</string>-->
-<!--    <string name="reset_email_sent_subtitle">We have sent all required instructions details to your mail.</string>-->
-<!--    <string name="reset_email_sent_message">We have sent all required instructions details to %1$s.</string>-->
+    <!--    <string name="reset_email_sent_title">Reset email sent</string>-->
+    <!--    <string name="reset_email_sent_subtitle">We have sent all required instructions details to your mail.</string>-->
+    <!--    <string name="reset_email_sent_message">We have sent all required instructions details to %1$s.</string>-->
     <string name="go_to_login_page">Go to Login page</string>
-    
+
     <!-- Set New Password Screen -->
-<!--    <string name="set_new_password_title">Set new password</string>-->
+    <!--    <string name="set_new_password_title">Set new password</string>-->
     <string name="set_new_password_nav_title">New Password</string>
     <string name="create_strong_password">Create strong and secured new password</string>
-<!--    <string name="new_password">New Password</string>-->
+    <!--    <string name="new_password">New Password</string>-->
     <string name="confirm_password">Confirm Password</string>
-<!--    <string name="save_password">Save Password</string>-->
-<!--    <string name="saving_password">Saving Password...</string>-->
+    <!--    <string name="save_password">Save Password</string>-->
+    <!--    <string name="saving_password">Saving Password...</string>-->
     <string name="password_requirements">At least 8 characters with uppercase, lowercase, and number</string>
-    
+
     <!-- Validation Messages -->
     <string name="email_required">Email is required</string>
     <string name="invalid_email_format">Please enter a valid email address</string>
@@ -50,11 +53,11 @@
     <string name="confirm_password_required">Please confirm your password</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="password_reset_success_message">Password reset successfully! Please login with your new password.</string>
-    
+
     <!-- Loading States -->
     <string name="logging_in">Logging in...</string>
     <string name="sending_reset_email">Sending...</string>
-    
+
     <!-- Fragment-specific strings -->
     <string name="welcome_to_main_screen">Welcome to Main Screen</string>
     <string name="load_data">Load Data</string>
@@ -65,11 +68,11 @@
     <string name="success_icon">Success Icon</string>
     <string name="lock_icon">Lock Icon</string>
     <string name="back">Back</string>
-    
+
     <!-- Forgot Password -->
     <string name="forgot_password_title">Forgot Password?</string>
     <string name="forgot_password_subtitle">Enter your email address and we\'ll send you a link to reset your password.</string>
-    
+
     <!-- Set New Password -->
     <string name="set_new_password">Set New Password</string>
     <string name="set_new_password_title">Create New Password</string>
@@ -77,7 +80,7 @@
     <string name="new_password">New Password</string>
     <string name="save_password">Save Password</string>
     <string name="saving_password">Saving...</string>
-    
+
     <!-- Reset Email Sent -->
     <string name="reset_email_sent_title">Check Your Email</string>
     <string name="reset_email_sent_subtitle">We\'ve sent a password reset link to your email address.</string>
@@ -103,7 +106,7 @@
     <string name="emergency_contact_phone">Emergency Contact Phone</string>
     <string name="emergency_contact_phone_hint">Contact person phone</string>
     <string name="continue_to_address">Continue to Address</string>
-    
+
     <!-- Customer Registration - Address Info -->
     <string name="address_information">Address Information</string>
     <string name="step_2_of_2">Step 2 of 2</string>
@@ -119,7 +122,7 @@
     <string name="country_hint">Select or enter country</string>
     <string name="complete_registration">Complete Registration</string>
     <string name="registering">Creating Account...</string>
-    
+
     <!-- Validation Messages for Registration -->
     <string name="full_name_required">Full name is required</string>
     <string name="phone_number_required">Phone number is required</string>
@@ -137,6 +140,22 @@
     <string name="registration_success">Account created successfully! Please login.</string>
     <string name="back_to_personal_info">Back to Personal Info</string>
 
+    <!-- Address Selection with Map -->
+    <string name="select_address_on_map">Select Address on Map</string>
+    <string name="tap_to_select_location">Tap on the map to select your service location</string>
+    <string name="current_location">Use Current Location</string>
+    <string name="confirm_address">Confirm Address</string>
+    <string name="address_selected">Address Selected</string>
+    <string name="searching_address">Searching for address...</string>
+    <string name="location_permission_required">Location permission is required to use this feature</string>
+    <string name="enable_location_services">Please enable location services</string>
+    <string name="address_not_found">Address not found for this location</string>
+    <string name="map_loading">Loading map...</string>
+    <string name="search_address">Search for an address</string>
+    <string name="address_search_hint">Enter street address, city, or landmark</string>
+    <string name="select_this_location">Select This Location</string>
+    <string name="selected_address">Selected Address:</string>
+
     <!-- Customer Dashboard -->
     <string name="home_services">Home Services</string>
     <string name="my_bookings">My Bookings</string>
@@ -153,7 +172,7 @@
     <string name="no_recent_bookings">No recent bookings</string>
     <string name="view_all_bookings">View All Bookings</string>
     <string name="no_services_available">No services available</string>
-    
+
     <!-- Role-based Views -->
     <string name="admin_dashboard">Admin Dashboard</string>
     <string name="staff_dashboard">Staff Dashboard</string>
@@ -217,7 +236,7 @@
     <string name="stripe_description">Stripe: International payment processing</string>
     <string name="cash_description">Cash: Pay on service completion</string>
     <string name="review_booking_instruction">Please review your booking details</string>
-    
+
     <!-- Review Section -->
     <string name="service_details">Service Details</string>
     <string name="service_label">Service:</string>
@@ -243,7 +262,7 @@
     <string name="payment_placeholder">Cash</string>
     <string name="total_label">Total:</string>
     <string name="price_placeholder">$50.00</string>
-    
+
     <!-- Navigation -->
     <string name="previous">Previous</string>
     <string name="next">Next</string>
@@ -258,6 +277,7 @@
     <string name="google_signin_description">Sign in with Google button</string>
     <string name="signup_button_description">Sign up button</string>
     <string name="error_message_description">Error message</string>
+    <string name="mapbox_access_token">sk.eyJ1IjoiZHVjbmd1eWVuMTIwNDA0IiwiYSI6ImNtY3lybjZrajBuMWwybHF4YjZycTV5dDYifQ.9laiDsqJgPcYOGW6fKimVA</string>
 
     <string name="back_button_description">Back to previous screen</string>
     <string name="select_date_description">Select booking date</string>
@@ -297,4 +317,5 @@
     <string name="staff_hire_date">Hire Date</string>
     <string name="staff_average_rating">Average Rating</string>
     <string name="staff_total_completed_jobs">Total Completed Jobs</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
