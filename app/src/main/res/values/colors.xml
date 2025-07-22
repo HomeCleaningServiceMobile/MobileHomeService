@@ -119,4 +119,14 @@
     <color name="primary">@color/primary_orange</color>
     <color name="gray">#9E9E9E</color>
 
+    <!-- Admin Dashboard Colors -->
+    <color name="admin_background">#F5F5F5</color>
+    <color name="admin_text_primary">#212121</color>
+    <color name="admin_text_secondary">#757575</color>
+    <color name="admin_success">#4CAF50</color>
+    <color name="admin_primary">#2196F3</color>
+    <color name="admin_primary_dark">#1976D2</color>
+    <color name="admin_accent">#FF9800</color>
+    <color name="admin_white">#FFFFFF</color>
+
 </resources>

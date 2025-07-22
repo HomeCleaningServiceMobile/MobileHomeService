@@ -8,7 +8,6 @@ pluginManagement {
             }
         }
         mavenCentral()
-
         gradlePluginPortal()
     }
 }
@@ -17,6 +16,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
         maven {
             url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
             authentication {
@@ -30,10 +30,8 @@ dependencyResolutionManagement {
                 password = providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN").get()
             }
         }
-
     }
 }
 
 rootProject.name = "Prm_Project"
 include(":app")
- 
