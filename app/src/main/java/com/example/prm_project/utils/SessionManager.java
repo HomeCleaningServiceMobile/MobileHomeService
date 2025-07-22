@@ -9,6 +9,8 @@ import com.example.prm_project.data.model.User;
 import com.example.prm_project.data.model.AuthResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 
 public class SessionManager {
     
@@ -225,17 +227,35 @@ public class SessionManager {
     /**
      * Check if token is expired (basic check)
      */
+//    public boolean isTokenExpired() {
+//        try {
+//            String expiresAt = prefs.getString(Constants.KEY_TOKEN_EXPIRES_AT, null);
+//            if (expiresAt == null) return true;
+//
+//            // Simple time-based check - in production you might want to parse the actual date
+//            long expirationTime = Long.parseLong(expiresAt);
+//            return System.currentTimeMillis() > expirationTime;
+//        } catch (Exception e) {
+//            Log.e(TAG, "Failed to check token expiration", e);
+//            return true; // If we can't parse, assume expired
+//        }
+//    }
     public boolean isTokenExpired() {
         try {
             String expiresAt = prefs.getString(Constants.KEY_TOKEN_EXPIRES_AT, null);
-            if (expiresAt == null) return true;
-            
-            // Simple time-based check - in production you might want to parse the actual date
-            long expirationTime = Long.parseLong(expiresAt);
-            return System.currentTimeMillis() > expirationTime;
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to check token expiration", e);
-            return true; // If we can't parse, assume expired
+            if (expiresAt == null || expiresAt.trim().isEmpty()) {
+                return true; // No expiration date, assume expired
+            }
+
+            // Parse ISO 8601 date-time string
+            Instant expirationInstant = Instant.parse(expiresAt);
+            long expirationMillis = expirationInstant.toEpochMilli();
+            long currentMillis = System.currentTimeMillis();
+//            return currentMillis > expirationMillis;
+            return true;
+        } catch (DateTimeParseException e) {
+            Log.e(TAG, "Failed to parse token expiration: " + e.getMessage(), e);
+            return true; // Assume expired if parsing fails
         }
     }
     

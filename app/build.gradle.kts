@@ -84,6 +84,15 @@ dependencies {
     implementation("com.stripe:stripe-android:20.40.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
+    // Google Maps and Places
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.libraries.places:places:3.3.0")
+    
+    // CircularImageView for profile pictures
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    
+    // Location Services
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // Image Loading
     implementation("com.github.bumptech.glide:glide:4.16.0")
