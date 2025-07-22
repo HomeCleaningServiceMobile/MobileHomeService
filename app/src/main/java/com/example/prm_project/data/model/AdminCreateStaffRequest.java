@@ -37,7 +37,7 @@ public class AdminCreateStaffRequest {
     private double hourlyRate;
 
     @SerializedName("serviceRadiusKm")
-    private double serviceRadiusKm;
+    private int serviceRadiusKm;
 
     @SerializedName("fullAddress")
     private String fullAddress;
@@ -151,7 +151,7 @@ public class AdminCreateStaffRequest {
         return serviceRadiusKm;
     }
 
-    public void setServiceRadiusKm(double serviceRadiusKm) {
+    public void setServiceRadiusKm(int serviceRadiusKm) {
         this.serviceRadiusKm = serviceRadiusKm;
     }
 
@@ -217,5 +217,29 @@ public class AdminCreateStaffRequest {
 
     public void setIdCardImageUrl(String idCardImageUrl) {
         this.idCardImageUrl = idCardImageUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "AdminCreateStaffRequest{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", employeeId='" + employeeId + '\'' +
+                ", hireDate='" + hireDate + '\'' +
+                ", skills='" + skills + '\'' +
+                ", bio='" + bio + '\'' +
+                ", hourlyRate=" + hourlyRate +
+                ", serviceRadiusKm=" + serviceRadiusKm +
+                ", fullAddress='" + fullAddress + '\'' +
+                ", street='" + street + '\'' +
+                ", district='" + district + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", certificationImageUrl='" + certificationImageUrl + '\'' +
+                ", idCardImageUrl='" + idCardImageUrl + '\'' +
+                '}';
     }
 }

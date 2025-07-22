@@ -101,14 +101,30 @@ public class AdminRepository {
      * @return
      */
     public LiveData<AdminUpdateStaffResponse> createStaff(String token, AdminCreateStaffRequest request) {
+        Log.d(TAG, "createStaff called in AdminRepository");
+        Log.d(TAG, "Token: " + token);
+        Log.d(TAG, "Request: " + request.toString());
+        
         MutableLiveData<AdminUpdateStaffResponse> result = new MutableLiveData<>();
 
         manageStaffApi.createStaff(token, request).enqueue(new Callback<AdminUpdateStaffResponse>() {
             @Override
             public void onResponse(Call<AdminUpdateStaffResponse> call, Response<AdminUpdateStaffResponse> response) {
+                Log.d(TAG, "API Response received - Code: " + response.code());
+                Log.d(TAG, "API Response successful: " + response.isSuccessful());
+                
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "Response body: " + response.body().toString());
                     result.setValue(response.body());
                 } else {
+                    Log.e(TAG, "API call failed - Response code: " + response.code());
+                    if (response.errorBody() != null) {
+                        try {
+                            Log.e(TAG, "Error body: " + response.errorBody().string());
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error reading error body", e);
+                        }
+                    }
                     AdminUpdateStaffResponse errorResponse = new AdminUpdateStaffResponse();
                     errorResponse.setSucceeded(false);
                     result.setValue(errorResponse);
@@ -117,6 +133,7 @@ public class AdminRepository {
 
             @Override
             public void onFailure(Call<AdminUpdateStaffResponse> call, Throwable t) {
+                Log.e(TAG, "API call failed with exception", t);
                 AdminUpdateStaffResponse failResponse = new AdminUpdateStaffResponse();
                 failResponse.setSucceeded(false);
                 result.setValue(failResponse);

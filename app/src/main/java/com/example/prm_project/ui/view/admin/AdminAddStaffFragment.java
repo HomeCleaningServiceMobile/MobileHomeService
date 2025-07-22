@@ -58,36 +58,31 @@ public class AdminAddStaffFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        // Basic info
         edtFirstName = view.findViewById(R.id.edtFirstName);
         edtLastName = view.findViewById(R.id.edtLastName);
         edtEmail = view.findViewById(R.id.edtEmail);
         edtPhone = view.findViewById(R.id.edtPhone);
         edtPassword = view.findViewById(R.id.edtPassword);
         edtEmployeeId = view.findViewById(R.id.edtEmployeeId);
-        
-        // Work info
+
         edtHireDate = view.findViewById(R.id.edtHireDate);
         edtSkills = view.findViewById(R.id.edtSkills);
         edtBio = view.findViewById(R.id.edtBio);
         edtHourlyRate = view.findViewById(R.id.edtHourlyRate);
         edtServiceRadius = view.findViewById(R.id.edtServiceRadius);
-        
-        // Address info
+
         edtFullAddress = view.findViewById(R.id.edtFullAddress);
         edtStreet = view.findViewById(R.id.edtStreet);
         edtDistrict = view.findViewById(R.id.edtDistrict);
         edtCity = view.findViewById(R.id.edtCity);
         edtProvince = view.findViewById(R.id.edtProvince);
         edtPostalCode = view.findViewById(R.id.edtPostalCode);
-        
-        // Documents
+
         edtCertification = view.findViewById(R.id.edtCertificationImageUrl);
         edtIdCard = view.findViewById(R.id.edtIdCardImageUrl);
         imgCertificationPreview = view.findViewById(R.id.imgCertificationPreview);
         imgIdCardPreview = view.findViewById(R.id.imgIdCardPreview);
-        
-        // Controls
+
         btnAdd = view.findViewById(R.id.btnAdd);
         btnSelectHireDate = view.findViewById(R.id.btnSelectHireDate);
         progressBar = view.findViewById(R.id.progressBar);
@@ -101,12 +96,12 @@ public class AdminAddStaffFragment extends Fragment {
     private void setupListeners() {
         btnSelectHireDate.setOnClickListener(v -> showDatePicker());
         btnAdd.setOnClickListener(v -> addStaff());
-        
-        // Image preview listeners
+
         edtCertification.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) loadImagePreview(edtCertification.getText().toString(), imgCertificationPreview);
+            if (!hasFocus)
+                loadImagePreview(edtCertification.getText().toString(), imgCertificationPreview);
         });
-        
+
         edtIdCard.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) loadImagePreview(edtIdCard.getText().toString(), imgIdCardPreview);
         });
@@ -138,108 +133,106 @@ public class AdminAddStaffFragment extends Fragment {
     }
 
     private void addStaff() {
-        if (!validateInput()) return;
+        Log.d("AdminAddStaffFragment", "addStaff() called");
+        if (!validateInput()) {
+            Log.e("AdminAddStaffFragment", "Validation failed, API not called");
+            return;
+        }
 
         progressBar.setVisibility(View.VISIBLE);
         btnAdd.setEnabled(false);
 
         AdminCreateStaffRequest request = createStaffRequest();
+        Log.d("AdminAddStaffFragment", "Request: " + request.toString());
         String token = "Bearer " + sessionManager.getAccessToken();
+        Log.d("AdminAddStaffFragment", "Token: " + token);
 
         staffViewModel.createStaff(token, request).observe(getViewLifecycleOwner(), response -> {
             progressBar.setVisibility(View.GONE);
             btnAdd.setEnabled(true);
 
             if (response != null && response.isSucceeded()) {
+                Log.d("AdminAddStaffFragment", "Staff creation succeeded");
                 Toast.makeText(requireContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
                 requireActivity().getSupportFragmentManager().popBackStack();
             } else {
-                Toast.makeText(requireContext(), "Thêm nhân viên thất bại", Toast.LENGTH_SHORT).show();
                 Log.e("AdminAddStaffFragment", "Add staff failed: " + response);
+                if (response != null) {
+                    Log.e("AdminAddStaffFragment", "Response message: " + response.getMessages());
+                }
+                Toast.makeText(requireContext(), "Thêm nhân viên thất bại", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private AdminCreateStaffRequest createStaffRequest() {
         AdminCreateStaffRequest request = new AdminCreateStaffRequest();
-        
-        // Basic info
+
         request.setFirstName(edtFirstName.getText().toString().trim());
         request.setLastName(edtLastName.getText().toString().trim());
         request.setEmail(edtEmail.getText().toString().trim());
         request.setPhoneNumber(edtPhone.getText().toString().trim());
         request.setPassword(edtPassword.getText().toString().trim());
         request.setEmployeeId(edtEmployeeId.getText().toString().trim());
-        
-        // Work info
+
         request.setHireDate(edtHireDate.getText().toString().trim());
         request.setSkills(edtSkills.getText().toString().trim());
         request.setBio(edtBio.getText().toString().trim());
-        
+
         try {
             request.setHourlyRate(Double.parseDouble(edtHourlyRate.getText().toString().trim()));
         } catch (NumberFormatException e) {
             request.setHourlyRate(0.0);
         }
-        
+
         try {
-            request.setServiceRadiusKm(Double.parseDouble(edtServiceRadius.getText().toString().trim()));
+            request.setServiceRadiusKm(Integer.parseInt(edtServiceRadius.getText().toString().trim()));
         } catch (NumberFormatException e) {
-            request.setServiceRadiusKm(0.0);
+            request.setServiceRadiusKm(0);
         }
-        
-        // Address info
+
         request.setFullAddress(edtFullAddress.getText().toString().trim());
         request.setStreet(edtStreet.getText().toString().trim());
         request.setDistrict(edtDistrict.getText().toString().trim());
         request.setCity(edtCity.getText().toString().trim());
         request.setProvince(edtProvince.getText().toString().trim());
         request.setPostalCode(edtPostalCode.getText().toString().trim());
-        
-        // Documents
+
         request.setCertificationImageUrl(edtCertification.getText().toString().trim());
         request.setIdCardImageUrl(edtIdCard.getText().toString().trim());
-        
+
         return request;
     }
 
     private boolean validateInput() {
-        // Validate required fields
         if (edtFirstName.getText().toString().trim().isEmpty()) {
             edtFirstName.setError("Tên không được để trống");
             return false;
         }
-        
         if (edtLastName.getText().toString().trim().isEmpty()) {
             edtLastName.setError("Họ không được để trống");
             return false;
         }
-        
         if (edtEmail.getText().toString().trim().isEmpty()) {
             edtEmail.setError("Email không được để trống");
             return false;
         }
-        
         if (edtPhone.getText().toString().trim().isEmpty()) {
             edtPhone.setError("Số điện thoại không được để trống");
             return false;
         }
-        
         if (edtPassword.getText().toString().trim().isEmpty()) {
             edtPassword.setError("Mật khẩu không được để trống");
             return false;
         }
-        
         if (edtEmployeeId.getText().toString().trim().isEmpty()) {
             edtEmployeeId.setError("Mã nhân viên không được để trống");
             return false;
         }
-        
         if (edtHireDate.getText().toString().trim().isEmpty()) {
             edtHireDate.setError("Ngày tuyển dụng không được để trống");
             return false;
         }
-        
         return true;
     }
 }

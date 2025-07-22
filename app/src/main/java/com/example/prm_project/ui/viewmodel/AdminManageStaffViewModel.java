@@ -12,7 +12,7 @@ import com.example.prm_project.data.model.AdminUpdateStaffResponse;
 import com.example.prm_project.data.remote.ManageStaffApi;
 import com.example.prm_project.data.repository.AdminRepository;
 import com.example.prm_project.utils.Constants;
-
+import android.util.Log;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -86,6 +86,7 @@ public class AdminManageStaffViewModel extends ViewModel {
      * @return LiveData chứa kết quả tạo nhân viên
      */
     public LiveData<AdminUpdateStaffResponse> createStaff(String token, AdminCreateStaffRequest request) {
+        Log.d("AdminManageStaffViewModel", "createStaff called");
         return adminRepository.createStaff(token, request);
     }
 

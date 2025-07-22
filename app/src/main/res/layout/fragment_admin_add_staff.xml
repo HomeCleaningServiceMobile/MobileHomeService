@@ -8,7 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="16dp">
 
         <!-- Header -->
         <TextView
@@ -18,7 +20,8 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/admin_primary_dark" />
 
         <!-- Basic Information Section -->
         <TextView
@@ -27,7 +30,8 @@
             android:text="Thông Tin Cơ Bản"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/admin_primary" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -109,7 +113,8 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/admin_primary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -206,7 +211,8 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/admin_primary" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -307,7 +313,8 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/admin_primary" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -359,14 +366,16 @@
             android:gravity="center"
             android:layout_marginTop="16dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAdd"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Thêm Nhân Viên"
                 android:textSize="16sp"
-                style="@style/Widget.Material3.Button" />
+                android:textColor="@color/admin_primary_dark"
+                app:backgroundTint="@color/admin_primary" />
         </LinearLayout>
 
         <!-- Progress Bar -->
