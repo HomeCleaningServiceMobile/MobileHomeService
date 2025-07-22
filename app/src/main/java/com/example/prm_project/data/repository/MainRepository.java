@@ -219,31 +219,10 @@ public class MainRepository {
     /**
      * Get user profile
      */
-    public void getProfile(String authToken, AuthCallback<User> callback) {
-        Call<ApiResponse<User>> call = authApiService.getProfile(authToken);
-        
-        call.enqueue(new Callback<ApiResponse<User>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<User> apiResponse = response.body();
-                    if (apiResponse.isSucceeded()) {
-                        callback.onSuccess(apiResponse.getData());
-                    } else {
-                        callback.onError(apiResponse.getFirstErrorMessage());
-                    }
-                } else {
-                    callback.onError("Failed to get profile. Please try again.");
-                }
-            }
-            
-            @Override
-            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                callback.onError("Network error: " + t.getMessage());
-            }
-        });
+    public void getProfile(Callback<AppResponse<UserResponse>> callback) {
+        authApiService.getProfile().enqueue(callback);
     }
-    
+
     /**
      * Refresh token
      */

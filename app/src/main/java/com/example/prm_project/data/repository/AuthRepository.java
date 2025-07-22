@@ -180,26 +180,25 @@ public class AuthRepository {
     /**
      * Get user profile - No manual token needed! AuthInterceptor handles it
      */
-    public void getProfile(AuthCallback<User> callback) {
-        Call<ApiResponse<User>> call = authApiService.getProfile(""); // Empty string, interceptor will inject token
-        
-        call.enqueue(new Callback<ApiResponse<User>>() {
+    public void getProfile(AuthCallback<UserResponse> callback) {
+        authApiService.getProfile().enqueue(new Callback<AppResponse<UserResponse>>() {
             @Override
-            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+            public void onResponse(Call<AppResponse<UserResponse>> call,
+                                   Response<AppResponse<UserResponse>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<User> apiResponse = response.body();
+                    AppResponse<UserResponse> apiResponse = response.body();
                     if (apiResponse.isSucceeded()) {
                         callback.onSuccess(apiResponse.getData());
                     } else {
-                        callback.onError(apiResponse.getFirstErrorMessage());
+                        callback.onError(apiResponse.getFirstMessage("Error"));
                     }
                 } else {
-                    callback.onError("Failed to get profile. Please try again.");
+                    callback.onError("Failed to load profile");
                 }
             }
-            
+
             @Override
-            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+            public void onFailure(Call<AppResponse<UserResponse>> call, Throwable t) {
                 callback.onError("Network error: " + t.getMessage());
             }
         });

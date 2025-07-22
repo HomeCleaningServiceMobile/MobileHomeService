@@ -75,16 +75,20 @@ public class ProfileFragment extends Fragment {
             showToast("Help & Support - Coming Soon!");
         });
     }
-    
+
     private void loadUserProfile() {
-        // TODO: Load actual user data from SharedPreferences or API
-        // For now, showing placeholder data
-        binding.tvUserName.setText("John Doe");
-        binding.tvUserEmail.setText("john.doe@email.com");
-        binding.tvUserPhone.setText("+1 234 567 8900");
-        binding.tvMemberSince.setText("Member since Jan 2024");
+        mainViewModel.getProfile().observe(getViewLifecycleOwner(), profile -> {
+            if (profile != null) {
+                binding.tvUserName.setText(profile.getFullName());
+                binding.tvUserEmail.setText(profile.getEmail());
+                binding.tvUserPhone.setText(profile.getPhoneNumber() != null ? profile.getPhoneNumber() : "N/A");
+                binding.tvMemberSince.setText("Member since " + profile.getCreatedAt());
+            }
+        });
+
+        mainViewModel.loadUserProfile(); // Trigger API call
     }
-    
+
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }

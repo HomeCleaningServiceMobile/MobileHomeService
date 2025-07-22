@@ -26,9 +26,10 @@ public interface AuthApiService {
         @Header("Authorization") String authToken,
         @Body ChangePasswordRequest changePasswordRequest
     );
-    
+
     @GET("profile")
-    Call<ApiResponse<User>> getProfile(@Header("Authorization") String authToken);
+    Call<AppResponse<UserResponse>> getProfile();
+//    Call<ApiResponse<User>> getProfile(@Header("Authorization") String authToken);
     
 //    @PUT("profile")
 //    Call<ApiResponse<User>> updateProfile(
