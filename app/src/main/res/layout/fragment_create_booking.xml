@@ -85,6 +85,7 @@
                     android:layout_margin="4dp" />
 
                 <View
+                    android:id="@+id/connector1_2"
                     android:layout_width="16dp"
                     android:layout_height="2dp"
                     android:background="?attr/colorOutline" />
@@ -100,6 +101,7 @@
                     android:layout_margin="4dp" />
 
                 <View
+                    android:id="@+id/connector2_3"
                     android:layout_width="16dp"
                     android:layout_height="2dp"
                     android:background="?attr/colorOutline" />
@@ -115,6 +117,7 @@
                     android:layout_margin="4dp" />
 
                 <View
+                    android:id="@+id/connector3_4"
                     android:layout_width="16dp"
                     android:layout_height="2dp"
                     android:background="?attr/colorOutline" />
@@ -130,6 +133,7 @@
                     android:layout_margin="4dp" />
 
                 <View
+                    android:id="@+id/connector4_5"
                     android:layout_width="16dp"
                     android:layout_height="2dp"
                     android:background="?attr/colorOutline" />
@@ -145,6 +149,7 @@
                     android:layout_margin="4dp" />
 
                 <View
+                    android:id="@+id/connector5_6"
                     android:layout_width="16dp"
                     android:layout_height="2dp"
                     android:background="?attr/colorOutline" />

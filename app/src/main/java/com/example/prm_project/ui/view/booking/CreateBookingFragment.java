@@ -503,36 +503,84 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
     }
     
     private void updateStepIndicator(BookingViewModel.BookingFormStep step) {
-        // Reset all step indicators
-        binding.step1.setBackgroundResource(R.drawable.step_inactive);
-        binding.step2.setBackgroundResource(R.drawable.step_inactive);
-        binding.step3.setBackgroundResource(R.drawable.step_inactive);
-        binding.step4.setBackgroundResource(R.drawable.step_inactive);
-        binding.step5.setBackgroundResource(R.drawable.step_inactive);
-        binding.step6.setBackgroundResource(R.drawable.step_inactive);
+        // Get colors for active and inactive states
+        int activeColor = getResources().getColor(R.color.primary_color, null);
+        int inactiveColor = getResources().getColor(R.color.status_default, null);
+        int completedColor = getResources().getColor(R.color.status_completed, null);
+        
+        // Reset all step indicators to inactive
+        binding.step1.setBackgroundTintList(android.content.res.ColorStateList.valueOf(inactiveColor));
+        binding.step2.setBackgroundTintList(android.content.res.ColorStateList.valueOf(inactiveColor));
+        binding.step3.setBackgroundTintList(android.content.res.ColorStateList.valueOf(inactiveColor));
+        binding.step4.setBackgroundTintList(android.content.res.ColorStateList.valueOf(inactiveColor));
+        binding.step5.setBackgroundTintList(android.content.res.ColorStateList.valueOf(inactiveColor));
+        binding.step6.setBackgroundTintList(android.content.res.ColorStateList.valueOf(inactiveColor));
+        
+        // Reset text colors to white for better contrast
+        binding.step1.setTextColor(getResources().getColor(android.R.color.white, null));
+        binding.step2.setTextColor(getResources().getColor(android.R.color.white, null));
+        binding.step3.setTextColor(getResources().getColor(android.R.color.white, null));
+        binding.step4.setTextColor(getResources().getColor(android.R.color.white, null));
+        binding.step5.setTextColor(getResources().getColor(android.R.color.white, null));
+        binding.step6.setTextColor(getResources().getColor(android.R.color.white, null));
 
-        // Set active step
-        int stepNumber = step.ordinal() + 1;
-        switch (stepNumber) {
+        // Get current step number
+        int currentStepNumber = step.ordinal() + 1;
+        
+        // Set completed steps (all steps before current) to completed color
+        for (int i = 1; i < currentStepNumber; i++) {
+            switch (i) {
+                case 1:
+                    binding.step1.setBackgroundTintList(android.content.res.ColorStateList.valueOf(completedColor));
+                    break;
+                case 2:
+                    binding.step2.setBackgroundTintList(android.content.res.ColorStateList.valueOf(completedColor));
+                    break;
+                case 3:
+                    binding.step3.setBackgroundTintList(android.content.res.ColorStateList.valueOf(completedColor));
+                    break;
+                case 4:
+                    binding.step4.setBackgroundTintList(android.content.res.ColorStateList.valueOf(completedColor));
+                    break;
+                case 5:
+                    binding.step5.setBackgroundTintList(android.content.res.ColorStateList.valueOf(completedColor));
+                    break;
+                case 6:
+                    binding.step6.setBackgroundTintList(android.content.res.ColorStateList.valueOf(completedColor));
+                    break;
+            }
+        }
+        
+        // Set current active step
+        switch (currentStepNumber) {
             case 1:
-                binding.step1.setBackgroundResource(R.drawable.step_active);
+                binding.step1.setBackgroundTintList(android.content.res.ColorStateList.valueOf(activeColor));
                 break;
             case 2:
-                binding.step2.setBackgroundResource(R.drawable.step_active);
+                binding.step2.setBackgroundTintList(android.content.res.ColorStateList.valueOf(activeColor));
                 break;
             case 3:
-                binding.step3.setBackgroundResource(R.drawable.step_active);
+                binding.step3.setBackgroundTintList(android.content.res.ColorStateList.valueOf(activeColor));
                 break;
             case 4:
-                binding.step4.setBackgroundResource(R.drawable.step_active);
+                binding.step4.setBackgroundTintList(android.content.res.ColorStateList.valueOf(activeColor));
                 break;
             case 5:
-                binding.step5.setBackgroundResource(R.drawable.step_active);
+                binding.step5.setBackgroundTintList(android.content.res.ColorStateList.valueOf(activeColor));
                 break;
             case 6:
-                binding.step6.setBackgroundResource(R.drawable.step_active);
+                binding.step6.setBackgroundTintList(android.content.res.ColorStateList.valueOf(activeColor));
                 break;
         }
+        
+        // Update step connector lines
+        updateStepConnectors(currentStepNumber);
+    }
+    
+    private void updateStepConnectors(int currentStep) {
+        // For now, we'll focus on the step buttons themselves
+        // The connector lines can be enhanced later if needed
+        // The main step indicator functionality is working with the button colors
     }
 
     // Optimized showDatePicker method
