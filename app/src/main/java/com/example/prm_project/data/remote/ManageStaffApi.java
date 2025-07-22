@@ -1,11 +1,18 @@
-// file: data/remote/ManageStaffApi.java
 package com.example.prm_project.data.remote;
 
+import com.example.prm_project.data.model.AdminCreateStaffRequest;
 import com.example.prm_project.data.model.AdminStaffDetailResponse;
 import com.example.prm_project.data.model.AdminStaffListResponse;
+import com.example.prm_project.data.model.AdminStaffUpdateRequest;
+import com.example.prm_project.data.model.AdminUpdateStaffResponse;
+
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -33,6 +40,25 @@ public interface ManageStaffApi {
 
     @GET("StaffManagement/{id}")
     Call<AdminStaffDetailResponse> getStaffDetail(
+            @Header("Authorization") String token,
+            @Path("id") int staffId
+    );
+
+    @POST("StaffManagement")
+    Call<AdminUpdateStaffResponse> createStaff(
+            @Header("Authorization") String token,
+            @Body AdminCreateStaffRequest request
+    );
+
+    @PUT("StaffManagement/{id}")
+    Call<AdminUpdateStaffResponse> updateStaff(
+            @Header("Authorization") String token,
+            @Path("id") int staffId,
+            @Body AdminStaffUpdateRequest request
+    );
+
+    @DELETE("StaffManagement/{id}")
+    Call<AdminUpdateStaffResponse> deleteStaff(
             @Header("Authorization") String token,
             @Path("id") int staffId
     );

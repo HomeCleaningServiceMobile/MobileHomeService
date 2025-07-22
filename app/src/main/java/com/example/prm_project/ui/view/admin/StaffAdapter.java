@@ -19,6 +19,10 @@ import java.util.List;
 public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHolder> {
     public interface OnStaffClickListener {
         void onStaffClick(int staffId);
+
+        void onStaffEditClick(int staffId);
+
+        void onStaffDeleteClick(int staffId);
     }
 
     private List<StaffManagement> staffList;
@@ -46,6 +50,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
         StaffManagement staff = staffList.get(position);
         holder.tvName.setText(staff.fullName);
         holder.tvEmail.setText(staff.email);
+
         // Load idCardImageUrl into imgStaff
         Glide.with(holder.itemView.getContext())
             .load(staff.idCardImageUrl)
@@ -54,6 +59,14 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.StaffViewHol
             .into(holder.imgStaff);
         holder.btnView.setOnClickListener(v -> {
             if (listener != null) listener.onStaffClick(staff.id);
+        });
+
+        holder.btnEdit.setOnClickListener(v -> {
+            if (listener != null) listener.onStaffEditClick(staff.id);
+        });
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (listener != null) listener.onStaffDeleteClick(staff.id);
         });
     }
 

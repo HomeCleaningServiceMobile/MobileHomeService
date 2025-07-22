@@ -15,14 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.prm_project.R;
 import com.example.prm_project.data.model.AdminStaffDetailResponse;
-import com.example.prm_project.ui.viewmodel.AdminStaffDetailViewModel;
+import com.example.prm_project.ui.viewmodel.AdminManageStaffViewModel;
 import com.example.prm_project.utils.SessionManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AdminStaffDetailFragment extends Fragment {
-    private AdminStaffDetailViewModel viewModel;
+    private AdminManageStaffViewModel viewModel;
 
     private ImageView imgProfile, imgCertification, imgIdCard;
     private TextView tvFullName, tvBio, tvEmail, tvPhone, tvAddress, tvSkills, tvHourlyRate, tvHireDate, tvStatus;
@@ -58,13 +58,22 @@ public class AdminStaffDetailFragment extends Fragment {
         tvHireDate = view.findViewById(R.id.tvHireDate);
         tvStatus = view.findViewById(R.id.tvStatus);
 
-        viewModel = new ViewModelProvider(this).get(AdminStaffDetailViewModel.class);
+        viewModel = new ViewModelProvider(this).get(AdminManageStaffViewModel.class);
 
-        int staffId = getArguments() != null ? getArguments().getInt("staffId") : -1;
+        // Lấy staffId từ arguments
+        Bundle args = getArguments();
+        if (args != null) {
+            int staffId = args.getInt("staff_id", -1);
+            if (staffId != -1) {
+                loadStaffDetail(staffId);
+            }
+        }
+    }
+
+    private void loadStaffDetail(int staffId) {
         String token = sessionManager.getAccessToken();
         token = "Bearer " + token;
-
-        if (staffId != -1 && token != null && !token.isEmpty()) {
+        if (token != null) {
             viewModel.getStaffDetail(token, staffId).observe(getViewLifecycleOwner(), response -> {
                 if (response != null && response.getData() != null) {
                     AdminStaffDetailResponse.StaffDetail staff = response.getData();

@@ -251,6 +251,14 @@
         <action
             android:id="@+id/action_manageStaffFragment_to_adminStaffDetailFragment"
             app:destination="@id/adminStaffDetailFragment" />
+
+        <action
+            android:id="@+id/action_manageStaffFragment_to_adminUpdateFragment"
+            app:destination="@id/adminUpdateFragment" />
+
+        <action
+            android:id="@+id/action_manageStaffFragment_to_adminAddStaffFragment"
+            app:destination="@id/adminAddStaffFragment" />
     </fragment>
 
     <fragment
@@ -263,6 +271,21 @@
             app:argType="integer" />
     </fragment>
 
+    <fragment
+        android:id="@+id/adminUpdateFragment"
+        android:name="com.example.prm_project.ui.view.admin.AdminUpdateFragment"
+        android:label="Update Staff"
+        tools:layout="@layout/fragment_admin_update">
+        <argument
+            android:name="staffId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminAddStaffFragment"
+        android:name="com.example.prm_project.ui.view.admin.AdminAddStaffFragment"
+        android:label="Thêm Nhân Viên"
+        tools:layout="@layout/fragment_admin_add_staff" />
 
     <!-- Staff Fragment -->
     <fragment
@@ -276,7 +299,6 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
-            
     </fragment>
 
     <!-- Create Booking Fragment -->

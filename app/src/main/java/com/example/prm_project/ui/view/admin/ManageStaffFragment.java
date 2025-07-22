@@ -1,6 +1,7 @@
-// file: ui/view/admin/ManageStaffFragment.java
+// Java
 package com.example.prm_project.ui.view.admin;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.example.prm_project.R;
 import com.example.prm_project.ui.viewmodel.AdminManageStaffViewModel;
 import com.example.prm_project.utils.SessionManager;
@@ -35,14 +37,36 @@ public class ManageStaffFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         staffAdapter = new StaffAdapter(
                 Collections.emptyList(),
-                staffId -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("staffId", staffId);
-                    // Navigate to AdminStaffDetailFragment
-                    androidx.navigation.fragment.NavHostFragment.findNavController(this)
-                            .navigate(R.id.action_manageStaffFragment_to_adminStaffDetailFragment, bundle);
+                new StaffAdapter.OnStaffClickListener() {
+                    @Override
+                    public void onStaffClick(int staffId) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("staffId", staffId);
+                        // Navigate to AdminStaffDetailFragment
+                        androidx.navigation.fragment.NavHostFragment.findNavController(ManageStaffFragment.this)
+                                .navigate(R.id.action_manageStaffFragment_to_adminUpdateFragment, bundle);                    }
+
+                    @Override
+                    public void onStaffEditClick(int staffId) {
+                        // Java
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("staffId", staffId);
+                        androidx.navigation.fragment.NavHostFragment.findNavController(ManageStaffFragment.this)
+                                .navigate(R.id.action_manageStaffFragment_to_adminUpdateFragment, bundle);
+                    }
+
+                    @Override
+                    public void onStaffDeleteClick(int staffId) {
+                        showDeleteConfirmationDialog(staffId);
+                    }
                 });
         rv.setAdapter(staffAdapter);
+
+        // Setup Add Staff button
+        view.findViewById(R.id.btn_add_staff).setOnClickListener(v -> {
+            androidx.navigation.fragment.NavHostFragment.findNavController(ManageStaffFragment.this)
+                    .navigate(R.id.action_manageStaffFragment_to_adminAddStaffFragment);
+        });
 
         // Initialize ViewModel
         adminManageStaffViewModel = new ViewModelProvider(this).get(AdminManageStaffViewModel.class);
@@ -62,5 +86,47 @@ public class ManageStaffFragment extends Fragment {
         }
 
         return view;
+    }
+
+    private void showDeleteConfirmationDialog(int staffId) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa nhân viên này không?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    deleteStaff(staffId);
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void deleteStaff(int staffId) {
+        String token = sessionManager.getAccessToken();
+        if (token != null) {
+            adminManageStaffViewModel.deleteStaff("Bearer " + token, staffId)
+                    .observe(getViewLifecycleOwner(), response -> {
+                        if (response != null && response.isSucceeded()) {
+                            Toast.makeText(requireContext(), "Xóa nhân viên thành công", Toast.LENGTH_SHORT).show();
+                            // Refresh the staff list
+                            refreshStaffList();
+                        } else {
+                            Toast.makeText(requireContext(), "Xóa nhân viên thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(requireContext(), "Không có quyền truy cập", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void refreshStaffList() {
+        String token = sessionManager.getAccessToken();
+        if (token != null) {
+            adminManageStaffViewModel.getStaffList("Bearer " + token).observe(getViewLifecycleOwner(), response -> {
+                if (response != null && response.data != null && response.data.data != null) {
+                    staffAdapter.setStaffList(response.data.data);
+                } else {
+                    staffAdapter.setStaffList(Collections.emptyList());
+                }
+            });
+        }
     }
 }
