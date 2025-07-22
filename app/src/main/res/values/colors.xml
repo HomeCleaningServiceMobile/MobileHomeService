@@ -118,5 +118,16 @@
     <!-- Additional Colors for TimeSlot Implementation -->
     <color name="primary">@color/primary_orange</color>
     <color name="gray">#9E9E9E</color>
+    
+    <!-- Booking Status Colors -->
+    <color name="status_pending">#F59E0B</color>
+    <color name="status_confirmed">#10B981</color>
+    <color name="status_in_progress">#3B82F6</color>
+    <color name="status_completed">#10B981</color>
+    <color name="status_cancelled">#EF4444</color>
+    <color name="status_default">#6B7280</color>
+    
+    <!-- Alias for primary color -->
+    <color name="primary_color">@color/primary_orange</color>
 
 </resources>

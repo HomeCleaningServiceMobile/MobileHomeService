@@ -14,7 +14,6 @@
         android:layout_height="120dp"
         android:src="@drawable/ic_check_circle"
         android:contentDescription="@string/payment_success_icon"
-        android:tint="@android:color/holo_green_dark"
         android:layout_marginBottom="24dp" />
 
     <!-- Success Title -->

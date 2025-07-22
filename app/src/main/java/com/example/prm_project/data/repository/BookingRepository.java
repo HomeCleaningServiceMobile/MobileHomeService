@@ -30,6 +30,11 @@ public class BookingRepository {
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> successLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loadingLiveData = new MutableLiveData<>();
+    
+    // Customer-specific LiveData
+    private final MutableLiveData<List<Booking>> myBookingsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Booking>> upcomingBookingsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<BookingHistoryResponse> bookingHistoryLiveData = new MutableLiveData<>();
 
     @Inject
     public BookingRepository(BookingApiService bookingApiService) {
@@ -198,6 +203,93 @@ public class BookingRepository {
 
             @Override
             public void onFailure(Call<ApiResponse<List<Booking>>> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    // Customer-specific booking methods
+    
+    // Get my bookings with enhanced filtering
+    public void getMyBookings(String status, String startDate, String endDate, Integer serviceId, 
+                             String serviceName, String searchTerm, String sortBy, String sortDirection, 
+                             Integer pageNumber, Integer pageSize) {
+        loadingLiveData.setValue(true);
+        bookingApiService.getMyBookings(status, startDate, endDate, serviceId, serviceName, 
+                searchTerm, sortBy, sortDirection, pageNumber, pageSize)
+                .enqueue(new Callback<ApiResponse<List<Booking>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Booking>>> call, Response<ApiResponse<List<Booking>>> response) {
+                loadingLiveData.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<List<Booking>> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        myBookingsLiveData.setValue(apiResponse.getData());
+                    } else {
+                        errorLiveData.setValue("Failed to load your bookings");
+                    }
+                } else {
+                    errorLiveData.setValue("Failed to load your bookings");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Booking>>> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    // Get my upcoming bookings
+    public void getMyUpcomingBookings(Integer days) {
+        loadingLiveData.setValue(true);
+        bookingApiService.getMyUpcomingBookings(days).enqueue(new Callback<ApiResponse<List<Booking>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Booking>>> call, Response<ApiResponse<List<Booking>>> response) {
+                loadingLiveData.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<List<Booking>> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        upcomingBookingsLiveData.setValue(apiResponse.getData());
+                    } else {
+                        errorLiveData.setValue("Failed to load upcoming bookings");
+                    }
+                } else {
+                    errorLiveData.setValue("Failed to load upcoming bookings");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Booking>>> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue("Network error: " + t.getMessage());
+            }
+        });
+    }
+    
+    // Get my booking history with statistics
+    public void getMyBookingHistory() {
+        loadingLiveData.setValue(true);
+        bookingApiService.getMyBookingHistory().enqueue(new Callback<ApiResponse<BookingHistoryResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<BookingHistoryResponse>> call, Response<ApiResponse<BookingHistoryResponse>> response) {
+                loadingLiveData.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<BookingHistoryResponse> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        bookingHistoryLiveData.setValue(apiResponse.getData());
+                    } else {
+                        errorLiveData.setValue("Failed to load booking history");
+                    }
+                } else {
+                    errorLiveData.setValue("Failed to load booking history");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<BookingHistoryResponse>> call, Throwable t) {
                 loadingLiveData.setValue(false);
                 errorLiveData.setValue("Network error: " + t.getMessage());
             }
@@ -488,6 +580,19 @@ public class BookingRepository {
 
     public LiveData<Boolean> getLoadingLiveData() {
         return loadingLiveData;
+    }
+    
+    // Customer-specific LiveData getters
+    public LiveData<List<Booking>> getMyBookingsLiveData() {
+        return myBookingsLiveData;
+    }
+    
+    public LiveData<List<Booking>> getUpcomingBookingsLiveData() {
+        return upcomingBookingsLiveData;
+    }
+    
+    public LiveData<BookingHistoryResponse> getBookingHistoryLiveData() {
+        return bookingHistoryLiveData;
     }
 
     // Clear error/success messages

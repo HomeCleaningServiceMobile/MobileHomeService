@@ -2,6 +2,7 @@ package com.example.prm_project.data.remote;
 
 import com.example.prm_project.data.model.ApiResponse;
 import com.example.prm_project.data.model.Booking;
+import com.example.prm_project.data.model.BookingHistoryResponse;
 import com.example.prm_project.data.model.BookingStatus;
 import com.example.prm_project.data.model.CreateBookingRequest;
 import com.example.prm_project.data.model.Service;
@@ -140,6 +141,33 @@ public interface BookingApiService {
         @Query("pageNumber") Integer pageNumber,
         @Query("pageSize") Integer pageSize
     );
+    
+    // Customer-specific booking endpoints
+    
+    // Get my bookings (enhanced with filtering and search)
+    @GET("booking/my-bookings")
+    Call<ApiResponse<List<Booking>>> getMyBookings(
+        @Query("status") String status,
+        @Query("startDate") String startDate,
+        @Query("endDate") String endDate,
+        @Query("serviceId") Integer serviceId,
+        @Query("serviceName") String serviceName,
+        @Query("searchTerm") String searchTerm,
+        @Query("sortBy") String sortBy,
+        @Query("sortDirection") String sortDirection,
+        @Query("pageNumber") Integer pageNumber,
+        @Query("pageSize") Integer pageSize
+    );
+    
+    // Get my upcoming bookings
+    @GET("booking/my-bookings/upcoming")
+    Call<ApiResponse<List<Booking>>> getMyUpcomingBookings(
+        @Query("days") Integer days
+    );
+    
+    // Get my booking history with statistics
+    @GET("booking/my-bookings/history")
+    Call<ApiResponse<BookingHistoryResponse>> getMyBookingHistory();
     
     // Request classes for API endpoints
     class CancelBookingRequest {
