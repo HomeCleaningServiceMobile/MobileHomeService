@@ -12,16 +12,34 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Header -->
-        <TextView
+        <!-- Header with Logout Button -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Admin Dashboard"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/admin_primary_dark"
-            android:gravity="center"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin Dashboard"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/admin_primary_dark"
+                android:layout_centerInParent="true" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_logout"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:icon="@drawable/ic_arrow_back"
+                app:iconSize="20dp"
+                app:iconTint="@color/admin_primary_dark"
+                android:contentDescription="@string/logout" />
+
+        </RelativeLayout>
 
         <!-- User Summary Card -->
         <androidx.cardview.widget.CardView
@@ -156,8 +174,8 @@
                     android:textColor="@color/admin_primary_dark"
                     android:layout_marginBottom="12dp" />
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/line_chart_monthly_revenue"
+                <com.example.prm_project.ui.view.custom.SimpleLineChartView
+                    android:id="@+id/simple_line_chart_monthly_revenue"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:layout_marginTop="8dp" />

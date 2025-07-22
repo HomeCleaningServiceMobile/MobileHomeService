@@ -176,7 +176,9 @@ public class AuthViewModel extends ViewModel {
             @Override
             public void onError(String error) {
                 isLoading.setValue(false);
-                // Session is already cleared by AuthRepository
+                // Even if server logout fails, session is already cleared by AuthRepository
+                // So we still consider this a successful logout from user perspective
+                successMessage.setValue("Logged out successfully");
             }
         });
     }
