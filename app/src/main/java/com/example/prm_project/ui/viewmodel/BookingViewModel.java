@@ -49,8 +49,8 @@ public class BookingViewModel extends ViewModel {
             BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
         // Initialize default values
-        currentStep.setValue(BookingFormStep.SELECT_SERVICE);
-        selectedPaymentMethod.setValue(PaymentMethod.CASH);
+        currentStep.postValue(BookingFormStep.SELECT_SERVICE);
+        selectedPaymentMethod.postValue(PaymentMethod.CASH);
     }
 
     // Repository LiveData getters
@@ -158,14 +158,6 @@ public class BookingViewModel extends ViewModel {
         bookingRepository.getAllBookings();
     }
 
-    public void loadStaffBookings() {
-        bookingRepository.getStaffBookings(null, null, null, 1, 10);
-    }
-
-    public void loadStaffBookingsByStatus(BookingStatus status) {
-        bookingRepository.getStaffBookings(status.getValue(), null, null, 1, 10);
-    }
-
     public void loadBookingsByStatus(BookingStatus status) {
         bookingRepository.getBookingsByStatus(status);
     }
@@ -200,7 +192,7 @@ public class BookingViewModel extends ViewModel {
 
     // Form data setters
     public void setSelectedService(Service service) {
-        selectedService.setValue(service);
+        selectedService.postValue(service);
         // Load packages for selected service
         if (service != null) {
             loadServicePackages(service.getId());
@@ -208,15 +200,11 @@ public class BookingViewModel extends ViewModel {
     }
     
     public void setSelectedServicePackage(ServicePackage servicePackage) {
-        selectedServicePackage.setValue(servicePackage);
-    }
-    
-    public void setSelectedStaff(StaffAvailabilityResponse staff) {
-        selectedStaff.setValue(staff);
+        selectedServicePackage.postValue(servicePackage);
     }
 
     public void setSelectedDate(String date) {
-        selectedDate.setValue(date);
+        selectedDate.postValue(date);
         // Load available time slots when date changes
         Service service = selectedService.getValue();
         if (service != null && date != null) {
@@ -228,7 +216,7 @@ public class BookingViewModel extends ViewModel {
     }
 
     public void setSelectedTime(String time) {
-        selectedTime.setValue(time);
+        selectedTime.postValue(time);
     }
 
     public void setServiceAddress(String address) {
@@ -243,11 +231,15 @@ public class BookingViewModel extends ViewModel {
         addressLongitude.postValue(longitude); // Changed from setValue to postValue
     }
     public void setSpecialInstructions(String instructions) {
-        specialInstructions.setValue(instructions);
+        specialInstructions.postValue(instructions);
     }
 
     public void setSelectedPaymentMethod(PaymentMethod paymentMethod) {
-        selectedPaymentMethod.setValue(paymentMethod);
+        selectedPaymentMethod.postValue(paymentMethod);
+    }
+
+    public void setSelectedStaff(StaffAvailabilityResponse staff) {
+        selectedStaff.postValue(staff);
     }
 
     // Set default date and time (temporary workaround)
@@ -258,13 +250,13 @@ public class BookingViewModel extends ViewModel {
         java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'00:00:00'Z'", java.util.Locale.getDefault());
         String defaultDate = dateFormat.format(calendar.getTime());
         
-        selectedDate.setValue(defaultDate);
-        selectedTime.setValue("10:00:00"); // Default time 10:00 AM
+        selectedDate.postValue(defaultDate);
+        selectedTime.postValue("10:00:00"); // Default time 10:00 AM
     }
 
     // Form navigation
     public void setCurrentStep(BookingFormStep step) {
-        currentStep.setValue(step);
+        currentStep.postValue(step);
     }
 
     public void nextStep() {
@@ -332,55 +324,78 @@ public class BookingViewModel extends ViewModel {
     // Validation methods
     private boolean validateServiceSelection() {
         if (selectedService.getValue() == null) {
-            validationError.setValue("Please select a service");
+            validationError.postValue("Please select a service");
             return false;
         }
-        validationError.setValue(null);
+        validationError.postValue(null);
         return true;
     }
 
     private boolean validatePackageSelection() {
         if (selectedServicePackage.getValue() == null) {
-            validationError.setValue("Please select a service package");
+            validationError.postValue("Please select a service package");
             return false;
         }
-        validationError.setValue(null);
+        validationError.postValue(null);
         return true;
     }
+    public void loadStaffBookings() {
+        bookingRepository.getStaffBookings(null, null, null, 1, 10);
+    }
+
+    public void loadStaffBookingsByStatus(BookingStatus status) {
+        bookingRepository.getStaffBookings(status.getValue(), null, null, 1, 10);
+    }
+
+
 
     private boolean validateDateTimeSelection() {
         if (selectedDate.getValue() == null || selectedDate.getValue().isEmpty()) {
-            validationError.setValue("Please select a date");
+            validationError.postValue("Please select a date");
             return false;
         }
         if (selectedTime.getValue() == null || selectedTime.getValue().isEmpty()) {
-            validationError.setValue("Please select a time");
-            return false;
-        }
-        validationError.setValue(null);
-        return true;
+            validationError.postValue("Please select a time");
+                          return false;
+          }
+          validationError.postValue(null);
+          return true;
+      }
+    public void respondToBooking(int bookingId, StaffResponseRequest request) {
+        bookingRepository.respondToBooking(bookingId, request);
     }
 
-    private boolean validateAddress() {
+    public void acceptBooking(int bookingId) {
+        bookingRepository.acceptBooking(bookingId);
+    }
+
+    public void declineBooking(int bookingId, String declineReason) {
+        bookingRepository.declineBooking(bookingId, declineReason);
+    }
+
+    public void updateBookingStatus(int bookingId, BookingStatus status) {
+        bookingRepository.updateBookingStatus(bookingId, status);
+    }
+      private boolean validateAddress() {
         if (serviceAddress.getValue() == null || serviceAddress.getValue().trim().isEmpty()) {
-            validationError.setValue("Please select an address on the map");
+            validationError.postValue("Please select an address on the map");
             return false;
         }
         if (addressLatitude.getValue() == null || addressLongitude.getValue() == null || 
             (addressLatitude.getValue() == 0.0 && addressLongitude.getValue() == 0.0)) {
-            validationError.setValue("Please select a valid location on the map");
+            validationError.postValue("Please select a valid location on the map");
             return false;
         }
-        validationError.setValue(null);
+        validationError.postValue(null);
         return true;
     }
 
     private boolean validatePaymentMethod() {
         if (selectedPaymentMethod.getValue() == null) {
-            validationError.setValue("Please select a payment method");
+            validationError.postValue("Please select a payment method");
             return false;
         }
-        validationError.setValue(null);
+        validationError.postValue(null);
         return true;
     }
 
@@ -423,24 +438,24 @@ public class BookingViewModel extends ViewModel {
     // Process payment after booking creation
     public void processPayment(android.content.Context context) {
         if (createdBooking == null) {
-            paymentStatus.setValue("No booking to process payment for");
+            paymentStatus.postValue("No booking to process payment for");
             return;
         }
         
         PaymentMethod paymentMethod = selectedPaymentMethod.getValue();
         if (paymentMethod == null) {
-            paymentStatus.setValue("No payment method selected");
+            paymentStatus.postValue("No payment method selected");
             return;
         }
         
         // Don't process payment for cash method
         if (paymentMethod == PaymentMethod.CASH) {
-            paymentStatus.setValue("Cash payment - no processing required");
+            paymentStatus.postValue("Cash payment - no processing required");
             return;
         }
         
-        isProcessingPayment.setValue(true);
-        paymentStatus.setValue("Processing payment...");
+        isProcessingPayment.postValue(true);
+        paymentStatus.postValue("Processing payment...");
         
         // Create payment request based on selected method
         PaymentRequest paymentRequest = createPaymentRequest(paymentMethod);
@@ -453,7 +468,7 @@ public class BookingViewModel extends ViewModel {
             new PaymentProcessor.PaymentCallback() {
                 @Override
                 public void onPaymentSuccess(PaymentResult result) {
-                    isProcessingPayment.setValue(false);
+                    isProcessingPayment.postValue(false);
                     
                     // Handle different payment methods
                     if (paymentMethod == PaymentMethod.STRIPE) {
@@ -461,7 +476,7 @@ public class BookingViewModel extends ViewModel {
                         handleStripePaymentConfirmation(context, result.getTransactionId());
                     } else {
                         // For VNPay, the confirmation is handled in handleVNPayPaymentResult
-                        paymentStatus.setValue("Payment successful: " + result.getMessage());
+                        paymentStatus.postValue("Payment successful: " + result.getMessage());
                         // Update booking status to confirmed
                         if (createdBooking != null) {
                             bookingRepository.updateBookingStatus(createdBooking.getId(), BookingStatus.CONFIRMED);
@@ -471,14 +486,14 @@ public class BookingViewModel extends ViewModel {
                 
                 @Override
                 public void onPaymentFailure(PaymentResult result) {
-                    isProcessingPayment.setValue(false);
-                    paymentStatus.setValue("Payment failed: " + result.getMessage());
+                    isProcessingPayment.postValue(false);
+                    paymentStatus.postValue("Payment failed: " + result.getMessage());
                 }
                 
                 @Override
                 public void onPaymentCancelled() {
-                    isProcessingPayment.setValue(false);
-                    paymentStatus.setValue("Payment cancelled by user");
+                    isProcessingPayment.postValue(false);
+                    paymentStatus.postValue("Payment cancelled by user");
                 }
             }
         );
@@ -487,7 +502,7 @@ public class BookingViewModel extends ViewModel {
     // Handle VNPay payment result from WebView
     public void handleVNPayPaymentResult(android.content.Context context, int requestCode, int resultCode, android.content.Intent data) {
         if (createdBooking == null) {
-            paymentStatus.setValue("No booking found for payment confirmation");
+            paymentStatus.postValue("No booking found for payment confirmation");
             return;
         }
         
@@ -497,7 +512,7 @@ public class BookingViewModel extends ViewModel {
         int customerId = sessionManager.getCurrentCustomerId();
         
         if (customerId == -1) {
-            paymentStatus.setValue("Customer not found - please login again");
+            paymentStatus.postValue("Customer not found - please login again");
             return;
         }
         
@@ -524,10 +539,10 @@ public class BookingViewModel extends ViewModel {
                 // Call confirm payment API to deduct balance
                 confirmPaymentAndDeductBalance(customerId, bookingId, callbackData);
             } else {
-                paymentStatus.setValue("Payment was not successful");
+                paymentStatus.postValue("Payment was not successful");
             }
         } else {
-            paymentStatus.setValue("Payment cancelled by user");
+            paymentStatus.postValue("Payment cancelled by user");
         }
     }
     
@@ -546,22 +561,22 @@ public class BookingViewModel extends ViewModel {
                     if (confirmationResponse.isSucceeded() && confirmationResponse.getData() != null) {
                         com.example.prm_project.data.model.PaymentConfirmationResponse.PaymentConfirmationData data = confirmationResponse.getData();
                         
-                        paymentStatus.setValue("Payment confirmed and balance deducted successfully. Remaining balance: $" + data.getRemainingBalance());
+                        paymentStatus.postValue("Payment confirmed and balance deducted successfully. Remaining balance: $" + data.getRemainingBalance());
                         
                         // Update booking status to confirmed
                         bookingRepository.updateBookingStatus(bookingId, BookingStatus.CONFIRMED);
                     } else {
-                        paymentStatus.setValue("Payment confirmation failed");
+                        paymentStatus.postValue("Payment confirmation failed");
                     }
                 } else {
-                    paymentStatus.setValue("Failed to confirm payment");
+                    paymentStatus.postValue("Failed to confirm payment");
                 }
             }
 
             @Override
             public void onFailure(Call<com.example.prm_project.data.model.PaymentConfirmationResponse> call, Throwable t) {
                 android.util.Log.e("BookingViewModel", "Payment confirmation failed", t);
-                paymentStatus.setValue("Network error during payment confirmation: " + t.getMessage());
+                paymentStatus.postValue("Network error during payment confirmation: " + t.getMessage());
             }
         });
     }
@@ -569,7 +584,7 @@ public class BookingViewModel extends ViewModel {
     // Handle Stripe payment confirmation
     public void handleStripePaymentConfirmation(android.content.Context context, String paymentIntentId) {
         if (createdBooking == null) {
-            paymentStatus.setValue("No booking found for payment confirmation");
+            paymentStatus.postValue("No booking found for payment confirmation");
             return;
         }
         
@@ -579,7 +594,7 @@ public class BookingViewModel extends ViewModel {
         int customerId = sessionManager.getCurrentCustomerId();
         
         if (customerId == -1) {
-            paymentStatus.setValue("Customer not found - please login again");
+            paymentStatus.postValue("Customer not found - please login again");
             return;
         }
         
@@ -603,22 +618,22 @@ public class BookingViewModel extends ViewModel {
                     if (confirmationResponse.isSucceeded() && confirmationResponse.getData() != null) {
                         com.example.prm_project.data.model.PaymentConfirmationResponse.PaymentConfirmationData data = confirmationResponse.getData();
                         
-                        paymentStatus.setValue("Stripe payment confirmed and balance deducted successfully. Remaining balance: $" + data.getRemainingBalance());
+                        paymentStatus.postValue("Stripe payment confirmed and balance deducted successfully. Remaining balance: $" + data.getRemainingBalance());
                         
                         // Update booking status to confirmed
                         bookingRepository.updateBookingStatus(bookingId, BookingStatus.CONFIRMED);
                     } else {
-                        paymentStatus.setValue("Stripe payment confirmation failed");
+                        paymentStatus.postValue("Stripe payment confirmation failed");
                     }
                 } else {
-                    paymentStatus.setValue("Failed to confirm Stripe payment");
+                    paymentStatus.postValue("Failed to confirm Stripe payment");
                 }
             }
 
             @Override
             public void onFailure(Call<com.example.prm_project.data.model.PaymentConfirmationResponse> call, Throwable t) {
                 android.util.Log.e("BookingViewModel", "Stripe payment confirmation failed", t);
-                paymentStatus.setValue("Network error during Stripe payment confirmation: " + t.getMessage());
+                paymentStatus.postValue("Network error during Stripe payment confirmation: " + t.getMessage());
             }
         });
     }
@@ -708,38 +723,39 @@ public class BookingViewModel extends ViewModel {
 
     // Reset form
     public void resetForm() {
-        selectedService.setValue(null);
-        selectedServicePackage.setValue(null);
-        selectedDate.setValue(null);
-        selectedTime.setValue(null);
-        serviceAddress.setValue(null);
-        addressLatitude.setValue(null);
-        addressLongitude.setValue(null);
-        specialInstructions.setValue(null);
-        selectedPaymentMethod.setValue(PaymentMethod.CASH);
-        currentStep.setValue(BookingFormStep.SELECT_SERVICE);
-        validationError.setValue(null);
+        selectedService.postValue(null);
+        selectedServicePackage.postValue(null);
+        selectedDate.postValue(null);
+        selectedTime.postValue(null);
+        serviceAddress.postValue(null);
+        addressLatitude.postValue(null);
+        addressLongitude.postValue(null);
+        specialInstructions.postValue(null);
+        selectedPaymentMethod.postValue(PaymentMethod.CASH);
+        selectedStaff.postValue(null);
+        currentStep.postValue(BookingFormStep.SELECT_SERVICE);
+        validationError.postValue(null);
     }
 
     // Load form data from existing booking (for editing)
     public void loadBookingForEdit(Booking booking) {
         if (booking != null) {
-            selectedService.setValue(booking.getService());
-            selectedServicePackage.setValue(booking.getServicePackage());
-            selectedDate.setValue(booking.getScheduledDate());
-            selectedTime.setValue(booking.getScheduledTime());
-            serviceAddress.setValue(booking.getServiceAddress());
-            addressLatitude.setValue(booking.getAddressLatitude());
-            addressLongitude.setValue(booking.getAddressLongitude());
-            specialInstructions.setValue(booking.getSpecialInstructions());
-            selectedPaymentMethod.setValue(PaymentMethod.fromValue(booking.getPreferredPaymentMethod()));
+            selectedService.postValue(booking.getService());
+            selectedServicePackage.postValue(booking.getServicePackage());
+            selectedDate.postValue(booking.getScheduledDate());
+            selectedTime.postValue(booking.getScheduledTime());
+            serviceAddress.postValue(booking.getServiceAddress());
+            addressLatitude.postValue(booking.getAddressLatitude());
+            addressLongitude.postValue(booking.getAddressLongitude());
+            specialInstructions.postValue(booking.getSpecialInstructions());
+            selectedPaymentMethod.postValue(PaymentMethod.fromValue(booking.getPreferredPaymentMethod()));
         }
     }
 
     // Clear messages
     public void clearErrorMessage() {
         bookingRepository.clearErrorMessage();
-        validationError.setValue(null);
+        validationError.postValue(null);
     }
 
     public void clearSuccessMessage() {
@@ -759,21 +775,5 @@ public class BookingViewModel extends ViewModel {
         ENTER_ADDRESS,
         PAYMENT_METHOD,
         REVIEW_BOOKING
-    }
-
-    public void respondToBooking(int bookingId, StaffResponseRequest request) {
-        bookingRepository.respondToBooking(bookingId, request);
-    }
-
-    public void acceptBooking(int bookingId) {
-        bookingRepository.acceptBooking(bookingId);
-    }
-
-    public void declineBooking(int bookingId, String declineReason) {
-        bookingRepository.declineBooking(bookingId, declineReason);
-    }
-
-    public void updateBookingStatus(int bookingId, BookingStatus status) {
-        bookingRepository.updateBookingStatus(bookingId, status);
     }
 } 
