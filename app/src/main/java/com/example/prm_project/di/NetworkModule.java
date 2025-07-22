@@ -1,6 +1,8 @@
 package com.example.prm_project.di;
 
 import android.content.Context;
+
+import com.example.prm_project.data.remote.AdminDashboardApiService;
 import com.example.prm_project.data.remote.ApiService;
 import com.example.prm_project.data.remote.AuthApiService;
 import com.example.prm_project.data.remote.ServiceApiService;
@@ -8,6 +10,7 @@ import com.example.prm_project.data.remote.BookingApiService;
 import com.example.prm_project.data.remote.TimeSlotApiService;
 import com.example.prm_project.utils.AuthInterceptor;
 import com.example.prm_project.utils.Constants;
+
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
@@ -167,5 +170,14 @@ public class NetworkModule {
     @Singleton
     public TimeSlotApiService provideTimeSlotApiService(@Named("booking") Retrofit retrofit) {
         return retrofit.create(TimeSlotApiService.class);
+    }
+
+    /**
+     * Provides admin dashboard API service with authentication
+     */
+    @Provides
+    @Singleton
+    public AdminDashboardApiService provideAdminDashboardApiService(@Named("base") Retrofit retrofit) {
+        return retrofit.create(AdminDashboardApiService.class);
     }
 } 

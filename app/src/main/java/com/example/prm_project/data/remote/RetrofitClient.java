@@ -5,8 +5,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import com.example.prm_project.utils.Constants;
+
 import com.example.prm_project.utils.AuthInterceptor;
+import com.example.prm_project.utils.Constants;
+
 import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {

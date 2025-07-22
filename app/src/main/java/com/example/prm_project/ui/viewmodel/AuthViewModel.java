@@ -194,7 +194,9 @@ public class AuthViewModel extends ViewModel {
             @Override
             public void onError(String error) {
                 isLoading.setValue(false);
-                // Session is already cleared by AuthRepository
+                // Even if server logout fails, session is already cleared by AuthRepository
+                // So we still consider this a successful logout from user perspective
+                successMessage.setValue("Logged out successfully");
             }
         });
     }
@@ -275,7 +277,36 @@ public class AuthViewModel extends ViewModel {
             }
         });
     }
-    
+
+    public void checkGoogleLogin(String email, String name, String avatar) {
+        isLoading.setValue(true);
+        errorMessage.setValue(null);
+
+        authRepository.googleLogin(email, name, avatar, new AuthRepository.AuthCallback<GoogleLoginResponse>() {
+            @Override
+            public void onSuccess(GoogleLoginResponse response) {
+                isLoading.setValue(false);
+
+                if (response != null && response.getAccessToken() != null) {
+                    authRepository.saveUserSession(response.toAuthResponse(), true);
+                    successMessage.setValue("Logged in with Google");
+                    loginSuccess.setValue(true);
+                } else {
+                    successMessage.setValue("Redirecting to registration...");
+                    loginSuccess.setValue(false);
+                    registrationRequest.setEmail(email);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                isLoading.setValue(false);
+                errorMessage.setValue(error);
+            }
+        });
+    }
+
+
     /**
      * Get current registration request (for debugging or validation)
      */

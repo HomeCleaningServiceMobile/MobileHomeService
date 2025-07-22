@@ -38,6 +38,12 @@
             android:id="@+id/action_loginFragment_to_registerPersonalInfoFragment"
             app:destination="@id/registerPersonalInfoFragment" />
             
+        <action
+            android:id="@+id/action_loginFragment_to_adminDashboardFragment"
+            app:destination="@id/adminDashboardFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+
     </fragment>
 
     <!-- Registration - Personal Info Fragment -->
@@ -325,19 +331,49 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+    <!-- Payment Success Fragment -->
+    <fragment
+        android:id="@+id/paymentSuccessFragment"
+        android:name="com.example.prm_project.ui.view.booking.PaymentSuccessFragment"
+        android:label="Payment Success"
+        tools:layout="@layout/fragment_payment_success">
+        <action
+            android:id="@+id/action_paymentSuccessFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <!-- Payment Failure Fragment -->
+    <fragment
+        android:id="@+id/paymentFailureFragment"
+        android:name="com.example.prm_project.ui.view.booking.PaymentFailureFragment"
+        android:label="Payment Failure"
+        tools:layout="@layout/fragment_payment_failure">
+        <action
+            android:id="@+id/action_paymentFailureFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
     <!-- Create Booking Fragment -->
     <fragment
         android:id="@+id/createBookingFragment"
         android:name="com.example.prm_project.ui.view.booking.CreateBookingFragment"
         android:label="@string/book_service"
         tools:layout="@layout/fragment_create_booking">
-        
         <action
             android:id="@+id/action_createBookingFragment_to_nav_home"
             app:destination="@id/nav_home"
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="false" />
-            
+        <action
+            android:id="@+id/action_createBookingFragment_to_paymentSuccessFragment"
+            app:destination="@id/paymentSuccessFragment" />
+        <action
+            android:id="@+id/action_createBookingFragment_to_paymentFailureFragment"
+            app:destination="@id/paymentFailureFragment" />
     </fragment>
 
     <fragment
@@ -348,6 +384,25 @@
         <argument
             android:name="serviceId"
             app:argType="integer" />
+    </fragment>
+
+    <!-- Admin Dashboard Fragment -->
+    <fragment
+        android:id="@+id/adminDashboardFragment"
+        android:name="com.example.prm_project.ui.view.admin.AdminDashboardFragment"
+        android:label="@string/admin_dashboard"
+        tools:layout="@layout/fragment_admin_dashboard">
+        <action
+            android:id="@+id/action_adminDashboardFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_adminDashboardFragment_to_manageStaffFragment"
+            app:destination="@id/manageStaffFragment" />
+        <action
+            android:id="@+id/action_adminDashboardFragment_to_adminServiceListFragment"
+            app:destination="@id/adminServiceListFragment" />
     </fragment>
 
 </navigation>

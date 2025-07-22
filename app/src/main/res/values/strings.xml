@@ -318,4 +318,6 @@
     <string name="staff_average_rating">Average Rating</string>
     <string name="staff_total_completed_jobs">Total Completed Jobs</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="payment_success_icon">Payment Success Icon</string>
+    <string name="payment_failure_icon">Payment Failure Icon</string>
 </resources>

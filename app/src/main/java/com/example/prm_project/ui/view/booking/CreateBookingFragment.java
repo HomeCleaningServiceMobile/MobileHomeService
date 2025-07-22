@@ -378,7 +378,9 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         // Observe payment processing state
         bookingViewModel.getIsProcessingPayment().observe(getViewLifecycleOwner(), isProcessing -> {
             if (isProcessing != null && isProcessing) {
-                showToast("Processing payment...");
+                showPaymentProcessingOverlay();
+            } else {
+                hidePaymentProcessingOverlay();
             }
         });
         
@@ -386,9 +388,12 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         bookingViewModel.getPaymentStatus().observe(getViewLifecycleOwner(), status -> {
             if (status != null) {
                 showToast(status);
-                if (status.contains("Payment successful") || status.contains("Cash payment")) {
-                    // Navigate back after successful payment
-                    Navigation.findNavController(requireView()).navigateUp();
+                if (status.contains("Payment confirmed") || status.contains("Cash payment") || status.contains("Payment successful")) {
+                    // Navigate to payment success screen after successful payment
+                    Navigation.findNavController(requireView()).navigate(R.id.action_createBookingFragment_to_paymentSuccessFragment);
+                } else if (status.contains("Payment failed") || status.contains("Payment was not successful") || status.contains("Network error") || status.contains("cancelled") || status.contains("confirmation failed") || status.contains("Failed to confirm")) {
+                    // Navigate to payment failure screen after failed payment
+                    Navigation.findNavController(requireView()).navigate(R.id.action_createBookingFragment_to_paymentFailureFragment);
                 }
             }
         });
@@ -1850,5 +1855,42 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void showPaymentProcessingOverlay() {
+        if (binding != null) {
+            binding.paymentProcessingOverlay.setVisibility(View.VISIBLE);
+            binding.paymentStatusText.setText("Processing payment...");
+            binding.paymentSubStatusText.setText("Please wait while we process your payment");
+            
+            // Add fade-in animation
+            binding.paymentProcessingOverlay.setAlpha(0f);
+            binding.paymentProcessingOverlay.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .start();
+        }
+    }
+    
+    private void hidePaymentProcessingOverlay() {
+        if (binding != null && binding.paymentProcessingOverlay.getVisibility() == View.VISIBLE) {
+            // Add fade-out animation
+            binding.paymentProcessingOverlay.animate()
+                .alpha(0f)
+                .setDuration(300)
+                .withEndAction(() -> {
+                    if (binding != null) {
+                        binding.paymentProcessingOverlay.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+        }
+    }
+    
+    private void updatePaymentProcessingStatus(String status, String subStatus) {
+        if (binding != null) {
+            binding.paymentStatusText.setText(status);
+            binding.paymentSubStatusText.setText(subStatus);
+        }
     }
 } 
