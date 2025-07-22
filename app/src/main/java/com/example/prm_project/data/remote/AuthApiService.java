@@ -39,7 +39,7 @@ public interface AuthApiService {
     
     @POST("refresh")
     Call<ApiResponse<TokenResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
-    
+
     @POST("logout")
-    Call<ApiResponse<Void>> logout(@Header("Authorization") String authToken);
+    Call<ApiResponse<String>> logout(@Header("Authorization") String token);
 } 

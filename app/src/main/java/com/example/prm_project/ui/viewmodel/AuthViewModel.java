@@ -165,22 +165,23 @@ public class AuthViewModel extends ViewModel {
      */
     public void logout() {
         isLoading.setValue(true);
-        
-        authRepository.logout(new AuthRepository.AuthCallback<Void>() {
+
+        authRepository.logout(new AuthRepository.AuthCallback<String>() {
             @Override
-            public void onSuccess(Void response) {
+            public void onSuccess(String response) {
                 isLoading.setValue(false);
                 successMessage.setValue("Logged out successfully");
             }
-            
+
             @Override
             public void onError(String error) {
                 isLoading.setValue(false);
+                Log.e("Logout Error", error);
                 // Session is already cleared by AuthRepository
             }
         });
     }
-    
+
     /**
      * Check if user is logged in
      */

@@ -182,6 +182,7 @@ public class AuthRepository {
      */
     public void getProfile(AuthCallback<UserResponse> callback) {
         authApiService.getProfile().enqueue(new Callback<AppResponse<UserResponse>>() {
+
             @Override
             public void onResponse(Call<AppResponse<UserResponse>> call,
                                    Response<AppResponse<UserResponse>> response) {
@@ -265,37 +266,36 @@ public class AuthRepository {
     /**
      * Logout user - No manual token needed! AuthInterceptor handles it
      */
-    public void logout(AuthCallback<Void> callback) {
-        Call<ApiResponse<Void>> call = authApiService.logout(""); // Empty string, interceptor will inject token
-        
-        call.enqueue(new Callback<ApiResponse<Void>>() {
+    public void logout(AuthCallback<String> callback) {
+        Call<ApiResponse<String>> call = authApiService.logout(""); // Interceptor injects token
+
+        call.enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<Void> apiResponse = response.body();
+                    ApiResponse<String> apiResponse = response.body();
                     if (apiResponse.isSucceeded()) {
                         // Clear local session after successful server logout
                         tokenManager.clearTokens();
-                        callback.onSuccess(null);
+                        callback.onSuccess(apiResponse.getData());
                     } else {
+                        tokenManager.clearTokens();
                         callback.onError(apiResponse.getFirstErrorMessage());
                     }
                 } else {
-                    // Even if server logout fails, clear local session
                     tokenManager.clearTokens();
                     callback.onError("Logout failed on server, but local session cleared.");
                 }
             }
-            
+
             @Override
-            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
-                // Clear local session even on network failure
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 tokenManager.clearTokens();
                 callback.onError("Network error during logout, but local session cleared.");
             }
         });
     }
-    
+
     /**
      * Check if user is authenticated with valid token
      */

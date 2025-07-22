@@ -1,5 +1,6 @@
 package com.example.prm_project.ui.view.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.navigation.Navigation;
 
 import com.example.prm_project.R;
 import com.example.prm_project.databinding.FragmentProfileBinding;
+import com.example.prm_project.ui.view.auth.LoginFragment;
 import com.example.prm_project.ui.viewmodel.AuthViewModel;
 import com.example.prm_project.ui.viewmodel.MainViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -96,7 +98,7 @@ public class ProfileFragment extends Fragment {
     private void observeViewModels() {
         // Observe auth view model for logout
         authViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), successMessage -> {
-            if (successMessage != null && !successMessage.isEmpty() && successMessage.contains("Logged out")) {
+            if (successMessage != null && successMessage.contains("Logged out")) {
                 showToast("Logged out successfully!");
                 // Navigate back to login
                 NavController navController = Navigation.findNavController(requireView());

@@ -254,16 +254,20 @@ public class MainRepository {
     /**
      * Logout user
      */
-    public void logout(String authToken, AuthCallback<Void> callback) {
-        Call<ApiResponse<Void>> call = authApiService.logout(authToken);
-        
-        call.enqueue(new Callback<ApiResponse<Void>>() {
+    public void logout(String authToken, AuthCallback<String> callback) {
+        Call<ApiResponse<String>> call = authApiService.logout("Bearer " + authToken);
+
+        call.enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<Void> apiResponse = response.body();
+                    ApiResponse<String> apiResponse = response.body();
                     if (apiResponse.isSucceeded()) {
-                        callback.onSuccess(null);
+                        // ✅ Clear local cache/session only after successful logout
+                        localDataSource.clearCache();
+                        callback.onSuccess(apiResponse.getData() != null
+                                ? apiResponse.getData()
+                                : "Logged out successfully");
                     } else {
                         callback.onError(apiResponse.getFirstErrorMessage());
                     }
@@ -271,9 +275,9 @@ public class MainRepository {
                     callback.onError("Logout failed. Please try again.");
                 }
             }
-            
+
             @Override
-            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) { // ✅ Correct type
                 callback.onError("Network error: " + t.getMessage());
             }
         });

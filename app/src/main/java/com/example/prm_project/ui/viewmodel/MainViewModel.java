@@ -24,6 +24,8 @@ public class MainViewModel extends ViewModel {
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     private final MutableLiveData<UserResponse> profile = new MutableLiveData<>();
+    private MutableLiveData<Boolean> logoutSuccess = new MutableLiveData<>();
+    private MutableLiveData<String> logoutMessage = new MutableLiveData<>();
     
     /**
      * Constructor with dependency injection
@@ -93,6 +95,30 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onFailure(Call<AppResponse<UserResponse>> call, Throwable t) {
                 Log.e("Profile", "Failed to load profile", t);
+            }
+        });
+    }
+
+    public LiveData<Boolean> getLogoutSuccess() {
+        return logoutSuccess;
+    }
+
+    public LiveData<String> getLogoutMessage() {
+        return logoutMessage;
+    }
+
+    public void logout(String authToken) {
+        repository.logout(authToken, new MainRepository.AuthCallback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                logoutSuccess.postValue(true);
+                logoutMessage.postValue(data != null ? data : "Logged out successfully.");
+            }
+
+            @Override
+            public void onError(String error) {
+                logoutSuccess.postValue(false);
+                logoutMessage.postValue(error);
             }
         });
     }
