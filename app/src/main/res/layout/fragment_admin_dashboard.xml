@@ -156,12 +156,11 @@
                     android:textColor="@color/admin_primary_dark"
                     android:layout_marginBottom="12dp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_monthly_revenue"
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/line_chart_monthly_revenue"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    tools:listitem="@layout/item_monthly_revenue" />
+                    android:layout_height="250dp"
+                    android:layout_marginTop="8dp" />
 
             </LinearLayout>
 
