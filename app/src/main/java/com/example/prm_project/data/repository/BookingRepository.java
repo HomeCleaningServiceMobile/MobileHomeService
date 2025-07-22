@@ -7,6 +7,8 @@ import com.example.prm_project.data.remote.BookingApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,7 +19,7 @@ public class BookingRepository {
     private final BookingApiService bookingApiService;
     
     // Call tracking for cancellation
-    private Call<ApiResponse<List<String>>> timeSlotCall;
+    private Call<ApiResponse<List<TimeSlotDto>>> timeSlotCall;
     
     // LiveData for UI observation
     private final MutableLiveData<List<Booking>> bookingsLiveData = new MutableLiveData<>();
@@ -265,60 +267,112 @@ public class BookingRepository {
     }
 
     // Get available time slots
-    public void getAvailableTimeSlots(int serviceId, String date, double latitude, double longitude) {
-        // Add null checks and validation
+//    public void getAvailableTimeSlots(int serviceId, String date, double latitude, double longitude) {
+//        // Add null checks and validation
+//        if (date == null || date.trim().isEmpty()) {
+//            errorLiveData.setValue("Date is required");
+//            return;
+//        }
+//
+//        // Cancel previous call if still running
+//        if (timeSlotCall != null && !timeSlotCall.isCanceled()) {
+//            timeSlotCall.cancel();
+//        }
+//
+//        loadingLiveData.setValue(true);
+//
+//        try {
+//            timeSlotCall = bookingApiService.getAvailableTimeSlots(serviceId, date, latitude, longitude);
+//            timeSlotCall.enqueue(new Callback<ApiResponse<List<String>>>() {
+//                @Override
+//                public void onResponse(Call<ApiResponse<List<String>>> call, Response<ApiResponse<List<String>>> response) {
+//                    loadingLiveData.setValue(false);
+//
+//                    if (call.isCanceled()) {
+//                        return; // Request was cancelled, don't process response
+//                    }
+//
+//                    if (response.isSuccessful() && response.body() != null) {
+//                        ApiResponse<List<String>> apiResponse = response.body();
+//                        if (apiResponse.isSucceeded() && apiResponse.getData() != null) {
+//                            timeAvaailableTimeSlotsLiveData.setValue(apiResponse.getData());
+//                        } else {
+//                            errorLiveData.setValue("No time slots available");
+//                        }
+//                    } else {
+//                        errorLiveData.setValue("Failed to load available time slots");
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ApiResponse<List<String>>> call, Throwable t) {
+//                    loadingLiveData.setValue(false);
+//
+//                    if (call.isCanceled()) {
+//                        return; // Request was cancelled, don't show error
+//                    }
+//
+//                    errorLiveData.setValue("Network error: " + (t.getMessage() != null ? t.getMessage() : "Unknown error"));
+//                }
+//            });
+//        } catch (Exception e) {
+//            loadingLiveData.setValue(false);
+//            errorLiveData.setValue("Error loading time slots: " + e.getMessage());
+//        }
+//    }
+// In BookingRepository.java
+    public void getAvailableTimeSlots(int serviceId, String date) {
         if (date == null || date.trim().isEmpty()) {
-            errorLiveData.setValue("Date is required");
+            errorLiveData.postValue("Date is required");
             return;
         }
-        
-        // Cancel previous call if still running
-        if (timeSlotCall != null && !timeSlotCall.isCanceled()) {
-            timeSlotCall.cancel();
-        }
-        
-        loadingLiveData.setValue(true);
-        
+
+        loadingLiveData.postValue(true); // Use postValue for safety
+
         try {
-            timeSlotCall = bookingApiService.getAvailableTimeSlots(serviceId, date, latitude, longitude);
-            timeSlotCall.enqueue(new Callback<ApiResponse<List<String>>>() {
+            Call<ApiResponse<List<TimeSlotDto>>> call = bookingApiService.getAvailableSlot(date, serviceId);
+            timeSlotCall = call; // Track the call
+            call.enqueue(new Callback<ApiResponse<List<TimeSlotDto>>>() {
                 @Override
-                public void onResponse(Call<ApiResponse<List<String>>> call, Response<ApiResponse<List<String>>> response) {
-                    loadingLiveData.setValue(false);
-                    
+                public void onResponse(Call<ApiResponse<List<TimeSlotDto>>> call, Response<ApiResponse<List<TimeSlotDto>>> response) {
+                    loadingLiveData.postValue(false);
                     if (call.isCanceled()) {
-                        return; // Request was cancelled, don't process response
+                        return;
                     }
-                    
+
                     if (response.isSuccessful() && response.body() != null) {
-                        ApiResponse<List<String>> apiResponse = response.body();
+                        ApiResponse<List<TimeSlotDto>> apiResponse = response.body();
                         if (apiResponse.isSucceeded() && apiResponse.getData() != null) {
-                            timeAvaailableTimeSlotsLiveData.setValue(apiResponse.getData());
+                            // Map List<TimeSlotDto> to List<String> using displayTime
+                            List<String> displayTimes = new ArrayList<>();
+                            for (TimeSlotDto timeSlot : apiResponse.getData()) {
+                                if (timeSlot.getDisplayTime() != null) {
+                                    displayTimes.add(timeSlot.getDisplayTime());
+                                }
+                            }
+                            timeAvaailableTimeSlotsLiveData.postValue(displayTimes); // Post the list of displayTime strings
                         } else {
-                            errorLiveData.setValue("No time slots available");
+                            errorLiveData.postValue("No time slots available");
                         }
                     } else {
-                        errorLiveData.setValue("Failed to load available time slots");
+                        errorLiveData.postValue("Failed to load available time slots");
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ApiResponse<List<String>>> call, Throwable t) {
-                    loadingLiveData.setValue(false);
-                    
+                public void onFailure(Call<ApiResponse<List<TimeSlotDto>>> call, Throwable t) {
+                    loadingLiveData.postValue(false);
                     if (call.isCanceled()) {
-                        return; // Request was cancelled, don't show error
+                        return;
                     }
-                    
-                    errorLiveData.setValue("Network error: " + (t.getMessage() != null ? t.getMessage() : "Unknown error"));
+                    errorLiveData.postValue("Network error: " + (t.getMessage() != null ? t.getMessage() : "Unknown error"));
                 }
             });
         } catch (Exception e) {
-            loadingLiveData.setValue(false);
-            errorLiveData.setValue("Error loading time slots: " + e.getMessage());
+            loadingLiveData.postValue(false);
+            errorLiveData.postValue("Error loading time slotshehehe: " + e.getMessage());
         }
     }
-
     // LiveData getters for UI observation
     public LiveData<List<Booking>> getBookingsLiveData() {
         return bookingsLiveData;

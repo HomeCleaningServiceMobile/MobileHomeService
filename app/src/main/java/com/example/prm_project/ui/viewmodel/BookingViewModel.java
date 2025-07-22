@@ -33,6 +33,7 @@ public class BookingViewModel extends ViewModel {
     private final MutableLiveData<Double> addressLongitude = new MutableLiveData<>();
     private final MutableLiveData<String> specialInstructions = new MutableLiveData<>();
     private final MutableLiveData<PaymentMethod> selectedPaymentMethod = new MutableLiveData<>();
+    private final MutableLiveData<StaffAvailabilityResponse> selectedStaff = new MutableLiveData<>();
     
     // UI state
     private final MutableLiveData<BookingFormStep> currentStep = new MutableLiveData<>();
@@ -44,7 +45,8 @@ public class BookingViewModel extends ViewModel {
     private Booking createdBooking = null;
 
     @Inject
-    public BookingViewModel(BookingRepository bookingRepository) {
+    public BookingViewModel(
+            BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
         // Initialize default values
         currentStep.setValue(BookingFormStep.SELECT_SERVICE);
@@ -131,6 +133,10 @@ public class BookingViewModel extends ViewModel {
         return selectedPaymentMethod;
     }
 
+    public LiveData<StaffAvailabilityResponse> getSelectedStaff() {
+        return selectedStaff;
+    }
+
     public LiveData<BookingFormStep> getCurrentStep() {
         return currentStep;
     }
@@ -180,8 +186,8 @@ public class BookingViewModel extends ViewModel {
         bookingRepository.getServicePackages(serviceId);
     }
 
-    public void loadAvailableTimeSlots(int serviceId, String date, double latitude, double longitude) {
-        bookingRepository.getAvailableTimeSlots(serviceId, date, latitude, longitude);
+    public void loadAvailableTimeSlots(int serviceId, String date) {
+        bookingRepository.getAvailableTimeSlots(serviceId, date);
     }
 
     // Form data setters
@@ -196,19 +202,20 @@ public class BookingViewModel extends ViewModel {
     public void setSelectedServicePackage(ServicePackage servicePackage) {
         selectedServicePackage.setValue(servicePackage);
     }
+    
+    public void setSelectedStaff(StaffAvailabilityResponse staff) {
+        selectedStaff.setValue(staff);
+    }
 
     public void setSelectedDate(String date) {
         selectedDate.setValue(date);
         // Load available time slots when date changes
         Service service = selectedService.getValue();
-        Double lat = addressLatitude.getValue();
-        Double lng = addressLongitude.getValue();
-        if (service != null && date != null && lat != null && lng != null) {
-            // Add a small delay to prevent rapid successive calls
+        if (service != null && date != null) {
             android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
             handler.postDelayed(() -> {
-                loadAvailableTimeSlots(service.getId(), date, lat, lng);
-            }, 100); // 100ms delay
+                loadAvailableTimeSlots(service.getId(), date);
+            }, 100);
         }
     }
 
@@ -217,17 +224,16 @@ public class BookingViewModel extends ViewModel {
     }
 
     public void setServiceAddress(String address) {
-        serviceAddress.setValue(address);
+        serviceAddress.postValue(address); // Changed from setValue to postValue
     }
 
     public void setAddressLatitude(Double latitude) {
-        addressLatitude.setValue(latitude);
+        addressLatitude.postValue(latitude); // Changed from setValue to postValue
     }
 
     public void setAddressLongitude(Double longitude) {
-        addressLongitude.setValue(longitude);
+        addressLongitude.postValue(longitude); // Changed from setValue to postValue
     }
-
     public void setSpecialInstructions(String instructions) {
         specialInstructions.setValue(instructions);
     }
@@ -349,11 +355,12 @@ public class BookingViewModel extends ViewModel {
 
     private boolean validateAddress() {
         if (serviceAddress.getValue() == null || serviceAddress.getValue().trim().isEmpty()) {
-            validationError.setValue("Please enter service address");
+            validationError.setValue("Please select an address on the map");
             return false;
         }
-        if (addressLatitude.getValue() == null || addressLongitude.getValue() == null) {
-            validationError.setValue("Please provide valid address coordinates");
+        if (addressLatitude.getValue() == null || addressLongitude.getValue() == null || 
+            (addressLatitude.getValue() == 0.0 && addressLongitude.getValue() == 0.0)) {
+            validationError.setValue("Please select a valid location on the map");
             return false;
         }
         validationError.setValue(null);
@@ -379,18 +386,28 @@ public class BookingViewModel extends ViewModel {
         ServicePackage servicePackage = selectedServicePackage.getValue();
         PaymentMethod paymentMethod = selectedPaymentMethod.getValue();
 
+//        CreateBookingRequest request = new CreateBookingRequest(
+//                service.getId(),
+//                servicePackage.getId(),
+//                selectedDate.getValue(),
+//                selectedTime.getValue(),
+//                serviceAddress.getValue(),
+//                addressLatitude.getValue(),
+//                addressLongitude.getValue(),
+//                specialInstructions.getValue(),
+//                paymentMethod.getValue()
+//        );
         CreateBookingRequest request = new CreateBookingRequest(
                 service.getId(),
                 servicePackage.getId(),
                 selectedDate.getValue(),
                 selectedTime.getValue(),
                 serviceAddress.getValue(),
-                addressLatitude.getValue(),
-                addressLongitude.getValue(),
+                1,
+                1,
                 specialInstructions.getValue(),
                 paymentMethod.getValue()
         );
-
         // Create booking first, then process payment
         bookingRepository.createBooking(request);
     }
@@ -666,12 +683,13 @@ public class BookingViewModel extends ViewModel {
                 selectedDate.getValue(),
                 selectedTime.getValue(),
                 serviceAddress.getValue(),
-                addressLatitude.getValue(),
-                addressLongitude.getValue(),
+                1,
+                2,
                 specialInstructions.getValue(),
-                paymentMethod.getValue()
+                1
         );
-
+        //addressLatitude.getValue(),
+        //                addressLongitude.getValue(),paymentMethod.getValue()
         bookingRepository.updateBooking(bookingId, request);
     }
 

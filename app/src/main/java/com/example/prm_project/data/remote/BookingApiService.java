@@ -8,6 +8,8 @@ import com.example.prm_project.data.model.Service;
 import com.example.prm_project.data.model.ServicePackage;
 import com.example.prm_project.data.model.ItemsWrapper;
 import com.example.prm_project.data.model.Staff;
+import com.example.prm_project.data.model.TimeSlotDto;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -96,7 +98,11 @@ public interface BookingApiService {
         @Query("latitude") double latitude,
         @Query("longitude") double longitude
     );
-    
+    @GET("timeslot/service-slots")
+    Call<ApiResponse<List<TimeSlotDto>>> getAvailableSlot(
+            @Query("date") String date,
+            @Query("serviceId") Integer serviceId
+    );
     // Find available staff (Admin)
     @GET("booking/available-staff")
     Call<ApiResponse<List<Staff>>> getAvailableStaff(

@@ -63,9 +63,10 @@ public class VNPayProcessor implements PaymentProcessor {
                             
                             Log.d(TAG, "VNPay payment initiated successfully via WebView");
                         } else {
+                            Log.e(TAG, "Context is not an Activity: " + context.getClass().getSimpleName());
                             callback.onPaymentFailure(new PaymentResult(
                                 PaymentResult.Status.FAILED,
-                                "Context must be an Activity for VNPay payment"
+                                "VNPay payment requires an Activity context. Please use requireActivity() instead of requireContext() when calling from a Fragment."
                             ));
                         }
                     } else {

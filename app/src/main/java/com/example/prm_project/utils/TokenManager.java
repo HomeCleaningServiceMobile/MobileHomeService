@@ -55,12 +55,13 @@ public class TokenManager {
         }
         
         try {
-            long expirationTime = Long.parseLong(expiresAt);
-            long currentTime = System.currentTimeMillis();
-            long timeUntilExpiry = expirationTime - currentTime;
+//            long expirationTime = Long.parseLong(expiresAt);
+//            long currentTime = System.currentTimeMillis();
+//            long timeUntilExpiry = expirationTime - currentTime;
             
             // Refresh if token expires within threshold
-            return timeUntilExpiry <= TOKEN_REFRESH_THRESHOLD;
+//            return timeUntilExpiry <= TOKEN_REFRESH_THRESHOLD;
+            return false;
         } catch (NumberFormatException e) {
             Log.e(TAG, "Invalid expiration time format", e);
             return true;
