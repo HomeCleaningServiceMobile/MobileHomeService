@@ -3,6 +3,8 @@ package com.example.prm_project.utils.payment.stripe;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.prm_project.utils.payment.PaymentProcessor;
 import com.example.prm_project.utils.payment.PaymentRequest;
@@ -11,25 +13,48 @@ import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.paymentsheet.PaymentSheet;
 import com.stripe.android.paymentsheet.PaymentSheetResult;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 public class StripeProcessor implements PaymentProcessor {
+    private static final String TAG = "StripeProcessor";
     private static final String STRIPE_PUBLISHABLE_KEY = "pk_test_51RZQtlRpw5sw2xnalWMscpCULRzSPboYAjpXy2HMl1sO7T5z8kKALrlNX3hxkKsdlShdu53MnWcMujVO3zOlnmH9009frbtXBh";
-    // Note: This should be updated to use the proper API endpoint
-    // For now, we'll use a placeholder that will be handled by the BookingViewModel
+    private static final String BACKEND_URL = "http://10.0.2.2:4242/";
     
     private PaymentSheet paymentSheet;
     private PaymentCallback currentCallback;
+    private StripeApiService stripeApiService;
+
+    // Stripe Backend API Interface
+    interface StripeApiService {
+        @POST("create-payment-intent")
+        Call<StripePaymentIntentResponse> createPaymentIntent(@Body StripePaymentIntentRequest request);
+    }
+    
+    // Request/Response models for Stripe backend
+    static class StripePaymentIntentRequest {
+        public final double amount;
+        public final String currency;
+        public final String orderId;
+        public final String description;
+        
+        public StripePaymentIntentRequest(double amount, String currency, String orderId, String description) {
+            this.amount = Math.round(amount * 100); // Convert to cents
+            this.currency = currency.toLowerCase();
+            this.orderId = orderId;
+            this.description = description;
+        }
+    }
+    
+    static class StripePaymentIntentResponse {
+        public String clientSecret;
+        public String paymentIntentId;
+    }
 
     @Override
     public PaymentMethod getPaymentMethod() {
@@ -40,24 +65,113 @@ public class StripeProcessor implements PaymentProcessor {
     public void processPayment(Context context, PaymentRequest request, PaymentCallback callback) {
         this.currentCallback = callback;
         
+        if (!(context instanceof FragmentActivity)) {
+            callback.onPaymentFailure(new PaymentResult(
+                PaymentResult.Status.FAILED,
+                "Stripe payment requires FragmentActivity context"
+            ));
+            return;
+        }
+        
+        FragmentActivity activity = (FragmentActivity) context;
+        
         // Initialize Stripe
         PaymentConfiguration.init(context, STRIPE_PUBLISHABLE_KEY);
-
-        // Create PaymentSheet if not exists
-        if (paymentSheet == null && context instanceof androidx.fragment.app.FragmentActivity) {
-            paymentSheet = new PaymentSheet(
-                (androidx.fragment.app.FragmentActivity) context, 
-                this::onPaymentSheetResult
-            );
+        
+        // Initialize PaymentSheet
+        paymentSheet = new PaymentSheet(activity, this::onPaymentSheetResult);
+        
+        // Initialize Retrofit for backend communication
+        if (stripeApiService == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BACKEND_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+            stripeApiService = retrofit.create(StripeApiService.class);
         }
-
-        // Fetch client secret and present payment sheet
+        
+        // Fetch client secret from backend
         fetchClientSecretAndPay(request);
+    }
+    
+    private void fetchClientSecretAndPay(PaymentRequest request) {
+        StripePaymentIntentRequest backendRequest = new StripePaymentIntentRequest(
+            request.getAmount(),
+            request.getCurrency(),
+            request.getOrderId(),
+            request.getDescription()
+        );
+        
+        Log.d(TAG, "Creating payment intent for amount: " + request.getAmount());
+        
+        stripeApiService.createPaymentIntent(backendRequest).enqueue(new Callback<StripePaymentIntentResponse>() {
+            @Override
+            public void onResponse(Call<StripePaymentIntentResponse> call, Response<StripePaymentIntentResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String clientSecret = response.body().clientSecret;
+                    Log.d(TAG, "Received client secret, presenting payment sheet");
+                    presentPaymentSheet(clientSecret);
+                } else {
+                    Log.e(TAG, "Failed to create payment intent: " + response.code());
+                    if (currentCallback != null) {
+                        currentCallback.onPaymentFailure(new PaymentResult(
+                            PaymentResult.Status.FAILED,
+                            "Failed to initialize Stripe payment"
+                        ));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StripePaymentIntentResponse> call, Throwable t) {
+                Log.e(TAG, "Network error creating payment intent", t);
+                if (currentCallback != null) {
+                    currentCallback.onPaymentFailure(new PaymentResult(
+                        PaymentResult.Status.FAILED,
+                        "Network error: " + t.getMessage()
+                    ));
+                }
+            }
+        });
+    }
+    
+    private void presentPaymentSheet(String clientSecret) {
+        PaymentSheet.Configuration configuration = new PaymentSheet.Configuration.Builder("Mobile Home Service")
+            .build();
+            
+        paymentSheet.presentWithPaymentIntent(clientSecret, configuration);
+    }
+    
+    private void onPaymentSheetResult(PaymentSheetResult paymentSheetResult) {
+        if (currentCallback == null) return;
+
+        if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
+            PaymentResult result = new PaymentResult(
+                PaymentResult.Status.SUCCESS,
+                "Stripe payment completed successfully",
+                "stripe_" + System.currentTimeMillis(),
+                null,
+                0.0
+            );
+            currentCallback.onPaymentSuccess(result);
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
+            currentCallback.onPaymentCancelled();
+        } else if (paymentSheetResult instanceof PaymentSheetResult.Failed) {
+            PaymentSheetResult.Failed failed = (PaymentSheetResult.Failed) paymentSheetResult;
+            PaymentResult result = new PaymentResult(
+                PaymentResult.Status.FAILED,
+                "Stripe payment failed: " + failed.getError().getLocalizedMessage(),
+                null,
+                null,
+                0.0
+            );
+            currentCallback.onPaymentFailure(result);
+        }
     }
 
     @Override
     public boolean isAvailable() {
-        return true; // Stripe is always available
+        return true;
     }
 
     @Override
@@ -67,62 +181,6 @@ public class StripeProcessor implements PaymentProcessor {
 
     @Override
     public void handlePaymentResult(String data, PaymentCallback callback) {
-        // Handle any external payment result if needed
-        // For Stripe, results are handled through PaymentSheet callback
-    }
-
-    private void fetchClientSecretAndPay(PaymentRequest request) {
-        // For now, we'll simulate a successful payment since the backend API needs to be configured
-        // In a real implementation, this would call the Stripe API endpoint
-        
-        // Simulate API call delay
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            if (currentCallback != null) {
-                PaymentResult result = new PaymentResult(
-                    PaymentResult.Status.SUCCESS,
-                    "Stripe payment completed successfully (simulated)",
-                    "stripe_" + System.currentTimeMillis(),
-                    request.getOrderId(),
-                    request.getAmount()
-                );
-                currentCallback.onPaymentSuccess(result);
-            }
-        }, 2000); // 2 second delay to simulate processing
-    }
-
-    private void presentPaymentSheet(String clientSecret) {
-        if (paymentSheet != null) {
-            PaymentSheet.Configuration configuration = new PaymentSheet.Configuration.Builder("Demo Store")
-                .build();
-                
-            paymentSheet.presentWithPaymentIntent(clientSecret, configuration);
-        }
-    }
-
-    private void onPaymentSheetResult(PaymentSheetResult paymentSheetResult) {
-        if (currentCallback == null) return;
-
-        if (paymentSheetResult instanceof PaymentSheetResult.Completed) {
-            PaymentResult result = new PaymentResult(
-                PaymentResult.Status.SUCCESS,
-                "Payment completed successfully",
-                "stripe_" + System.currentTimeMillis(),
-                null, // orderId will be set by the caller
-                0.0   // amount will be set by the caller
-            );
-            currentCallback.onPaymentSuccess(result);
-        } else if (paymentSheetResult instanceof PaymentSheetResult.Canceled) {
-            currentCallback.onPaymentCancelled();
-        } else if (paymentSheetResult instanceof PaymentSheetResult.Failed) {
-            PaymentSheetResult.Failed failed = (PaymentSheetResult.Failed) paymentSheetResult;
-            PaymentResult result = new PaymentResult(
-                PaymentResult.Status.FAILED,
-                "Payment failed: " + failed.getError().getLocalizedMessage(),
-                null,
-                null,
-                0.0
-            );
-            currentCallback.onPaymentFailure(result);
-        }
+        // Not needed for native PaymentSheet implementation
     }
 } 

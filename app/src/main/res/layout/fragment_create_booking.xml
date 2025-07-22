@@ -349,34 +349,127 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <!-- Time Selection -->
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
+                        android:id="@+id/layout_time_selection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp">
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:background="@drawable/rounded_border"
+                        android:layout_marginBottom="16dp">
 
-                        <LinearLayout
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📅 Select Date &amp; Time"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:id="@+id/tv_selected_date_display"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="12dp">
+                            android:text="Tomorrow at 10:00 AM"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            android:background="@drawable/rounded_border"
+                            android:padding="12dp"
+                            android:layout_marginBottom="8dp" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/select_time"
-                                android:textAppearance="?attr/textAppearanceSubtitle1"
-                                android:textColor="?attr/colorOnSurface"
-                                android:layout_marginBottom="8dp" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_select_date_time"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="📅 Select Date"
+                            android:layout_marginBottom="16dp" />
 
-                            <Spinner
-                                android:id="@+id/spinner_time_slot"
-                                android:layout_width="match_parent"
-                                android:layout_height="48dp"
-                                android:contentDescription="@string/select_time_description" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Available Time Slots:"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                        <Spinner
+                            android:id="@+id/spinner_time_slot"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@drawable/rounded_border"
+                            android:padding="12dp" />
+
+                    </LinearLayout>
+
+                    <!-- Staff Selection Section -->
+                    <LinearLayout
+                        android:id="@+id/layout_staff_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:background="@drawable/rounded_border"
+                        android:layout_marginBottom="16dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="👨‍🔧 Select Staff Member"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:id="@+id/tv_staff_instruction"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Choose from available staff for your selected time slot"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_marginBottom="12dp" />
+
+                        <!-- Selected Staff Display -->
+                        <TextView
+                            android:id="@+id/tv_selected_staff_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No staff selected"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            android:background="@drawable/rounded_border"
+                            android:padding="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:drawableStart="@drawable/ic_worker"
+                            android:drawablePadding="8dp"
+                            android:visibility="gone" />
+
+                        <!-- Staff RecyclerView -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_staff_selection"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- Loading and Empty States -->
+                        <ProgressBar
+                            android:id="@+id/progress_staff_loading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tv_no_staff_available"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="No staff available for selected time slot"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:gravity="center"
+                            android:padding="24dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -390,10 +483,10 @@
                 android:visibility="gone"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card"
-                app:layout_constraintTop_toBottomOf="@id/layout_select_date_time"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/layout_select_date_time"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -404,17 +497,17 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
                         android:text="@string/enter_address_instruction"
                         android:textAppearance="?attr/textAppearanceBody1"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:gravity="center"
-                        android:layout_marginBottom="16dp" />
+                        android:textColor="?attr/colorOnSurfaceVariant" />
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         app:errorEnabled="true"
                         app:helperText="@string/address_helper">
 
@@ -422,34 +515,178 @@
                             android:id="@+id/et_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/address_description"
                             android:hint="@string/enter_service_address"
-                            android:minLines="2"
-                            android:maxLines="3"
                             android:inputType="textMultiLine"
-                            android:contentDescription="@string/address_description" />
+                            android:maxLines="3"
+                            android:minLines="2" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         app:helperText="@string/special_instructions_helper">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_special_instructions"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:contentDescription="@string/special_instructions_description"
                             android:hint="@string/special_instructions_optional"
-                            android:minLines="2"
-                            android:maxLines="4"
                             android:inputType="textMultiLine"
-                            android:contentDescription="@string/special_instructions_description" />
+                            android:maxLines="4"
+                            android:minLines="2" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Map Selection Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
+
+                        <!-- Search Bar -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:hint="Search address">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_search_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPostalAddress"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Address Suggestions -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_address_suggestions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/rounded_border"
+                            android:clipToPadding="false"
+                            android:elevation="2dp"
+                            android:maxHeight="150dp"
+                            android:paddingVertical="4dp"
+                            android:visibility="gone" />
+
+                        <!-- Compact Map Container -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_marginBottom="8dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <com.google.android.gms.maps.MapView
+                                    android:id="@+id/map_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" />
+
+                                <ProgressBar
+                                    android:id="@+id/progress_map"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:visibility="gone" />
+
+                                <!-- Status overlay -->
+                                <TextView
+                                    android:id="@+id/tv_map_status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="top|center_horizontal"
+                                    android:layout_margin="8dp"
+                                    android:background="@android:color/white"
+                                    android:padding="4dp"
+                                    android:text="Map Loading..."
+                                    android:textColor="@android:color/black"
+                                    android:textSize="12sp" />
+
+                            </FrameLayout>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Location Controls -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_current_location"
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="4dp"
+                                android:layout_weight="1"
+                                android:text="📍 Current"
+                                android:textSize="12sp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btn_confirm_address"
+                                style="@style/Widget.Material3.Button"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1"
+                                android:enabled="false"
+                                android:text="✓ Use This"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <!-- Selected Address Display -->
+                        <TextView
+                            android:id="@+id/tv_selected_address_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/rounded_border"
+                            android:padding="8dp"
+                            android:text="Tap on map to select location"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                        <!-- Change Location Button (shown after map is hidden) -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_change_location"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="🗺️ Change Location"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <!-- Fragment Container for Address Selection -->
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/layout_enter_address"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Step 5: Payment Method -->
             <com.google.android.material.card.MaterialCardView
@@ -480,7 +717,6 @@
                         android:textAppearance="?attr/textAppearanceBody1"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <!-- Payment Method Selection -->
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -506,55 +742,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="48dp"
                                 android:contentDescription="@string/payment_method_description" />
-
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Payment Information -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp"
-                        app:cardBackgroundColor="?attr/colorSurfaceVariant">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="8dp"
-                                android:text="@string/payment_information"
-                                android:textAppearance="?attr/textAppearanceSubtitle2"
-                                android:textColor="?attr/colorOnSurface" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="• VNPay: Secure online payment gateway"
-                                android:textAppearance="?attr/textAppearanceBody2"
-                                android:textColor="?attr/colorOnSurfaceVariant"
-                                android:layout_marginBottom="4dp" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="• Stripe: International payment processing"
-                                android:textAppearance="?attr/textAppearanceBody2"
-                                android:textColor="?attr/colorOnSurfaceVariant"
-                                android:layout_marginBottom="4dp" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="• Cash: Pay on service completion"
-                                android:textAppearance="?attr/textAppearanceBody2"
-                                android:textColor="?attr/colorOnSurfaceVariant" />
 
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -837,6 +1024,59 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <!-- Payment Processing Overlay -->
+    <FrameLayout
+        android:id="@+id/paymentProcessingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="32dp"
+            android:elevation="8dp">
+
+            <ProgressBar
+                android:id="@+id/paymentProgressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:indeterminateTint="@android:color/holo_blue_bright" />
+
+            <TextView
+                android:id="@+id/paymentStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Processing payment..."
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/paymentSubStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Please wait while we process your payment"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
     <!-- Bottom Navigation Bar -->
     <com.google.android.material.card.MaterialCardView

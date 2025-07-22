@@ -9,6 +9,7 @@ import com.example.prm_project.data.repository.AuthRepository;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import javax.inject.Inject;
 import android.util.Log;
+import com.example.prm_project.data.model.User;
 
 @HiltViewModel
 public class AuthViewModel extends ViewModel {
@@ -22,6 +23,23 @@ public class AuthViewModel extends ViewModel {
     private MutableLiveData<Boolean> loginSuccess = new MutableLiveData<>();
     private MutableLiveData<Boolean> forgotPasswordSuccess = new MutableLiveData<>();
     private MutableLiveData<Boolean> resetPasswordSuccess = new MutableLiveData<>();
+    
+    private MutableLiveData<User> profileLiveData = new MutableLiveData<>();
+    public LiveData<User> getProfileLiveData() {
+        return profileLiveData;
+    }
+    public void loadProfile() {
+        authRepository.getProfile(new AuthRepository.AuthCallback<User>() {
+            @Override
+            public void onSuccess(User user) {
+                profileLiveData.postValue(user);
+            }
+            @Override
+            public void onError(String error) {
+                // Xử lý lỗi nếu cần
+            }
+        });
+    }
     
     /**
      * Constructor with dependency injection
@@ -177,7 +195,9 @@ public class AuthViewModel extends ViewModel {
             public void onError(String error) {
                 isLoading.setValue(false);
                 Log.e("Logout Error", error);
-                // Session is already cleared by AuthRepository
+                // Even if server logout fails, session is already cleared by AuthRepository
+                // So we still consider this a successful logout from user perspective
+                successMessage.setValue("Logged out successfully");
             }
         });
     }

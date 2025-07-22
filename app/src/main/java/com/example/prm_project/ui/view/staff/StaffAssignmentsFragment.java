@@ -33,7 +33,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class StaffAssignmentsFragment extends Fragment implements BookingAdapter.OnBookingClickListener {
 
-    private int currentStaffId;
     private AuthViewModel authViewModel;
     private BookingViewModel bookingViewModel;
 
@@ -44,7 +43,6 @@ public class StaffAssignmentsFragment extends Fragment implements BookingAdapter
     private TextView tvPendingCount, tvInProgressCount, tvCompletedCount;
 
     private BookingAdapter bookingAdapter;
-    private List<Booking> allBookings = new ArrayList<>();
     private List<Booking> staffBookings = new ArrayList<>();
 
     public StaffAssignmentsFragment() {
@@ -62,7 +60,6 @@ public class StaffAssignmentsFragment extends Fragment implements BookingAdapter
         bookingViewModel = new ViewModelProvider(this).get(BookingViewModel.class);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
-        currentStaffId = authViewModel.getUserId();
     }
 
     @Override
@@ -117,9 +114,9 @@ public class StaffAssignmentsFragment extends Fragment implements BookingAdapter
             @Override
             public void onChanged(List<Booking> bookings) {
                 if (bookings != null) {
-                    allBookings.clear();
-                    allBookings.addAll(bookings);
-                    filterStaffBookings();
+                    staffBookings.clear();
+                    staffBookings.addAll(bookings);
+                    updateBookingsDisplay();
                 }
             }
         });
@@ -149,37 +146,11 @@ public class StaffAssignmentsFragment extends Fragment implements BookingAdapter
     }
 
     private void loadBookings() {
-        // Load all bookings - we'll filter them client-side for staff assignments
-        bookingViewModel.loadAllBookings();
+        // Load staff-specific bookings from backend
+        bookingViewModel.loadStaffBookings();
     }
 
-    private void filterStaffBookings() {
-        staffBookings.clear();
 
-        if (currentStaffId == -1) {
-            showError("Staff user ID not available");
-            updateBookingsDisplay();
-            return;
-        }
-
-        // Filter bookings assigned to current staff member
-        for (Booking booking : allBookings) {
-            if (isBookingAssignedToCurrentStaff(booking)) {
-                staffBookings.add(booking);
-            }
-        }
-
-        updateBookingsDisplay();
-    }
-
-    private boolean isBookingAssignedToCurrentStaff(Booking booking) {
-        // Check if booking is assigned to current staff member
-        if (booking.getStaff() != null &&
-                booking.getStaff().getId() == currentStaffId) {
-            return true;
-        }
-        return false;
-    }
 
     private void updateBookingsDisplay() {
         bookingAdapter.updateBookings(staffBookings);
@@ -189,7 +160,7 @@ public class StaffAssignmentsFragment extends Fragment implements BookingAdapter
 
 
     private void updateEmptyState() {
-        if (allBookings.isEmpty()) {
+        if (staffBookings.isEmpty()) {
             emptyStateLayout.setVisibility(View.VISIBLE);
             lvBookings.setVisibility(View.GONE);
         } else {
@@ -238,16 +209,16 @@ public class StaffAssignmentsFragment extends Fragment implements BookingAdapter
                     .setItems(filterOptions, (dialog, which) -> {
                         switch (which) {
                             case 0: // Pending
-                                bookingViewModel.loadBookingsByStatus(BookingStatus.AUTO_ASSIGNED);
+                                bookingViewModel.loadStaffBookingsByStatus(BookingStatus.AUTO_ASSIGNED);
                                 break;
                             case 1: // Confirmed
-                                bookingViewModel.loadBookingsByStatus(BookingStatus.CONFIRMED);
+                                bookingViewModel.loadStaffBookingsByStatus(BookingStatus.CONFIRMED);
                                 break;
                             case 2: // Completed
-                                bookingViewModel.loadBookingsByStatus(BookingStatus.COMPLETED);
+                                bookingViewModel.loadStaffBookingsByStatus(BookingStatus.COMPLETED);
                                 break;
                             default:
-                                bookingViewModel.loadAllBookings();
+                                bookingViewModel.loadStaffBookings();
                                 break;
                         }
                     })

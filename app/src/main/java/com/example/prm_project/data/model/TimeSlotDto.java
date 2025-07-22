@@ -20,12 +20,12 @@ public class TimeSlotDto {
     private boolean isAvailable;
     
     @SerializedName("availableStaff")
-    private List<StaffAvailabilityDto> availableStaff;
+    private List<StaffAvailabilityResponse> availableStaff;
 
     // Constructors
     public TimeSlotDto() {}
 
-    public TimeSlotDto(String startTime, String endTime, String displayTime, String date, boolean isAvailable, List<StaffAvailabilityDto> availableStaff) {
+    public TimeSlotDto(String startTime, String endTime, String displayTime, String date, boolean isAvailable, List<StaffAvailabilityResponse> availableStaff) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.displayTime = displayTime;
@@ -75,11 +75,11 @@ public class TimeSlotDto {
         isAvailable = available;
     }
 
-    public List<StaffAvailabilityDto> getAvailableStaff() {
+    public List<StaffAvailabilityResponse> getAvailableStaff() {
         return availableStaff;
     }
 
-    public void setAvailableStaff(List<StaffAvailabilityDto> availableStaff) {
+    public void setAvailableStaff(List<StaffAvailabilityResponse> availableStaff) {
         this.availableStaff = availableStaff;
     }
 } 

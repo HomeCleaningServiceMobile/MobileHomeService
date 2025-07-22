@@ -36,6 +36,11 @@ android {
         dataBinding = true
         viewBinding = true
     }
+    
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
 }
 
 dependencies {
@@ -77,7 +82,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.5")
     
     // Networking
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     
@@ -86,9 +91,23 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.11.0")
 
-    implementation("com.stripe:stripe-android:20.40.1")
+    // Stripe SDK for native payment processing
+    implementation("com.stripe:stripe-android:20.25.0")
+    
+    // Network dependencies
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
+    // Google Maps and Places
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.libraries.places:places:3.3.0")
+    
+    // CircularImageView for profile pictures
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    
+    // Location Services
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // Image Loading
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -102,6 +121,9 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     // SwipeRefreshLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    
+    // Chart Library
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

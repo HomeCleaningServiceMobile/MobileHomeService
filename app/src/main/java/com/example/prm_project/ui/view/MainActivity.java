@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         // Handle role-based navigation if user is already logged in
         handleInitialNavigation();
         
+        // Handle payment callback navigation
+        handlePaymentCallbackNavigation();
+        
         // Listen for navigation changes to show/hide bottom nav
         observeNavigation();
     }
@@ -107,6 +110,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         // If not logged in, navigation will stay at loginFragment (default start destination)
+    }
+    
+    private void handlePaymentCallbackNavigation() {
+        // Check if the intent contains payment callback data
+        if (getIntent().hasExtra("navigate_to")) {
+            String navigateTo = getIntent().getStringExtra("navigate_to");
+            
+            if ("payment_success".equals(navigateTo)) {
+                // Navigate to success screen after a short delay to ensure navigation is ready
+                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                    if (navController != null) {
+                        try {
+                            navController.navigate(R.id.paymentSuccessFragment);
+                        } catch (Exception e) {
+                            android.util.Log.e("MainActivity", "Failed to navigate to payment success", e);
+                        }
+                    }
+                }, 500);
+            } else if ("payment_failure".equals(navigateTo)) {
+                // Navigate to failure screen after a short delay
+                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                    if (navController != null) {
+                        try {
+                            navController.navigate(R.id.paymentFailureFragment);
+                        } catch (Exception e) {
+                            android.util.Log.e("MainActivity", "Failed to navigate to payment failure", e);
+                        }
+                    }
+                }, 500);
+            }
+        }
     }
     
     @Override
