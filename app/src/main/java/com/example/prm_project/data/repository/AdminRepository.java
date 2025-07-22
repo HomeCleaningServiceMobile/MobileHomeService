@@ -7,21 +7,34 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.prm_project.data.model.AdminCreateStaffRequest;
+import com.example.prm_project.data.model.AdminServiceCreateRequest;
+import com.example.prm_project.data.model.AdminServiceCreateResponse;
+import com.example.prm_project.data.model.AdminServiceListResponse;
+import com.example.prm_project.data.model.AdminServiceUpdateRequest;
 import com.example.prm_project.data.model.AdminStaffDetailResponse;
 import com.example.prm_project.data.model.AdminStaffListResponse;
 import com.example.prm_project.data.model.AdminStaffUpdateRequest;
 import com.example.prm_project.data.model.AdminUpdateStaffResponse;
 import com.example.prm_project.data.remote.ManageStaffApi;
+import com.example.prm_project.data.remote.RetrofitClient;
+import com.example.prm_project.data.remote.ServiceApi;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Repository cho các chức năng admin
+ * Quản lý staff và services
+ */
 public class AdminRepository {
+    private static final String TAG = "AdminRepository";
     private final ManageStaffApi manageStaffApi;
+    private final ServiceApi serviceApi;
 
     public AdminRepository(ManageStaffApi manageStaffApi) {
         this.manageStaffApi = manageStaffApi;
+        this.serviceApi = RetrofitClient.getInstance().create(ServiceApi.class);
     }
 
     /**
@@ -45,7 +58,7 @@ public class AdminRepository {
                 null,          // SortBy
                 null,          // SortDescending
                 1,             // PageNumber
-                10,            // PageSize
+                Integer.MAX_VALUE,            // PageSize
                 null           // Skip
                 ).enqueue(new Callback<AdminStaffListResponse>() {
             @Override
@@ -162,6 +175,143 @@ public class AdminRepository {
             }
         });
 
+        return result;
+    }
+
+    /**
+     * Lấy danh sách services cho admin
+     * @param token Bearer token
+     * @param pageNumber Số trang
+     * @param pageSize Số items mỗi trang
+     * @return MutableLiveData với AdminServiceListResponse
+     */
+    public MutableLiveData<AdminServiceListResponse> getServiceList(String token, Integer pageNumber, Integer pageSize) {
+        MutableLiveData<AdminServiceListResponse> result = new MutableLiveData<>();
+        
+        Call<AdminServiceListResponse> call = serviceApi.getServiceList("Bearer " + token, pageNumber, pageSize);
+        call.enqueue(new Callback<AdminServiceListResponse>() {
+            @Override
+            public void onResponse(Call<AdminServiceListResponse> call, Response<AdminServiceListResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "Service list loaded successfully");
+                    result.setValue(response.body());
+                } else {
+                    Log.e(TAG, "Failed to load service list: " + response.code());
+                    AdminServiceListResponse failResponse = new AdminServiceListResponse();
+                    failResponse.setSucceeded(false);
+                    result.setValue(failResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AdminServiceListResponse> call, Throwable t) {
+                Log.e(TAG, "Error loading service list: " + t.getMessage());
+                AdminServiceListResponse failResponse = new AdminServiceListResponse();
+                failResponse.setSucceeded(false);
+                result.setValue(failResponse);
+            }
+        });
+
+        return result;
+    }
+
+    /**
+     * Tạo mới service (admin)
+     * @param token Bearer token
+     * @param request Thông tin service cần tạo
+     * @return MutableLiveData với AdminServiceCreateResponse
+     */
+    public MutableLiveData<AdminServiceCreateResponse> addService(String token, AdminServiceCreateRequest request) {
+        MutableLiveData<AdminServiceCreateResponse> result = new MutableLiveData<>();
+        Call<AdminServiceCreateResponse> call = serviceApi.addService("Bearer " + token, request);
+        call.enqueue(new Callback<AdminServiceCreateResponse>() {
+            @Override
+            public void onResponse(Call<AdminServiceCreateResponse> call, Response<AdminServiceCreateResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.setValue(response.body());
+                } else {
+                    result.setValue(null);
+                }
+            }
+            @Override
+            public void onFailure(Call<AdminServiceCreateResponse> call, Throwable t) {
+                Log.e(TAG, "Add service failed", t);
+                result.setValue(null);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * Lấy chi tiết service theo id (dùng GET)
+     */
+    public MutableLiveData<AdminServiceCreateResponse> getServiceDetail(String token, int serviceId) {
+        MutableLiveData<AdminServiceCreateResponse> result = new MutableLiveData<>();
+        Call<AdminServiceCreateResponse> call = serviceApi.getServiceById(serviceId, "Bearer " + token);
+        call.enqueue(new Callback<AdminServiceCreateResponse>() {
+            @Override
+            public void onResponse(Call<AdminServiceCreateResponse> call, Response<AdminServiceCreateResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.setValue(response.body());
+                } else {
+                    result.setValue(null);
+                }
+            }
+            @Override
+            public void onFailure(Call<AdminServiceCreateResponse> call, Throwable t) {
+                Log.e(TAG, "Get service detail failed", t);
+                result.setValue(null);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * Cập nhật service
+     */
+    public MutableLiveData<AdminServiceCreateResponse> updateService(String token, int serviceId, AdminServiceUpdateRequest request) {
+        MutableLiveData<AdminServiceCreateResponse> result = new MutableLiveData<>();
+        Call<AdminServiceCreateResponse> call = serviceApi.updateService(serviceId, "Bearer " + token, request);
+        call.enqueue(new Callback<AdminServiceCreateResponse>() {
+            @Override
+            public void onResponse(Call<AdminServiceCreateResponse> call, Response<AdminServiceCreateResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.setValue(response.body());
+                } else {
+                    result.setValue(null);
+                }
+            }
+            @Override
+            public void onFailure(Call<AdminServiceCreateResponse> call, Throwable t) {
+                Log.e(TAG, "Update service failed", t);
+                result.setValue(null);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * Xóa service theo id
+     */
+    public MutableLiveData<AdminServiceCreateResponse> deleteService(String token, int serviceId) {
+        Log.d(TAG, "Calling deleteService API with id: " + serviceId);
+        MutableLiveData<AdminServiceCreateResponse> result = new MutableLiveData<>();
+        Call<AdminServiceCreateResponse> call = serviceApi.deleteService(serviceId, "Bearer " + token);
+        call.enqueue(new Callback<AdminServiceCreateResponse>() {
+            @Override
+            public void onResponse(Call<AdminServiceCreateResponse> call, Response<AdminServiceCreateResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.setValue(response.body());
+                } else {
+                    result.setValue(null);
+                }
+            }
+            @Override
+            public void onFailure(Call<AdminServiceCreateResponse> call, Throwable t) {
+                Log.e(TAG, "Delete service failed", t);
+                result.setValue(null);
+            }
+        });
         return result;
     }
 }

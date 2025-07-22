@@ -39,6 +39,7 @@ public class AdminFragment extends Fragment {
         initializeComponents();
 
         setupManageStaffButton();
+        setupManageServiceButton();
 
         // Observe ViewModel
         observeViewModel();
@@ -48,6 +49,13 @@ public class AdminFragment extends Fragment {
         binding.btnManageStaff.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(requireView());
             navController.navigate(R.id.action_adminFragment_to_manageStaffFragment);
+        });
+    }
+    
+    private void setupManageServiceButton() {
+        binding.btnManageService.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireView());
+            navController.navigate(R.id.action_adminFragment_to_adminServiceListFragment);
         });
     }
     
