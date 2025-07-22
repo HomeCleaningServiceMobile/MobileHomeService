@@ -72,7 +72,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.5")
     
     // Networking
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     
@@ -81,7 +81,12 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.11.0")
 
-    implementation("com.stripe:stripe-android:20.40.1")
+    // Stripe SDK for native payment processing
+    implementation("com.stripe:stripe-android:20.25.0")
+    
+    // Network dependencies
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // Google Maps and Places
