@@ -111,4 +111,12 @@ public class ApiResponse<T> {
         }
         return null;
     }
+
+    public String getMessage() {
+        if (isSucceeded) {
+            return getFirstSuccessMessage();
+        } else {
+            return getFirstErrorMessage();
+        }
+    }
 }

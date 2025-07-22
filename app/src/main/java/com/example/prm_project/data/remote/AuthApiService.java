@@ -8,6 +8,9 @@ public interface AuthApiService {
     
     @POST("login")
     Call<ApiResponse<AuthResponse>> login(@Body LoginRequest loginRequest);
+
+    @POST("google-login")
+    Call<ApiResponse<GoogleLoginResponse>> googleLogin(@Body GoogleLoginRequest request);
     
     @POST("register/customer")
     Call<ApiResponse<AuthResponse>> registerCustomer(@Body CustomerRegistrationRequest customerRequest);
