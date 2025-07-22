@@ -35,6 +35,61 @@ public class BookingRepository {
     public BookingRepository(BookingApiService bookingApiService) {
         this.bookingApiService = bookingApiService;
     }
+    public void respondToBooking(int bookingId, StaffResponseRequest request) {
+        loadingLiveData.setValue(true);
+        bookingApiService.respondToBooking(bookingId, request).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                loadingLiveData.setValue(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        // Handle success
+                        String message = request.isAccept() ?
+                                "Booking accepted successfully!" :
+                                "Booking declined successfully!";
+                        successLiveData.setValue(message);
+                        // Refresh bookings list
+                        getBookings(null, null, null, 1, 10);
+                    } else {
+                        // Handle API error
+                        errorLiveData.setValue(apiResponse.getFirstErrorMessage());
+                    }
+                } else {
+                    // Handle HTTP error
+                    errorLiveData.setValue("Failed to response to booking");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue("Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    // Accept booking - convenience method
+    public void acceptBooking(int bookingId) {
+        StaffResponseRequest request = new StaffResponseRequest();
+        request.setBookingId(bookingId);
+        request.setAccept(true);
+        request.setDeclineReason(null);
+        respondToBooking(bookingId, request);
+    }
+
+    // Decline booking - convenience method
+    public void declineBooking(int bookingId, String declineReason) {
+        StaffResponseRequest request = new StaffResponseRequest();
+        request.setBookingId(bookingId);
+        request.setAccept(false);
+        request.setDeclineReason(declineReason);
+        respondToBooking(bookingId, request);
+    }
+
+
+
 
     // Create new booking
     public void createBooking(CreateBookingRequest request) {
@@ -373,6 +428,7 @@ public class BookingRepository {
             errorLiveData.postValue("Error loading time slotshehehe: " + e.getMessage());
         }
     }
+
     // LiveData getters for UI observation
     public LiveData<List<Booking>> getBookingsLiveData() {
         return bookingsLiveData;

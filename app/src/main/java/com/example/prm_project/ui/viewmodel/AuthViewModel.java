@@ -299,7 +299,10 @@ public class AuthViewModel extends ViewModel {
     public String getUserEmail() {
         return authRepository.getUserEmail();
     }
-    
+
+    public int getUserId() {
+        return authRepository.getUserId();
+    }
     /**
      * Check if current user is customer
      */

@@ -752,4 +752,20 @@ public class BookingViewModel extends ViewModel {
         PAYMENT_METHOD,
         REVIEW_BOOKING
     }
+
+    public void respondToBooking(int bookingId, StaffResponseRequest request) {
+        bookingRepository.respondToBooking(bookingId, request);
+    }
+
+    public void acceptBooking(int bookingId) {
+        bookingRepository.acceptBooking(bookingId);
+    }
+
+    public void declineBooking(int bookingId, String declineReason) {
+        bookingRepository.declineBooking(bookingId, declineReason);
+    }
+
+    public void updateBookingStatus(int bookingId, BookingStatus status) {
+        bookingRepository.updateBookingStatus(bookingId, status);
+    }
 } 
