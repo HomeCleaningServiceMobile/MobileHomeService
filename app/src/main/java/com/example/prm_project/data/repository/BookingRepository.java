@@ -176,6 +176,34 @@ public class BookingRepository {
         });
     }
 
+    // Get staff bookings (backend will use UserId from token to get StaffId)
+    public void getStaffBookings(Integer status, String startDate, String endDate, Integer pageNumber, Integer pageSize) {
+        loadingLiveData.setValue(true);
+        bookingApiService.getStaffBookings(status, startDate, endDate, pageNumber, pageSize)
+                .enqueue(new Callback<ApiResponse<List<Booking>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Booking>>> call, Response<ApiResponse<List<Booking>>> response) {
+                loadingLiveData.setValue(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<List<Booking>> apiResponse = response.body();
+                    if (apiResponse.isSucceeded()) {
+                        bookingsLiveData.setValue(apiResponse.getData());
+                    } else {
+                        errorLiveData.setValue("Failed to load staff bookings");
+                    }
+                } else {
+                    errorLiveData.setValue("Failed to load staff bookings");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Booking>>> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                errorLiveData.setValue("Network error: " + t.getMessage());
+            }
+        });
+    }
+
     // Update booking
     public void updateBooking(int bookingId, CreateBookingRequest request) {
         loadingLiveData.setValue(true);
