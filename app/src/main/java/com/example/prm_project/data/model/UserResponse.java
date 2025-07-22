@@ -8,6 +8,7 @@ public class UserResponse {
     private String phoneNumber;
     private String role;
     private String status;
+    private String createdAt;
     private String profileImageUrl;
 
     public int getId() {
@@ -32,6 +33,27 @@ public class UserResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    public void setFullName(String fullName) {
+        if (fullName == null || fullName.trim().isEmpty()) {
+            this.firstName = "";
+            this.lastName = "";
+            return;
+        }
+
+        String[] parts = fullName.trim().split("\\s+");
+        if (parts.length == 1) {
+            this.firstName = parts[0];
+            this.lastName = "";
+        } else {
+            this.firstName = parts[0];
+            this.lastName = String.join(" ", java.util.Arrays.copyOfRange(parts, 1, parts.length));
+        }
     }
 
     public String getEmail() {
@@ -72,5 +94,13 @@ public class UserResponse {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

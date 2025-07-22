@@ -112,6 +112,23 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public void setFullName(String fullName) {
+        if (fullName == null || fullName.trim().isEmpty()) {
+            this.firstName = "";
+            this.lastName = "";
+            return;
+        }
+
+        String[] parts = fullName.trim().split("\\s+");
+        if (parts.length == 1) {
+            this.firstName = parts[0];
+            this.lastName = "";
+        } else {
+            this.firstName = parts[0];
+            this.lastName = String.join(" ", java.util.Arrays.copyOfRange(parts, 1, parts.length));
+        }
+    }
     
     public String getEmail() {
         return email;

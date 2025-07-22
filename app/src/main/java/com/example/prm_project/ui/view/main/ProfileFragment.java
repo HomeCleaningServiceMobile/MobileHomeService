@@ -1,5 +1,6 @@
 package com.example.prm_project.ui.view.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.navigation.Navigation;
 
 import com.example.prm_project.R;
 import com.example.prm_project.databinding.FragmentProfileBinding;
+import com.example.prm_project.ui.view.auth.LoginFragment;
 import com.example.prm_project.ui.viewmodel.AuthViewModel;
 import com.example.prm_project.ui.viewmodel.MainViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -75,16 +77,20 @@ public class ProfileFragment extends Fragment {
             showToast("Help & Support - Coming Soon!");
         });
     }
-    
+
     private void loadUserProfile() {
-        // TODO: Load actual user data from SharedPreferences or API
-        // For now, showing placeholder data
-        binding.tvUserName.setText("John Doe");
-        binding.tvUserEmail.setText("john.doe@email.com");
-        binding.tvUserPhone.setText("+1 234 567 8900");
-        binding.tvMemberSince.setText("Member since Jan 2024");
+        mainViewModel.getProfile().observe(getViewLifecycleOwner(), profile -> {
+            if (profile != null) {
+                binding.tvUserName.setText(profile.getFullName());
+                binding.tvUserEmail.setText(profile.getEmail());
+                binding.tvUserPhone.setText(profile.getPhoneNumber() != null ? profile.getPhoneNumber() : "N/A");
+                binding.tvMemberSince.setText("Member since " + profile.getCreatedAt());
+            }
+        });
+
+        mainViewModel.loadUserProfile(); // Trigger API call
     }
-    
+
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
@@ -92,7 +98,7 @@ public class ProfileFragment extends Fragment {
     private void observeViewModels() {
         // Observe auth view model for logout
         authViewModel.getSuccessMessage().observe(getViewLifecycleOwner(), successMessage -> {
-            if (successMessage != null && !successMessage.isEmpty() && successMessage.contains("Logged out")) {
+            if (successMessage != null && successMessage.contains("Logged out")) {
                 showToast("Logged out successfully!");
                 // Navigate back to login
                 NavController navController = Navigation.findNavController(requireView());
