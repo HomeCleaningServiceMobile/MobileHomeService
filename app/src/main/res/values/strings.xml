@@ -291,4 +291,6 @@
     <string name="special_instructions_helper">Optional: Add any special instructions</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="payment_success_icon">Payment Success Icon</string>
+    <string name="payment_failure_icon">Payment Failure Icon</string>
 </resources>

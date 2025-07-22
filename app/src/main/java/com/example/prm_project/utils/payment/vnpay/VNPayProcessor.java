@@ -50,7 +50,7 @@ public class VNPayProcessor implements PaymentProcessor {
                     VNPayResponse vnpayResponse = response.body();
 
                     if (vnpayResponse.isSuccess() && vnpayResponse.getPaymentUrl() != null) {
-                        // Open VNPay payment URL in WebView
+                        // Open VNPay payment URL in WebView with deep link callback support
                         if (context instanceof Activity) {
                             Intent intent = new Intent(context, PaymentWebViewActivity.class);
                             intent.putExtra("payment_url", vnpayResponse.getPaymentUrl());
@@ -61,7 +61,7 @@ public class VNPayProcessor implements PaymentProcessor {
                             // Store callback for later use
                             PaymentCallbackManager.getInstance().setCallback(callback);
                             
-                            Log.d(TAG, "VNPay payment initiated successfully via WebView");
+                            Log.d(TAG, "VNPay payment initiated successfully via WebView with deep link support");
                         } else {
                             Log.e(TAG, "Context is not an Activity: " + context.getClass().getSimpleName());
                             callback.onPaymentFailure(new PaymentResult(

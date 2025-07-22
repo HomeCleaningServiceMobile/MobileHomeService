@@ -1025,6 +1025,59 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <!-- Payment Processing Overlay -->
+    <FrameLayout
+        android:id="@+id/paymentProcessingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="32dp"
+            android:elevation="8dp">
+
+            <ProgressBar
+                android:id="@+id/paymentProgressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:indeterminateTint="@android:color/holo_blue_bright" />
+
+            <TextView
+                android:id="@+id/paymentStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Processing payment..."
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/paymentSubStatusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Please wait while we process your payment"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
     <!-- Bottom Navigation Bar -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottom_navigation"

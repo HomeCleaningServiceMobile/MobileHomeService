@@ -19,13 +19,13 @@ public class VNPayRequest extends PaymentRequest {
     @SerializedName("ipAddr")
     private String ipAddr;
 
-    public VNPayRequest(double amount, String orderId, String description) {
-        super(amount, "USD", orderId, description); // API expects USD amount
-        this.orderInfo = description;
+    public VNPayRequest(double amount, String orderId, String orderInfo) {
+        super(amount, "VND", orderId, orderInfo); // Call parent constructor
+        this.orderInfo = orderInfo;
         this.orderType = "billpayment";
         this.locale = "vn";
-        this.returnUrl = "mobilehomeservice://payment/result"; // Deep link for mobile app
-        this.ipAddr = "127.0.0.1"; // Will be set by backend
+        this.returnUrl = "vnpay://return"; // Use deep link with host to match manifest
+        this.ipAddr = "127.0.0.1";
     }
 
     // Getters
