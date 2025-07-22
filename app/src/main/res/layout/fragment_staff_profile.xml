@@ -47,6 +47,7 @@
 
             <!-- Staff Name -->
             <TextView
+                android:id="@+id/tvStaffName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -58,6 +59,7 @@
 
             <!-- Staff Role -->
             <TextView
+                android:id="@+id/tvStaffRole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Senior Service Staff"
@@ -196,6 +198,7 @@
                     app:tint="@color/orange_500" />
 
                 <TextView
+                    android:id="@+id/tvProfileEmail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -221,6 +224,7 @@
                     app:tint="@color/orange_500" />
 
                 <TextView
+                    android:id="@+id/tvProfilePhone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -246,6 +250,7 @@
                     app:tint="@color/orange_500" />
 
                 <TextView
+                    android:id="@+id/tvProfileSkills"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -271,6 +276,7 @@
                     app:tint="@color/orange_500" />
 
                 <TextView
+                    android:id="@+id/tvProfileExperience"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

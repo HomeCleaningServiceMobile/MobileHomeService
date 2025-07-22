@@ -127,10 +127,9 @@ public interface BookingApiService {
         @Query("pageSize") Integer pageSize
     );
     
-    // Get staff bookings
-    @GET("booking/staff/{staffId}")
+    // Get staff bookings (backend will use UserId from token to get StaffId)
+    @GET("booking/staff")
     Call<ApiResponse<List<Booking>>> getStaffBookings(
-        @Path("staffId") int staffId,
         @Query("status") Integer status,
         @Query("startDate") String startDate,
         @Query("endDate") String endDate,

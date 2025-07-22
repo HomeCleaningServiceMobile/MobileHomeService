@@ -152,6 +152,14 @@ public class BookingViewModel extends ViewModel {
         bookingRepository.getAllBookings();
     }
 
+    public void loadStaffBookings() {
+        bookingRepository.getStaffBookings(null, null, null, 1, 10);
+    }
+
+    public void loadStaffBookingsByStatus(BookingStatus status) {
+        bookingRepository.getStaffBookings(status.getValue(), null, null, 1, 10);
+    }
+
     public void loadBookingsByStatus(BookingStatus status) {
         bookingRepository.getBookingsByStatus(status);
     }
