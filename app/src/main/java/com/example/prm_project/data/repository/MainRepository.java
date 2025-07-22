@@ -263,7 +263,6 @@ public class MainRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     ApiResponse<String> apiResponse = response.body();
                     if (apiResponse.isSucceeded()) {
-                        // ✅ Clear local cache/session only after successful logout
                         localDataSource.clearCache();
                         callback.onSuccess(apiResponse.getData() != null
                                 ? apiResponse.getData()
@@ -277,7 +276,7 @@ public class MainRepository {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<String>> call, Throwable t) { // ✅ Correct type
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 callback.onError("Network error: " + t.getMessage());
             }
         });
