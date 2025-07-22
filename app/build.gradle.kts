@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -44,6 +45,10 @@ dependencies {
     implementation(libs.constraintlayout)
     
     // MVVM Architecture Components
+    implementation ("com.google.android.gms:play-services-auth:21.2.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
+    implementation ("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.7")
     implementation("androidx.lifecycle:lifecycle-livedata:2.8.7")
     implementation("androidx.lifecycle:lifecycle-common-java8:2.8.7")

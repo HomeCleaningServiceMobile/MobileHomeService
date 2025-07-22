@@ -204,7 +204,37 @@ public class AuthRepository {
             }
         });
     }
-    
+
+    public void googleLogin(String email, String fullName, String profileImageUrl, AuthCallback<GoogleLoginResponse> callback) {
+        GoogleLoginRequest request = new GoogleLoginRequest(email, fullName, profileImageUrl);
+
+        Call<ApiResponse<GoogleLoginResponse>> call = authApiService.googleLogin(request);
+
+        call.enqueue(new Callback<ApiResponse<GoogleLoginResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<GoogleLoginResponse>> call,
+                                   Response<ApiResponse<GoogleLoginResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse<GoogleLoginResponse> apiResponse = response.body();
+                    if (apiResponse.isSucceeded() && apiResponse.getData() != null) {
+                        callback.onSuccess(apiResponse.getData());
+                    } else {
+                        callback.onError(apiResponse.getMessage());
+                    }
+                } else {
+                    callback.onError("Google login failed. Try again.");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<GoogleLoginResponse>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+
+
+
     /**
      * Update profile - No manual token needed! AuthInterceptor handles it
      */
