@@ -73,7 +73,8 @@ public class Booking {
     
     @SerializedName("staff")
     private Staff staff;
-    
+    @SerializedName("bookingStaff")
+    private BookingStaff bookingStaff;
     @SerializedName("payment")
     private Payment payment;
     
@@ -173,7 +174,13 @@ public class Booking {
 
     public Staff getStaff() { return staff; }
     public void setStaff(Staff staff) { this.staff = staff; }
+    public BookingStaff getBookingStaff() {
+        return bookingStaff;
+    }
 
+    public void setBookingStaff(BookingStaff bookingStaff) {
+        this.bookingStaff = bookingStaff;
+    }
     public Payment getPayment() { return payment; }
     public void setPayment(Payment payment) { this.payment = payment; }
 

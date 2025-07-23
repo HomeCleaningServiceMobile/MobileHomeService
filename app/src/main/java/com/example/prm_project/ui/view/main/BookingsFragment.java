@@ -8,6 +8,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.prm_project.R;
 import com.example.prm_project.data.model.Booking;
+import com.example.prm_project.data.model.BookingStaff;
 import com.example.prm_project.data.model.BookingStatus;
 import com.example.prm_project.databinding.FragmentBookingsBinding;
 import com.example.prm_project.ui.viewmodel.CustomerBookingViewModel;
@@ -34,15 +37,20 @@ public class BookingsFragment extends Fragment {
     private CustomerBookingViewModel bookingViewModel;
     private BookingsPagerAdapter pagerAdapter;
     private boolean isSearchVisible = false;
+    private boolean isFilterSortVisible = false;
     private String currentSearchQuery = "";
+    private String currentSortBy = "ScheduledDate";
+    private String currentSortDirection = "Descending";
+    private String currentStatusFilter = null;
     
     // Tab titles and their corresponding filters
     private static final String[] TAB_TITLES = {
-        "All", "Upcoming", "In Progress", "Completed", "Cancelled"
+        "All", "Assigned", "Upcoming", "In Progress", "Completed", "Cancelled"
     };
     
     private static final String[] TAB_STATUS_FILTERS = {
         null, // All bookings
+        "AutoAssigned", // Assigned (auto-assigned bookings)
         "Confirmed", // Upcoming (confirmed bookings)
         "InProgress", // In Progress
         "Completed", // Completed
@@ -65,6 +73,7 @@ public class BookingsFragment extends Fragment {
         // Setup UI components
         setupViewPager();
         setupSearchFunctionality();
+        setupFilterAndSort();
         setupObservers();
         
         // Load initial data
@@ -84,6 +93,7 @@ public class BookingsFragment extends Fragment {
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                updateStatusFilterForTab(tab.getPosition());
                 loadBookingsForTab(tab.getPosition());
             }
             
@@ -126,10 +136,101 @@ public class BookingsFragment extends Fragment {
             }
         });
         
-        // Filter button (placeholder for now)
-        binding.btnFilter.setOnClickListener(v -> {
-            showToast("Advanced filters coming soon!");
+        // Filter button 
+        binding.btnFilter.setOnClickListener(v -> toggleFilterSortVisibility());
+        
+        // Sort button
+        binding.btnSort.setOnClickListener(v -> toggleFilterSortVisibility());
+    }
+    
+    private void setupFilterAndSort() {
+        // Setup Sort Spinner
+        String[] sortOptions = {"Date Scheduled", "Date Created", "Total Price", "Service Name", "Status"};
+        ArrayAdapter<String> sortAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sortOptions);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerSort.setAdapter(sortAdapter);
+        binding.spinnerSort.setSelection(0); // Default to "Date Scheduled"
+        
+        binding.spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: currentSortBy = "ScheduledDate"; break;
+                    case 1: currentSortBy = "CreatedDate"; break;
+                    case 2: currentSortBy = "TotalPrice"; break;
+                    case 3: currentSortBy = "ServiceName"; break;
+                    case 4: currentSortBy = "Status"; break;
+                }
+            }
+            
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
+        
+        // Setup Status Filter Spinner
+        String[] statusOptions = {"All Statuses", "Pending", "Auto Assigned", "Confirmed", "In Progress", "Completed", "Cancelled"};
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, statusOptions);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerStatus.setAdapter(statusAdapter);
+        
+        binding.spinnerStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: currentStatusFilter = null; break;
+                    case 1: currentStatusFilter = "Pending"; break;
+                    case 2: currentStatusFilter = "AutoAssigned"; break;
+                    case 3: currentStatusFilter = "Confirmed"; break;
+                    case 4: currentStatusFilter = "InProgress"; break;
+                    case 5: currentStatusFilter = "Completed"; break;
+                    case 6: currentStatusFilter = "Cancelled"; break;
+                }
+            }
+            
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        
+        // Sort Direction Button
+        binding.btnSortDirection.setOnClickListener(v -> {
+            if ("DESC".equals(v.getTag())) {
+                currentSortDirection = "Ascending";
+                v.setTag("ASC");
+                binding.btnSortDirection.setImageResource(R.drawable.ic_arrow_upward);
+            } else {
+                currentSortDirection = "Descending";
+                v.setTag("DESC");
+                binding.btnSortDirection.setImageResource(R.drawable.ic_arrow_downward);
+            }
+        });
+        
+        // Apply Filters Button
+        binding.btnApplyFilters.setOnClickListener(v -> {
+            loadBookingsWithCurrentFilters();
+            // Optionally hide the filter panel after applying
+            // toggleFilterSortVisibility();
+        });
+    }
+    
+    private void toggleFilterSortVisibility() {
+        isFilterSortVisible = !isFilterSortVisible;
+        binding.filterSortLayout.setVisibility(isFilterSortVisible ? View.VISIBLE : View.GONE);
+    }
+    
+    private void updateStatusFilterForTab(int tabPosition) {
+        // Update the status filter spinner to match the selected tab
+        int spinnerPosition = 0; // Default to "All Statuses"
+        
+        switch (tabPosition) {
+            case 0: spinnerPosition = 0; break; // All
+            case 1: spinnerPosition = 2; break; // Auto Assigned
+            case 2: spinnerPosition = 3; break; // Confirmed (Upcoming)
+            case 3: spinnerPosition = 4; break; // In Progress
+            case 4: spinnerPosition = 5; break; // Completed
+            case 5: spinnerPosition = 6; break; // Cancelled
+        }
+        
+        binding.spinnerStatus.setSelection(spinnerPosition);
     }
     
     private final Runnable searchRunnable = new Runnable() {
@@ -215,13 +316,38 @@ public class BookingsFragment extends Fragment {
                     null, // serviceId
                     null, // serviceName
                     searchTerm, // searchTerm
-                    "ScheduledDate", // sortBy
-                    "Descending", // sortDirection
+                    currentSortBy, // sortBy
+                    currentSortDirection, // sortDirection
                     1, // pageNumber
                     20 // pageSize
                 );
                 break;
         }
+    }
+    
+    private void loadBookingsWithCurrentFilters() {
+        // Use the current status filter from the spinner, or the tab filter if no spinner selection
+        String effectiveStatusFilter = currentStatusFilter;
+        if (effectiveStatusFilter == null) {
+            // Fall back to the current tab's filter
+            int currentTab = getCurrentTabPosition();
+            effectiveStatusFilter = TAB_STATUS_FILTERS[currentTab];
+        }
+        
+        String searchTerm = currentSearchQuery.isEmpty() ? null : currentSearchQuery;
+        
+        bookingViewModel.loadMyBookings(
+            effectiveStatusFilter, // status filter
+            null, // startDate
+            null, // endDate
+            null, // serviceId
+            null, // serviceName
+            searchTerm, // searchTerm
+            currentSortBy, // sortBy
+            currentSortDirection, // sortDirection
+            1, // pageNumber
+            20 // pageSize
+        );
     }
     
     private void updateCurrentTabWithBookings(java.util.List<Booking> bookings) {
@@ -356,11 +482,11 @@ public class BookingsFragment extends Fragment {
                 @Override
                 public void onCallStaff(Booking booking) {
                     // Handle staff call
-                    if (booking.getStaff() != null && booking.getStaff().getPhoneNumber() != null) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-                        intent.setData(Uri.parse("tel:" + booking.getStaff().getPhoneNumber()));
-                        startActivity(intent);
-                    }
+                            if (booking.getBookingStaff() != null && booking.getBookingStaff().getPhoneNumber() != null) {
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + booking.getBookingStaff().getPhoneNumber()));
+            startActivity(intent);
+        }
                 }
                 
                 @Override

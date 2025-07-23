@@ -123,6 +123,7 @@
     
     <!-- Booking Status Colors -->
     <color name="status_pending">#F59E0B</color>
+    <color name="status_auto_assigned">#8B5CF6</color>
     <color name="status_confirmed">#10B981</color>
     <color name="status_in_progress">#3B82F6</color>
     <color name="status_completed">#10B981</color>

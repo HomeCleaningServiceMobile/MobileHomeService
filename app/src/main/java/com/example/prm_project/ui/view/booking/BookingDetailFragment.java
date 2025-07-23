@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 
 import com.example.prm_project.R;
 import com.example.prm_project.data.model.Booking;
+import com.example.prm_project.data.model.BookingStaff;
 import com.example.prm_project.data.model.BookingStatus;
 import com.example.prm_project.databinding.FragmentBookingDetailBinding;
 import com.example.prm_project.ui.viewmodel.CustomerBookingViewModel;
@@ -186,9 +187,9 @@ public class BookingDetailFragment extends Fragment {
         }
         
         // Staff information
-        if (booking.getStaff() != null) {
-            binding.tvStaffName.setText(booking.getStaff().getFirstName() + " " + booking.getStaff().getLastName());
-            binding.tvStaffPhone.setText(booking.getStaff().getPhoneNumber());
+        if (booking.getBookingStaff() != null) {
+            binding.tvStaffName.setText(booking.getBookingStaff().getName());
+            binding.tvStaffPhone.setText(booking.getBookingStaff().getPhoneNumber());
             binding.layoutStaffInfo.setVisibility(View.VISIBLE);
         } else {
             binding.layoutStaffInfo.setVisibility(View.GONE);
@@ -241,8 +242,10 @@ public class BookingDetailFragment extends Fragment {
         int colorRes;
         switch (status) {
             case PENDING:
-            case AUTO_ASSIGNED:
                 colorRes = R.color.status_pending;
+                break;
+            case AUTO_ASSIGNED:
+                colorRes = R.color.status_auto_assigned;
                 break;
             case CONFIRMED:
                 colorRes = R.color.status_confirmed;
@@ -303,11 +306,11 @@ public class BookingDetailFragment extends Fragment {
     }
     
     private void callStaff() {
-        if (currentBooking != null && currentBooking.getStaff() != null && 
-            currentBooking.getStaff().getPhoneNumber() != null) {
+        if (currentBooking != null && currentBooking.getBookingStaff() != null && 
+            currentBooking.getBookingStaff().getPhoneNumber() != null) {
             
             Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:" + currentBooking.getStaff().getPhoneNumber()));
+            intent.setData(Uri.parse("tel:" + currentBooking.getBookingStaff().getPhoneNumber()));
             startActivity(intent);
         } else {
             Toast.makeText(getContext(), "Staff contact information not available", Toast.LENGTH_SHORT).show();

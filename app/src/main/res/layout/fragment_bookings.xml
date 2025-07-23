@@ -35,6 +35,15 @@
             android:contentDescription="Search bookings" />
 
         <ImageButton
+            android:id="@+id/btnSort"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_sort"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Sort bookings"
+            android:layout_marginStart="8dp" />
+
+        <ImageButton
             android:id="@+id/btnFilter"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -84,6 +93,85 @@
             android:contentDescription="Clear search"
             android:layout_marginStart="8dp"
             android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <!-- Filter and Sort Panel (Initially Hidden) -->
+    <LinearLayout
+        android:id="@+id/filterSortLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@color/gray_100"
+        android:visibility="gone">
+
+        <!-- Sort Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort by:"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginEnd="12dp" />
+
+            <Spinner
+                android:id="@+id/spinnerSort"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp" />
+
+            <ImageButton
+                android:id="@+id/btnSortDirection"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_arrow_downward"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Sort direction"
+                android:tag="DESC" />
+
+        </LinearLayout>
+
+        <!-- Filter Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status:"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginEnd="12dp" />
+
+            <Spinner
+                android:id="@+id/spinnerStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnApplyFilters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apply"
+                android:textSize="12sp"
+                app:cornerRadius="8dp"
+                style="@style/Widget.Material3.Button.UnelevatedButton" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
