@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.prm_project.R;
 import com.example.prm_project.data.model.Booking;
+import com.example.prm_project.data.model.BookingStaff;
 import com.example.prm_project.data.model.BookingStatus;
 import com.example.prm_project.utils.DateTimeUtils;
 
@@ -138,8 +139,8 @@ public class CustomerBookingAdapter extends RecyclerView.Adapter<CustomerBooking
             }
             
             // Staff info
-            if (booking.getStaff() != null) {
-                tvStaffName.setText(booking.getStaff().getFirstName() + " " + booking.getStaff().getLastName());
+            if (booking.getBookingStaff() != null) {
+                tvStaffName.setText(booking.getBookingStaff().getName());
                 tvStaffName.setVisibility(View.VISIBLE);
             } else {
                 tvStaffName.setVisibility(View.GONE);
@@ -167,6 +168,10 @@ public class CustomerBookingAdapter extends RecyclerView.Adapter<CustomerBooking
                 case PENDING:
                     statusColor = ContextCompat.getColor(context, R.color.status_pending);
                     statusIcon = R.drawable.ic_clock;
+                    break;
+                case AUTO_ASSIGNED:
+                    statusColor = ContextCompat.getColor(context, R.color.status_auto_assigned);
+                    statusIcon = R.drawable.ic_assignment;
                     break;
                 case CONFIRMED:
                     statusColor = ContextCompat.getColor(context, R.color.status_confirmed);
@@ -224,6 +229,7 @@ public class CustomerBookingAdapter extends RecyclerView.Adapter<CustomerBooking
             
             switch (status) {
                 case PENDING:
+                case AUTO_ASSIGNED:
                 case CONFIRMED:
                     // Show Cancel button
                     btnPrimaryAction.setText("Cancel");
@@ -235,7 +241,7 @@ public class CustomerBookingAdapter extends RecyclerView.Adapter<CustomerBooking
                     });
                     
                     // Show Call Staff button if staff is assigned
-                    if (booking.getStaff() != null) {
+                    if (booking.getBookingStaff() != null) {
                         btnSecondaryAction.setText("Call Staff");
                         btnSecondaryAction.setVisibility(View.VISIBLE);
                         btnSecondaryAction.setOnClickListener(v -> {
