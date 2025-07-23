@@ -1,11 +1,19 @@
 package com.example.prm_project.ui.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.prm_project.data.model.AppResponse;
+import com.example.prm_project.data.model.UserResponse;
 import com.example.prm_project.data.repository.MainRepository;
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import javax.inject.Inject;
 
 @HiltViewModel
@@ -14,6 +22,10 @@ public class MainViewModel extends ViewModel {
     private MainRepository repository;
     private MutableLiveData<String> message = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+
+    private final MutableLiveData<UserResponse> profile = new MutableLiveData<>();
+    private MutableLiveData<Boolean> logoutSuccess = new MutableLiveData<>();
+    private MutableLiveData<String> logoutMessage = new MutableLiveData<>();
     
     /**
      * Constructor with dependency injection
@@ -63,4 +75,51 @@ public class MainViewModel extends ViewModel {
         super.onCleared();
         // Clean up any resources
     }
-} 
+
+    public LiveData<UserResponse> getProfile() {
+        return profile;
+    }
+
+    public void loadUserProfile() {
+        repository.getProfile(new Callback<AppResponse<UserResponse>>() {
+            @Override
+            public void onResponse(Call<AppResponse<UserResponse>> call, Response<AppResponse<UserResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSucceeded()) {
+                    profile.postValue(response.body().getData());
+                } else {
+                    Log.e("Profile", "Profile load failed: " +
+                            (response.body() != null ? response.body().getFirstMessage("Error") : "Unknown error"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AppResponse<UserResponse>> call, Throwable t) {
+                Log.e("Profile", "Failed to load profile", t);
+            }
+        });
+    }
+
+    public LiveData<Boolean> getLogoutSuccess() {
+        return logoutSuccess;
+    }
+
+    public LiveData<String> getLogoutMessage() {
+        return logoutMessage;
+    }
+
+    public void logout(String authToken) {
+        repository.logout(authToken, new MainRepository.AuthCallback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                logoutSuccess.postValue(true);
+                logoutMessage.postValue(data != null ? data : "Logged out successfully.");
+            }
+
+            @Override
+            public void onError(String error) {
+                logoutSuccess.postValue(false);
+                logoutMessage.postValue(error);
+            }
+        });
+    }
+}

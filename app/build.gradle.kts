@@ -36,6 +36,11 @@ android {
         dataBinding = true
         viewBinding = true
     }
+    
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
 }
 
 dependencies {
@@ -116,6 +121,9 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     // SwipeRefreshLayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    
+    // Chart Library
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

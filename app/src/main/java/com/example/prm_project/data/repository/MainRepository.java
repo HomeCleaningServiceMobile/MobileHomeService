@@ -219,31 +219,10 @@ public class MainRepository {
     /**
      * Get user profile
      */
-    public void getProfile(String authToken, AuthCallback<User> callback) {
-        Call<ApiResponse<User>> call = authApiService.getProfile(authToken);
-        
-        call.enqueue(new Callback<ApiResponse<User>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<User> apiResponse = response.body();
-                    if (apiResponse.isSucceeded()) {
-                        callback.onSuccess(apiResponse.getData());
-                    } else {
-                        callback.onError(apiResponse.getFirstErrorMessage());
-                    }
-                } else {
-                    callback.onError("Failed to get profile. Please try again.");
-                }
-            }
-            
-            @Override
-            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
-                callback.onError("Network error: " + t.getMessage());
-            }
-        });
+    public void getProfile(Callback<AppResponse<UserResponse>> callback) {
+        authApiService.getProfile().enqueue(callback);
     }
-    
+
     /**
      * Refresh token
      */
@@ -275,16 +254,19 @@ public class MainRepository {
     /**
      * Logout user
      */
-    public void logout(String authToken, AuthCallback<Void> callback) {
-        Call<ApiResponse<Void>> call = authApiService.logout(authToken);
-        
-        call.enqueue(new Callback<ApiResponse<Void>>() {
+    public void logout(String authToken, AuthCallback<String> callback) {
+        Call<ApiResponse<String>> call = authApiService.logout("Bearer " + authToken);
+
+        call.enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<Void> apiResponse = response.body();
+                    ApiResponse<String> apiResponse = response.body();
                     if (apiResponse.isSucceeded()) {
-                        callback.onSuccess(null);
+                        localDataSource.clearCache();
+                        callback.onSuccess(apiResponse.getData() != null
+                                ? apiResponse.getData()
+                                : "Logged out successfully");
                     } else {
                         callback.onError(apiResponse.getFirstErrorMessage());
                     }
@@ -292,9 +274,9 @@ public class MainRepository {
                     callback.onError("Logout failed. Please try again.");
                 }
             }
-            
+
             @Override
-            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 callback.onError("Network error: " + t.getMessage());
             }
         });

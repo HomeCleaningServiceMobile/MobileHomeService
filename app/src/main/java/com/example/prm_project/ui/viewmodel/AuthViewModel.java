@@ -29,18 +29,22 @@ public class AuthViewModel extends ViewModel {
         return profileLiveData;
     }
     public void loadProfile() {
-        authRepository.getProfile(new AuthRepository.AuthCallback<User>() {
+        authRepository.getProfile(new AuthRepository.AuthCallback<UserResponse>() {
             @Override
-            public void onSuccess(User user) {
-                profileLiveData.postValue(user);
+            public void onSuccess(UserResponse response) {
+                if (response != null) {
+                    User user = mapUserResponseToUser(response);
+                    profileLiveData.postValue(user);
+                }
             }
+
             @Override
             public void onError(String error) {
-                // Xử lý lỗi nếu cần
+                errorMessage.postValue(error);
             }
         });
     }
-    
+
     /**
      * Constructor with dependency injection
      * AuthRepository is automatically provided by Hilt
@@ -183,22 +187,25 @@ public class AuthViewModel extends ViewModel {
      */
     public void logout() {
         isLoading.setValue(true);
-        
-        authRepository.logout(new AuthRepository.AuthCallback<Void>() {
+
+        authRepository.logout(new AuthRepository.AuthCallback<String>() {
             @Override
-            public void onSuccess(Void response) {
+            public void onSuccess(String response) {
                 isLoading.setValue(false);
                 successMessage.setValue("Logged out successfully");
             }
-            
+
             @Override
             public void onError(String error) {
                 isLoading.setValue(false);
-                // Session is already cleared by AuthRepository
+                Log.e("Logout Error", error);
+                // Even if server logout fails, session is already cleared by AuthRepository
+                // So we still consider this a successful logout from user perspective
+                successMessage.setValue("Logged out successfully");
             }
         });
     }
-    
+
     /**
      * Check if user is logged in
      */
@@ -439,5 +446,19 @@ public class AuthViewModel extends ViewModel {
     public void clearMessages() {
         errorMessage.setValue(null);
         successMessage.setValue(null);
+    }
+
+    private User mapUserResponseToUser(UserResponse response) {
+        User user = new User();
+        user.setId(response.getId());
+        user.setFirstName(response.getFirstName());
+        user.setLastName(response.getLastName());
+        user.setEmail(response.getEmail());
+        user.setPhoneNumber(response.getPhoneNumber());
+        user.setRole(response.getRole());
+        user.setStatus(response.getStatus());
+        user.setProfileImageUrl(response.getProfileImageUrl());
+        user.setCreatedAt(response.getCreatedAt());
+        return user;
     }
 } 

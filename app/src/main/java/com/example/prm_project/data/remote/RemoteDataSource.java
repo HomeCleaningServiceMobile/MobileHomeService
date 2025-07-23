@@ -182,33 +182,47 @@ public class RemoteDataSource {
             }
         });
     }
-    
-    public void getProfile(String authToken, ProfileCallback callback) {
-        Call<ApiResponse<User>> call = authApiService.getProfile("Bearer " + authToken);
-        call.enqueue(new Callback<ApiResponse<User>>() {
+
+    public void getProfile(ProfileCallback callback) {
+        Call<AppResponse<UserResponse>> call = authApiService.getProfile();
+
+        call.enqueue(new Callback<AppResponse<UserResponse>>() {
             @Override
-            public void onResponse(Call<ApiResponse<User>> call, Response<ApiResponse<User>> response) {
+            public void onResponse(Call<AppResponse<UserResponse>> call,
+                                   Response<AppResponse<UserResponse>> response) {
                 mainHandler.post(() -> {
                     if (response.isSuccessful() && response.body() != null) {
-                        ApiResponse<User> apiResponse = response.body();
+                        AppResponse<UserResponse> apiResponse = response.body();
                         if (apiResponse.isSucceeded()) {
-                            callback.onSuccess(apiResponse.getData());
+                            // ✅ Convert UserResponse -> User (if needed)
+                            User user = convertUserResponseToUser(apiResponse.getData());
+                            callback.onSuccess(user);
                         } else {
-                            callback.onError(apiResponse.getFirstErrorMessage());
+                            callback.onError(apiResponse.getFirstMessage("Error"));
                         }
                     } else {
                         callback.onError("Failed to get profile: " + response.code());
                     }
                 });
             }
-            
+
             @Override
-            public void onFailure(Call<ApiResponse<User>> call, Throwable t) {
+            public void onFailure(Call<AppResponse<UserResponse>> call, Throwable t) {
                 mainHandler.post(() -> callback.onError("Network error: " + t.getMessage()));
             }
         });
     }
-    
+
+    private User convertUserResponseToUser(UserResponse userResponse) {
+        User user = new User();
+        user.setId(userResponse.getId());
+        user.setFullName(userResponse.getFullName());
+        user.setEmail(userResponse.getEmail());
+        user.setCreatedAt(userResponse.getCreatedAt());
+        return user;
+    }
+
+
 //    public void updateProfile(String authToken, UpdateProfileRequest updateProfileRequest, ProfileCallback callback) {
 //        Call<ApiResponse<User>> call = authApiService.updateProfile("Bearer " + authToken, updateProfileRequest);
 //        call.enqueue(new Callback<ApiResponse<User>>() {
@@ -260,15 +274,15 @@ public class RemoteDataSource {
             }
         });
     }
-    
+
     public void logout(String authToken, VoidCallback callback) {
-        Call<ApiResponse<Void>> call = authApiService.logout("Bearer " + authToken);
-        call.enqueue(new Callback<ApiResponse<Void>>() {
+        Call<ApiResponse<String>> call = authApiService.logout("Bearer " + authToken);
+        call.enqueue(new Callback<ApiResponse<String>>() {
             @Override
-            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
                 mainHandler.post(() -> {
                     if (response.isSuccessful() && response.body() != null) {
-                        ApiResponse<Void> apiResponse = response.body();
+                        ApiResponse<String> apiResponse = response.body();
                         if (apiResponse.isSucceeded()) {
                             callback.onSuccess();
                         } else {
@@ -279,14 +293,14 @@ public class RemoteDataSource {
                     }
                 });
             }
-            
+
             @Override
-            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 mainHandler.post(() -> callback.onError("Network error: " + t.getMessage()));
             }
         });
     }
-    
+
     public void fetchData(RemoteCallback callback) {
         // Simulate network call
         new Thread(() -> {

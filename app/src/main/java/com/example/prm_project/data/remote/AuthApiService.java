@@ -26,9 +26,10 @@ public interface AuthApiService {
         @Header("Authorization") String authToken,
         @Body ChangePasswordRequest changePasswordRequest
     );
-    
+
     @GET("profile")
-    Call<ApiResponse<User>> getProfile(@Header("Authorization") String authToken);
+    Call<AppResponse<UserResponse>> getProfile();
+//    Call<ApiResponse<User>> getProfile(@Header("Authorization") String authToken);
     
 //    @PUT("profile")
 //    Call<ApiResponse<User>> updateProfile(
@@ -38,7 +39,7 @@ public interface AuthApiService {
     
     @POST("refresh")
     Call<ApiResponse<TokenResponse>> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
-    
+
     @POST("logout")
-    Call<ApiResponse<Void>> logout(@Header("Authorization") String authToken);
+    Call<ApiResponse<String>> logout(@Header("Authorization") String token);
 } 
