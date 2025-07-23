@@ -340,7 +340,11 @@ public class BookingsFragment extends Fragment {
                 @Override
                 public void onBookingClick(Booking booking) {
                     // Navigate to booking details
-                    showToast("Booking details for: " + booking.getBookingNumber());
+                    Bundle args = new Bundle();
+                    args.putInt("bookingId", booking.getId());
+                    
+                    NavController navController = Navigation.findNavController(requireView());
+                    navController.navigate(R.id.action_nav_bookings_to_bookingDetailFragment, args);
                 }
                 
                 @Override

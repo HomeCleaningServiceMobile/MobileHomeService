@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,8 @@ import com.example.prm_project.databinding.FragmentCreateBookingBinding;
 import com.example.prm_project.data.model.*;
 import com.example.prm_project.ui.viewmodel.BookingViewModel;
 import com.example.prm_project.ui.viewmodel.TimeSlotViewModel;
+import com.example.prm_project.ui.view.adapters.TimeSlotAdapter;
+import com.example.prm_project.ui.view.dialogs.StaffSelectionDialog;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -85,6 +88,11 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
     private StaffSelectionAdapter staffSelectionAdapter;
     private List<StaffAvailabilityResponse> availableStaffList = new ArrayList<>();
     private StaffAvailabilityResponse selectedStaff;
+    
+    // Enhanced UI components
+    private CalendarView calendarView;
+    private TimeSlotAdapter horizontalTimeSlotAdapter;
+    private StaffSelectionDialog staffSelectionDialog;
 
     // Map and location components
     private GoogleMap googleMap;
@@ -125,6 +133,7 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         
         // Setup UI
         setupUI();
+        setupEnhancedUI();
         setupObservers();
         
         // Handle navigation arguments for auto-selection
@@ -137,17 +146,248 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         bookingViewModel.loadServices();
         bookingViewModel.resetForm();
     }
+
+    private void setupEnhancedUI() {
+        // Initialize CalendarView
+        calendarView = binding.getRoot().findViewById(R.id.calendar_view);
+        if (calendarView != null) {
+            setupCalendarView();
+        }
+        
+        // Initialize horizontal time slots
+        setupHorizontalTimeSlots();
+        
+        // Initialize staff picker button
+        setupStaffPicker();
+        
+        // Hide enhanced sections initially
+        hideTimeSlotSection();
+        hideStaffSection();
+    }
+
+    private void setupCalendarView() {
+        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month, dayOfMonth);
+            
+            String selectedDate = com.example.prm_project.utils.DateTimeUtils.formatDate(calendar.getTime());
+            String displayDate = com.example.prm_project.utils.DateTimeUtils.formatDate(calendar.getTime());
+            
+            // Update ViewModel
+            bookingViewModel.setSelectedDate(selectedDate);
+            
+            // Update selected date display
+            updateSelectedDateDisplay(displayDate);
+            
+            // Load time slots for selected date
+            loadTimeSlotsForDate(selectedDate);
+            
+            // Hide staff section until time is selected
+            hideStaffSection();
+            
+            showToast("Selected date: " + displayDate);
+        });
+    }
+
+    private void setupHorizontalTimeSlots() {
+        horizontalTimeSlotAdapter = new TimeSlotAdapter(requireContext());
+        
+        // Find the horizontal RecyclerView
+        androidx.recyclerview.widget.RecyclerView rvTimeSlots = 
+            binding.getRoot().findViewById(R.id.rv_time_slots);
+        
+        if (rvTimeSlots != null) {
+            rvTimeSlots.setLayoutManager(
+                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            );
+            rvTimeSlots.setAdapter(horizontalTimeSlotAdapter);
+            
+            horizontalTimeSlotAdapter.setOnTimeSlotClickListener((timeSlot, position) -> {
+                // Update ViewModel
+                bookingViewModel.setSelectedTime(timeSlot);
+                
+                // Load available staff for selected date and time
+                loadAvailableStaffForTimeSlot();
+                
+                // Show staff selection section
+                showStaffSection();
+                
+                showToast("Selected time: " + timeSlot);
+            });
+        }
+    }
+
+    private void setupStaffPicker() {
+        View btnPickStaff = binding.getRoot().findViewById(R.id.btn_pick_staff);
+        if (btnPickStaff != null) {
+            btnPickStaff.setOnClickListener(v -> showStaffSelectionDialog());
+        }
+    }
+
+    private void showStaffSelectionDialog() {
+        if (availableStaffList.isEmpty()) {
+            showToast("Please select a date and time first");
+            return;
+        }
+
+        staffSelectionDialog = new StaffSelectionDialog(requireContext(), availableStaffList);
+        staffSelectionDialog.setOnStaffSelectedListener(staff -> {
+            selectedStaff = staff;
+            bookingViewModel.setSelectedStaff(staff);
+            updateSelectedStaffDisplay();
+            showToast("Selected staff: " + staff.getStaffName());
+        });
+        staffSelectionDialog.show();
+    }
+
+    private void loadTimeSlotsForDate(String selectedDate) {
+        Service selectedService = bookingViewModel.getSelectedService().getValue();
+        if (selectedService != null) {
+            timeSlotViewModel.loadAvailableSlots(selectedDate, selectedService.getId(), null);
+        }
+    }
+
+    private void loadAvailableStaffForTimeSlot() {
+        // Show loading state
+        showStaffLoading();
+        
+        String selectedDate = bookingViewModel.getSelectedDate().getValue();
+        String selectedTime = bookingViewModel.getSelectedTime().getValue();
+        Service selectedService = bookingViewModel.getSelectedService().getValue();
+        
+        if (selectedDate != null && selectedTime != null && selectedService != null) {
+            // Use both the new TimeSlotViewModel method and the existing loadAvailableStaff method
+            timeSlotViewModel.loadAvailableStaffForSlot(selectedDate, selectedTime, selectedTime, selectedService.getId());
+            // Also call the existing method to maintain compatibility
+            loadAvailableStaff(selectedDate, selectedTime, selectedService.getId());
+        }
+    }
+
+    // UI state management methods
+    private void updateSelectedDateDisplay(String displayDate) {
+        View tvSelectedDate = binding.getRoot().findViewById(R.id.tv_selected_date_display);
+        if (tvSelectedDate instanceof android.widget.TextView) {
+            ((android.widget.TextView) tvSelectedDate).setText(displayDate);
+        }
+    }
+
+    private void updateSelectedStaffDisplay() {
+        if (selectedStaff != null) {
+            // Show selected staff layout
+            View layoutSelectedStaff = binding.getRoot().findViewById(R.id.layout_selected_staff);
+            if (layoutSelectedStaff != null) {
+                layoutSelectedStaff.setVisibility(View.VISIBLE);
+            }
+
+            // Update staff name
+            View tvStaffName = binding.getRoot().findViewById(R.id.tv_selected_staff_name);
+            if (tvStaffName instanceof android.widget.TextView) {
+                ((android.widget.TextView) tvStaffName).setText(selectedStaff.getStaffName());
+            }
+
+            // Update staff rating
+            View tvStaffRating = binding.getRoot().findViewById(R.id.tv_selected_staff_rating);
+            if (tvStaffRating instanceof android.widget.TextView) {
+                String ratingText;
+                if (selectedStaff.getAverageRating() != null && selectedStaff.getAverageRating() > 0) {
+                    ratingText = String.format("⭐ %.1f rating", selectedStaff.getAverageRating());
+                } else {
+                    ratingText = "⭐ New staff";
+                }
+                ((android.widget.TextView) tvStaffRating).setText(ratingText);
+            }
+
+            // Update button text
+            View btnPickStaff = binding.getRoot().findViewById(R.id.btn_pick_staff);
+            if (btnPickStaff instanceof com.google.android.material.button.MaterialButton) {
+                ((com.google.android.material.button.MaterialButton) btnPickStaff)
+                    .setText("Change Staff Member");
+            }
+        }
+    }
+
+    private void showTimeSlotSection() {
+        View cardTimeSlots = binding.getRoot().findViewById(R.id.card_time_slots);
+        if (cardTimeSlots != null) {
+            cardTimeSlots.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideTimeSlotSection() {
+        View cardTimeSlots = binding.getRoot().findViewById(R.id.card_time_slots);
+        if (cardTimeSlots != null) {
+            cardTimeSlots.setVisibility(View.GONE);
+        }
+    }
+
+    private void showStaffSection() {
+        View cardStaffSelection = binding.getRoot().findViewById(R.id.card_staff_selection);
+        if (cardStaffSelection != null) {
+            cardStaffSelection.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideStaffSection() {
+        View cardStaffSelection = binding.getRoot().findViewById(R.id.card_staff_selection);
+        if (cardStaffSelection != null) {
+            cardStaffSelection.setVisibility(View.GONE);
+        }
+    }
+
+    private void showStaffLoading() {
+        View staffLoadingLayout = binding.getRoot().findViewById(R.id.layout_staff_loading);
+        if (staffLoadingLayout != null) {
+            staffLoadingLayout.setVisibility(View.VISIBLE);
+        }
+        
+        View btnPickStaff = binding.getRoot().findViewById(R.id.btn_pick_staff);
+        if (btnPickStaff != null) {
+            btnPickStaff.setVisibility(View.GONE);
+        }
+    }
+
+    private void hideStaffLoading() {
+        View staffLoadingLayout = binding.getRoot().findViewById(R.id.layout_staff_loading);
+        if (staffLoadingLayout != null) {
+            staffLoadingLayout.setVisibility(View.GONE);
+        }
+        
+        View btnPickStaff = binding.getRoot().findViewById(R.id.btn_pick_staff);
+        if (btnPickStaff != null) {
+            btnPickStaff.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showTimeSlotsLoading() {
+        View loadingLayout = binding.getRoot().findViewById(R.id.layout_timeslots_loading);
+        if (loadingLayout != null) {
+            loadingLayout.setVisibility(View.VISIBLE);
+        }
+        
+        View rvTimeSlots = binding.getRoot().findViewById(R.id.rv_time_slots);
+        if (rvTimeSlots != null) {
+            rvTimeSlots.setVisibility(View.GONE);
+        }
+    }
+
+    private void hideTimeSlotsLoading() {
+        View loadingLayout = binding.getRoot().findViewById(R.id.layout_timeslots_loading);
+        if (loadingLayout != null) {
+            loadingLayout.setVisibility(View.GONE);
+        }
+        
+        View rvTimeSlots = binding.getRoot().findViewById(R.id.rv_time_slots);
+        if (rvTimeSlots != null) {
+            rvTimeSlots.setVisibility(View.VISIBLE);
+        }
+    }
     
     private void setupUI() {
         // Step navigation buttons
         binding.btnNext.setOnClickListener(v -> bookingViewModel.nextStep());
         binding.btnPrevious.setOnClickListener(v -> bookingViewModel.previousStep());
         
-        // Date picker - ENABLED
-        binding.btnSelectDateTime.setOnClickListener(v -> showDatePicker());
-
-        binding.btnSelectDateTime.setEnabled(true);
-        binding.btnSelectDateTime.setText("📅 Select Date");
+        // Date picker replaced with CalendarView - no button needed anymore
         
         // Initialize with tomorrow's date
         Calendar tomorrow = Calendar.getInstance();
@@ -155,7 +395,8 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String tomorrowDate = dateFormat.format(tomorrow.getTime());
         bookingViewModel.setSelectedDate(tomorrowDate);
-        binding.tvSelectedDateDisplay.setText("Tomorrow at 10:00 AM");
+        // Date display now handled by calendar view
+        // binding.tvSelectedDateDisplay.setText("Tomorrow at 10:00 AM");
         
         // Service selection
         binding.servicesRecyclerView.setAdapter(new ServiceSelectionAdapter(
@@ -327,7 +568,7 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
             
             binding.btnNext.setEnabled(!isLoading);
             binding.btnPrevious.setEnabled(!isLoading);
-            binding.btnSelectDate.setEnabled(!isLoading);
+            // Old date button removed - using CalendarView now
             
             binding.servicesRecyclerView.setEnabled(!isLoading);
             binding.packagesRecyclerView.setEnabled(!isLoading);
@@ -440,6 +681,51 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
             if (staff != null) {
                 selectedStaff = staff;
                 updateSelectedStaffDisplay();
+            }
+        });
+        
+        // Enhanced UI observers
+        timeSlotViewModel.getAvailableSlots().observe(getViewLifecycleOwner(), timeSlotDtos -> {
+            if (horizontalTimeSlotAdapter != null && timeSlotDtos != null) {
+                // Convert TimeSlotDto to String list for the adapter
+                List<String> timeSlotStrings = new ArrayList<>();
+                for (TimeSlotDto slot : timeSlotDtos) {
+                    // Use displayTime if available, otherwise use startTime
+                    String timeString = slot.getDisplayTime() != null ? slot.getDisplayTime() : slot.getStartTime();
+                    timeSlotStrings.add(timeString);
+                }
+                horizontalTimeSlotAdapter.setTimeSlots(timeSlotStrings);
+                if (!timeSlotStrings.isEmpty()) {
+                    showTimeSlotSection();
+                } else {
+                    hideTimeSlotSection();
+                }
+            }
+        });
+        
+        // Observe available staff
+        timeSlotViewModel.getAvailableStaff().observe(getViewLifecycleOwner(), staff -> {
+            if (staff != null) {
+                availableStaffList.clear();
+                availableStaffList.addAll(staff);
+                hideStaffLoading();
+            }
+        });
+        
+        // Observe loading state
+        timeSlotViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                showTimeSlotsLoading();
+            } else {
+                hideTimeSlotsLoading();
+            }
+        });
+        
+        // Observe errors
+        timeSlotViewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            if (error != null && !error.isEmpty()) {
+                showToast(error);
+                hideTimeSlotSection();
             }
         });
     }
@@ -741,7 +1027,8 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
                     new ArrayList<>() // Start with empty list, always update via addAll
             );
             timeSlotAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            binding.spinnerTimeSlot.setAdapter(timeSlotAdapter);
+            // Old spinner replaced with horizontal RecyclerView
+        // binding.spinnerTimeSlot.setAdapter(timeSlotAdapter);
             Log.d("TimeSlotDebug", "Adapter initialized: " + timeSlotAdapter);
         }
         // Set default time
@@ -761,13 +1048,13 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         timeSlotAdapter.addAll(timeSlotsList);
         timeSlotAdapter.notifyDataSetChanged();
         Log.d("TimeSlotDebug", "Spinner count after update (in updateTimeSlotSpinner): " + timeSlotAdapter.getCount());
-        // Restore previous selection if possible
-        String selectedTime = bookingViewModel.getSelectedTime().getValue();
-        if (selectedTime != null && timeSlotsList.contains(selectedTime)) {
-            binding.spinnerTimeSlot.setSelection(timeSlotsList.indexOf(selectedTime));
-        } else {
-            binding.spinnerTimeSlot.setSelection(0);
-        }
+        // Old spinner selection logic - now handled by horizontal adapter
+        // String selectedTime = bookingViewModel.getSelectedTime().getValue();
+        // if (selectedTime != null && timeSlotsList.contains(selectedTime)) {
+        //     binding.spinnerTimeSlot.setSelection(timeSlotsList.indexOf(selectedTime));
+        // } else {
+        //     binding.spinnerTimeSlot.setSelection(0);
+        // }
     }
 
 
@@ -1728,11 +2015,12 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         });
         
         // Setup RecyclerView
-        binding.rvStaffSelection.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(requireContext()));
-        binding.rvStaffSelection.setAdapter(staffSelectionAdapter);
+        // Old staff RecyclerView setup - now using dialog picker
+        // binding.rvStaffSelection.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(requireContext()));
+        // binding.rvStaffSelection.setAdapter(staffSelectionAdapter);
         
         // Initially hidden - will show when time slot is selected
-        binding.layoutStaffSelection.setVisibility(View.GONE);
+        hideStaffSection(); // Using enhanced UI method
     }
     
     private void openStaffProfile(StaffAvailabilityResponse staff) {
@@ -1752,32 +2040,30 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         }
     }
     
-    private void updateSelectedStaffDisplay() {
-        if (selectedStaff != null) {
-            String displayText = String.format("✓ %s - %s", 
-                selectedStaff.getStaffName()
-            );
-            binding.tvSelectedStaffDisplay.setText(displayText);
-            binding.tvSelectedStaffDisplay.setVisibility(View.VISIBLE);
-        } else {
-            binding.tvSelectedStaffDisplay.setText("No staff selected");
-            binding.tvSelectedStaffDisplay.setVisibility(View.GONE);
-        }
-    }
+//    private void updateSelectedStaffDisplay() {
+//        if (selectedStaff != null) {
+//            String displayText = String.format("✓ %s - %s",
+//                selectedStaff.getStaffName()
+//            );
+//            binding.tvSelectedStaffDisplay.setText(displayText);
+//            binding.tvSelectedStaffDisplay.setVisibility(View.VISIBLE);
+//        } else {
+//            binding.tvSelectedStaffDisplay.setText("No staff selected");
+//            binding.tvSelectedStaffDisplay.setVisibility(View.GONE);
+//        }
+//    }
     
     private void loadAvailableStaff(String date, String selectedTime, Integer serviceId) {
         if (date == null || selectedTime == null) {
             Log.d(TAG, "Date or time not selected, hiding staff selection");
-            binding.layoutStaffSelection.setVisibility(View.GONE);
+            binding.layoutSelectedStaff.setVisibility(View.GONE);
             return;
         }
         
         // Show loading state
-        binding.layoutStaffSelection.setVisibility(View.VISIBLE);
-        binding.progressStaffLoading.setVisibility(View.VISIBLE);
-        binding.rvStaffSelection.setVisibility(View.GONE);
-        binding.tvNoStaffAvailable.setVisibility(View.GONE);
-        
+        showStaffSection(); // Using enhanced UI method
+        showStaffLoading(); // Using enhanced UI method
+
         // Parse time slot to get start and end times
         String[] timeParts = parseTimeSlot(selectedTime);
         if (timeParts == null) {
@@ -1799,9 +2085,9 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
                 Response<ApiResponse<List<StaffAvailabilityResponse>>> response = call.execute();
                 
                 mainHandler.post(() -> {
-                    if (!isAdded()) return;
+                                        if (!isAdded()) return;
                     
-                    binding.progressStaffLoading.setVisibility(View.GONE);
+                    hideStaffLoading(); // Hide loading when response received
                     
                     if (response.isSuccessful() && response.body() != null) {
                         ApiResponse<List<StaffAvailabilityResponse>> apiResponse = response.body();
@@ -1818,7 +2104,7 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
                 Log.e(TAG, "Error loading staff", e);
                 mainHandler.post(() -> {
                     if (isAdded()) {
-                        binding.progressStaffLoading.setVisibility(View.GONE);
+                        hideStaffLoading(); // Hide loading on error
                         showStaffError("Network error: " + e.getMessage());
                     }
                 });
@@ -1882,26 +2168,40 @@ public class CreateBookingFragment extends Fragment implements OnMapReadyCallbac
         availableStaffList.addAll(staffList);
         
         if (staffList.isEmpty()) {
-            binding.rvStaffSelection.setVisibility(View.GONE);
-            binding.tvNoStaffAvailable.setVisibility(View.VISIBLE);
+            hideStaffLoading();
+            showToast("No staff available for this time slot");
+            // Could optionally hide staff section or show message
         } else {
-            staffSelectionAdapter.setStaffList(staffList);
-            binding.rvStaffSelection.setVisibility(View.VISIBLE);
-            binding.tvNoStaffAvailable.setVisibility(View.GONE);
+            // Update the available staff list for the dialog
+            availableStaffList.clear();
+            availableStaffList.addAll(staffList);
             
+            // Update old adapter if still needed elsewhere
+            if (staffSelectionAdapter != null) {
+                staffSelectionAdapter.setStaffList(staffList);
+            }
+            
+            hideStaffLoading();
             showToast(String.format("Found %d available staff members", staffList.size()));
         }
     }
     
     private void showStaffError(String message) {
-        binding.rvStaffSelection.setVisibility(View.GONE);
-        binding.tvNoStaffAvailable.setText(message);
-        binding.tvNoStaffAvailable.setVisibility(View.VISIBLE);
+        hideStaffLoading(); // Ensure loading is hidden
+        showToast("Staff loading error: " + message);
+        // Optionally hide staff section on error
+        // hideStaffSection();
     }
     
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        
+        // Clean up dialogs
+        if (staffSelectionDialog != null && staffSelectionDialog.isShowing()) {
+            staffSelectionDialog.dismiss();
+        }
+        
         binding = null;
     }
 

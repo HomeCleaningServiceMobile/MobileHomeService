@@ -110,8 +110,8 @@ public class StaffSelectionDialog extends Dialog {
         } else {
             String lowerQuery = query.toLowerCase().trim();
             for (StaffAvailabilityResponse staff : staffList) {
-                if (staff.getFullName().toLowerCase().contains(lowerQuery) ||
-                    (staff.getSpecialization() != null && staff.getSpecialization().toLowerCase().contains(lowerQuery))) {
+                if (staff.getStaffName().toLowerCase().contains(lowerQuery) ||
+                    (staff.getEmployeeId() != null && staff.getEmployeeId().toLowerCase().contains(lowerQuery))) {
                     filteredStaffList.add(staff);
                 }
             }
@@ -199,10 +199,10 @@ public class StaffSelectionDialog extends Dialog {
             }
             
             public void bind(StaffAvailabilityResponse staff) {
-                tvStaffName.setText(staff.getFullName());
+                tvStaffName.setText(staff.getStaffName());
                 
                 // Format rating
-                if (staff.getAverageRating() > 0) {
+                if (staff.getAverageRating() != null && staff.getAverageRating() > 0) {
                     tvStaffRating.setText(String.format("⭐ %.1f rating", staff.getAverageRating()));
                     tvStaffRating.setVisibility(View.VISIBLE);
                 } else {
@@ -211,16 +211,16 @@ public class StaffSelectionDialog extends Dialog {
                 }
                 
                 // Specialization
-                if (staff.getSpecialization() != null && !staff.getSpecialization().isEmpty()) {
-                    tvStaffSpecialization.setText(staff.getSpecialization());
+                if (staff.getEmployeeId() != null && !staff.getEmployeeId().isEmpty()) {
+                    tvStaffSpecialization.setText(staff.getEmployeeId());
                     tvStaffSpecialization.setVisibility(View.VISIBLE);
                 } else {
                     tvStaffSpecialization.setVisibility(View.GONE);
                 }
                 
                 // Experience
-                if (staff.getExperienceYears() > 0) {
-                    tvStaffExperience.setText(String.format("%d years experience", staff.getExperienceYears()));
+                if (staff.getTotalCompletedJobs() != null && staff.getTotalCompletedJobs() > 0) {
+                    tvStaffExperience.setText(String.format("%d years experience", staff.getTotalCompletedJobs()));
                     tvStaffExperience.setVisibility(View.VISIBLE);
                 } else {
                     tvStaffExperience.setVisibility(View.GONE);
