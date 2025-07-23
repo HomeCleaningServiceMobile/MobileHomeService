@@ -109,6 +109,7 @@
     <color name="gray_900">#212121</color>
     <color name="gray_700">#616161</color>
     <color name="gray_500">#9E9E9E</color>
+    <color name="gray_200">#E5E7EB</color>
     <color name="gray_100">#F5F5F5</color>
 
     <!-- Design Default Colors -->
@@ -118,6 +119,18 @@
     <!-- Additional Colors for TimeSlot Implementation -->
     <color name="primary">@color/primary_orange</color>
     <color name="gray">#9E9E9E</color>
+    <color name="error">@color/error_red</color>
+    
+    <!-- Booking Status Colors -->
+    <color name="status_pending">#F59E0B</color>
+    <color name="status_confirmed">#10B981</color>
+    <color name="status_in_progress">#3B82F6</color>
+    <color name="status_completed">#10B981</color>
+    <color name="status_cancelled">#EF4444</color>
+    <color name="status_default">#6B7280</color>
+    
+    <!-- Alias for primary color -->
+    <color name="primary_color">@color/primary_orange</color>
 
     <!-- Admin Dashboard Colors -->
     <color name="admin_background">#F5F5F5</color>

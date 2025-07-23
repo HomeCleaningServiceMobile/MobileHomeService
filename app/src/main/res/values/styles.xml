@@ -4,4 +4,12 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+
+    <!-- Calendar View Theme -->
+    <style name="CalendarViewTheme" parent="Theme.Material3.DayNight">
+        <item name="android:colorPrimary">@color/primary_color</item>
+        <item name="android:colorAccent">@color/primary_color</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+    </style>
 </resources>

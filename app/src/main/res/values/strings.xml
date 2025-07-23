@@ -67,7 +67,6 @@
     <string name="email_icon">Email Icon</string>
     <string name="success_icon">Success Icon</string>
     <string name="lock_icon">Lock Icon</string>
-    <string name="back">Back</string>
 
     <!-- Forgot Password -->
     <string name="forgot_password_title">Forgot Password?</string>
@@ -289,6 +288,28 @@
     <string name="next_button_description">Go to next step</string>
     <string name="address_helper">Enter the address where the service will be performed</string>
     <string name="special_instructions_helper">Optional: Add any special instructions</string>
+    
+    <!-- Booking Details -->
+    <string name="booking_details">Booking Details</string>
+    <string name="schedule_information">Schedule Information</string>
+    <string name="package_information">Package Information</string>
+    <string name="special_instructions">Special Instructions</string>
+    <string name="assigned_staff">Assigned Staff</string>
+    <string name="pricing_information">Pricing Information</string>
+    <string name="booking_timeline">Booking Timeline</string>
+    <string name="duration">Duration:</string>
+    <string name="total_amount">Total Amount:</string>
+    <string name="final_amount">Final Amount:</string>
+    <string name="booking_created">Booking Created:</string>
+    <string name="service_started">Service Started:</string>
+    <string name="service_completed">Service Completed:</string>
+    <string name="call_staff">Call Staff</string>
+    <string name="cancel_booking">Cancel</string>
+    <string name="reschedule">Reschedule</string>
+    <string name="rate_service">Rate Service</string>
+    <string name="book_again">Book Again</string>
+    <string name="back">Back</string>
+    
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="payment_success_icon">Payment Success Icon</string>
