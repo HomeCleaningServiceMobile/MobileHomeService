@@ -19,7 +19,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginTop="32dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@drawable/icon_home_cleaning_service"
             android:background="@drawable/ic_launcher_background"
             android:contentDescription="@string/app_logo_description"
             app:layout_constraintTop_toTopOf="parent"
